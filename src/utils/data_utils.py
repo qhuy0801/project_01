@@ -1,43 +1,56 @@
+import warnings
+
 import pandas as pd
 import utils.io_utils as io_utils
 from entities.Image import Image
 
 
-def init_images(config):
+def init_image(_file_name, _file_path, _metadata):
     """
-    Load images based on the configuration:
-    - Metadata path
-    - Image source directories
-    - Image metadata
-    - Number of desired sample
-    # TODO refactor this code so that it can be more re-usable
+    Init Image class instance but not loading the image matrix yet to save the memory
+    :param _file_name:
+    :param _file_path:
+    :param _metadata:
     :return:
     """
+    if _file_path is not None:
+        image = Image(_file_name, _file_path)
+        image.load_metadata(_metadata)
+        return image
+    else:
+        warnings.warn(f"File not found: {_file_name}\n")
 
+
+def init_images(_metadata_path, _image_dirs, _number_of_sample, _filename_column):
+    """
+    Read the metadata (.csv) file, initialise a list of images
+    :param _metadata_path:
+    :param _image_dirs:
+    :param _number_of_sample:
+    :param _filename_column:
+    :return: list of initialised image instance (class)
+    """
+
+    # Initialise empty array of images
     images = []
 
-    metadata_path = config["data"]["metadata_path"]
-    image_dirs = config["data"]["images_dirs"]
-
-    file_name_col = config["data"]["column_names"]["file_name"]
-
-    metadata = pd.read_csv(metadata_path)
+    # Read metadata and get only selected number of desired sample
+    metadata = pd.read_csv(_metadata_path)
     if (
-        config["samples"]["sample_count"] <= 0
-        or config["samples"]["sample_count"] >= metadata.shape[0]
+        _number_of_sample
+        or _number_of_sample >= metadata.shape[0]
     ):
         sample_count = metadata.shape[0]
     else:
-        sample_count = config["samples"]["sample_count"]
+        sample_count = _number_of_sample
     metadata = metadata.sample(n=sample_count)
 
+    # Creating the array
     for _, row in metadata.iterrows():
-        file_name = row[file_name_col]
-        file_path = io_utils.find_path(image_dirs, file_name)
-        if file_path is not None:
-            image = Image(file_name, file_path)
-            image.load_metadata(row)
-            images.append(image)
+        file_name = row[_filename_column]
+        file_path = io_utils.find_path(_image_dirs, file_name)
+        image = init_image(file_name, file_path, row)
+        images.append(image)
 
     return images
 
