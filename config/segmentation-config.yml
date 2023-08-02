@@ -1,0 +1,16 @@
+data:
+  metadata_path: ../../data/annotations/merged_wound_details_july_2022.csv
+  images_dirs: ../../data/images/
+  column_names:
+    file_name: ImageDetail.ImageFilename
+
+samples:
+  sample_count: 2 # 0: to scan ALL annotated image
+
+model:
+  path: ../models/SegmentationLevel1.onnx
+  input_size:
+    height: 336
+    width: 336
+
+device: cpu

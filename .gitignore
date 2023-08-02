@@ -1,0 +1,6 @@
+# Ignore models
+/src/models/segmentation-lv1.pt
+/src/models/SegmentationLevel1.onnx
+
+# Ignore data
+/data/
