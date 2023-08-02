@@ -15,5 +15,11 @@ MODEL_PATH = config["model"]["path"]
 MODEL_INPUT_HEIGHT = config["model"]["input_size"]["height"]
 MODEL_INPUT_WIDTH = config["model"]["input_size"]["width"]
 
+# Setting for samples
+SAMPLE_COUNT = config["samples"]["sample_count"]
+
 # Computational device
 DEVICE = config["device"]
+
+# Visualising setting
+SEGMENT_CMAP = config["visualisations"]["segment_cmap"]

@@ -3,14 +3,16 @@ import albumentations as A
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
+import torchvision.transforms as transforms
+from torchvision.models.segmentation import DeepLabV3_ResNet50_Weights, DeepLabV3_ResNet101_Weights
+
+import constraints.SEG_CONST as CONSTRAINTS
 
 from entities.Image import Image
 from utils.config_utils import read_config
 from utils.data_utils import init_images
 from utils.model_utils import load_pt
-from utils.visualise_utils import visualise_segmentation
-
-CONFIG_FILE = "../../config/segmentation-config.yml"
+from utils.visualise_utils import visualise_layers
 
 
 def transform_image(_target_height: int, _target_width: int):
@@ -35,7 +37,7 @@ def initialise_image_matrix(_image_instance: Image, _transform):
     :param _transform:
     :return:
     """
-    _image_instance.load_img()
+    _image_instance.load_image()
     image_matrix = _image_instance.img
     return _transform(image=image_matrix)["image"]
 
@@ -51,5 +53,34 @@ def get_segmentation_matrix(_model, _matrix):
 
 
 if __name__ == "__main__":
+    # Get the images
+    images = init_images(
+        CONSTRAINTS.METADATA_PATH,
+        CONSTRAINTS.IMAGES_DIR,
+        CONSTRAINTS.SAMPLE_COUNT,
+        CONSTRAINTS.FILENAME_COLUMN,
+    )
+    for image in images:
+        image.load_image()
+
+    # Testing ResNet
+
+    # Load the model
+    # model = torch.hub.load('pytorch/vision', 'deeplabv3_resnet101', weight=DeepLabV3_ResNet101_Weights.COCO_WITH_VOC_LABELS_V1.transforms)
+    # model.eval()
+    #
+    # # Transform template
+    # transform = transforms.ToTensor()
+    #
+    # # Pick a random image
+    # input_tensor = transform(images[5].img)
+    #
+    # input_batch = input_tensor.unsqueeze(0)
+    #
+    # with torch.no_grad():
+    #     output = model(input_batch)['out'][0]
+    # output_predictions = output.argmax(0)
+
+    visualise_layers((images[5].img, "gray", 0.5))
 
     print("Testing...")

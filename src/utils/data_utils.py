@@ -19,6 +19,7 @@ def init_image(_file_name, _file_path, _metadata):
         return image
     else:
         warnings.warn(f"File not found: {_file_name}\n")
+        return None
 
 
 def init_images(_metadata_path, _image_dirs, _number_of_sample, _filename_column):
@@ -37,7 +38,7 @@ def init_images(_metadata_path, _image_dirs, _number_of_sample, _filename_column
     # Read metadata and get only selected number of desired sample
     metadata = pd.read_csv(_metadata_path)
     if (
-        _number_of_sample
+        _number_of_sample <= 0
         or _number_of_sample >= metadata.shape[0]
     ):
         sample_count = metadata.shape[0]
@@ -50,7 +51,10 @@ def init_images(_metadata_path, _image_dirs, _number_of_sample, _filename_column
         file_name = row[_filename_column]
         file_path = io_utils.find_path(_image_dirs, file_name)
         image = init_image(file_name, file_path, row)
-        images.append(image)
+        if image is not None:
+            images.append(image)
+        else:
+            continue
 
     return images
 

@@ -5,7 +5,7 @@ data:
     file_name: ImageDetail.ImageFilename
 
 samples:
-  sample_count: 2 # 0: to scan ALL annotated image
+  sample_count: 10 # 0: to scan ALL annotated image
 
 model:
   path: ../models/SegmentationLevel1.onnx
@@ -14,3 +14,6 @@ model:
     width: 336
 
 device: cpu
+
+visualisations:
+  segment_cmap: "Set1"
