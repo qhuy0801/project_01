@@ -63,24 +63,6 @@ if __name__ == "__main__":
     for image in images:
         image.load_image()
 
-    # Testing ResNet
-
-    # Load the model
-    # model = torch.hub.load('pytorch/vision', 'deeplabv3_resnet101', weight=DeepLabV3_ResNet101_Weights.COCO_WITH_VOC_LABELS_V1.transforms)
-    # model.eval()
-    #
-    # # Transform template
-    # transform = transforms.ToTensor()
-    #
-    # # Pick a random image
-    # input_tensor = transform(images[5].img)
-    #
-    # input_batch = input_tensor.unsqueeze(0)
-    #
-    # with torch.no_grad():
-    #     output = model(input_batch)['out'][0]
-    # output_predictions = output.argmax(0)
-
     visualise_layers((images[5].img, "gray", 0.5))
 
     print("Testing...")
