@@ -1,3 +1,6 @@
+# Ignore Pycharm IDE
+/.idea/
+
 # Ignore models
 /src/models/segmentation-lv1.pt
 /src/models/SegmentationLevel1.onnx
