@@ -53,7 +53,7 @@ def get_metadata(_metadata_path, _number_of_samples, *args):
     Return just a selected number of samples
     :param _metadata_path:
     :param _number_of_samples:
-    :param args: list of tuples to filter (column_name, condition, value)
+    :param args: tuples to filter (column_name, condition, value)
     Eligible condition operators:
         Equal: "", " ", "=", None
         Larger than: ">", "larger than"

@@ -3,6 +3,9 @@ data:
   images_dirs: ../../data/images/
   column_names:
     file_name: ImageDetail.ImageFilename
+  filters: [
+    ("ImageDetail.hasRuler", None, True)
+  ]
 
 samples:
   sample_count: 10 # 0: to scan ALL annotated image

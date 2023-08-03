@@ -18,6 +18,7 @@ MODEL_INPUT_WIDTH = config["model"]["input_size"]["width"]
 # Setting for samples
 SAMPLE_COUNT = config["samples"]["sample_count"]
 
+
 # Computational device
 DEVICE = config["device"]
 
