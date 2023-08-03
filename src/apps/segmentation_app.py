@@ -1,18 +1,11 @@
-import cv2
 import albumentations as A
+import cv2
 import numpy as np
 import torch
-import matplotlib.pyplot as plt
-import torchvision.transforms as transforms
-from torchvision.models.segmentation import DeepLabV3_ResNet50_Weights, DeepLabV3_ResNet101_Weights
 
 import constraints.SEG_CONST as CONSTRAINTS
-
 from entities.Image import Image
-from utils.config_utils import read_config
 from utils.data_utils import init_images
-from utils.model_utils import load_pt
-from utils.visualise_utils import visualise_layers
 
 
 def transform_image(_target_height: int, _target_width: int):
@@ -62,7 +55,5 @@ if __name__ == "__main__":
     )
     for image in images:
         image.load_image()
-
-    visualise_layers((images[5].img, "gray", 0.5))
 
     print("Testing...")
