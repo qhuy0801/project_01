@@ -31,3 +31,8 @@ class Sample(Image):
         self.model_matrix = np.expand_dims(
             self.transform_template(image=self.image_matrix)["image"], axis=0
         ).transpose(self.dimension_order)
+
+    def divide_segmentation(self, _segment_matrix, _segment_dict):
+        for key in _segment_dict:
+            _mask = _segment_matrix == key
+            self.segments[_segment_dict.get(key)] = cv2.bitwise_and(self.image_matrix, self.image_matrix, mask=_mask.astype(np.uint8))

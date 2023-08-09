@@ -37,9 +37,4 @@ if __name__ == "__main__":
         fitted_segmentation = resize_segmentation(
             get_segmentation(sample, session), sample.image_matrix.shape[:-1][::-1]
         )
-        visualise_layers(
-            (sample.image_matrix, CONSTRAINTS.SEGMENT_CMAP, 1),
-            (fitted_segmentation, CONSTRAINTS.SEGMENT_CMAP, 0.5)
-        )
-
-    print("Testing...")
+        sample.divide_segmentation(fitted_segmentation, CONSTRAINTS.SEGMENT_DICT)
