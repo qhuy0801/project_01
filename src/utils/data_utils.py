@@ -2,49 +2,49 @@ import warnings
 
 import pandas as pd
 import utils.io_utils as io_utils
-from entities.Image import Image
+from entities.Sample import Sample
 
 
-def init_image(_file_name, _file_path, _metadata):
+def init_sample(_file_name, _file_path, _metadata):
     """
-    Init Image class instance but not loading the image matrix yet to save the memory
+    Init Image class instance but not loading the sample matrix yet to save the memory
     :param _file_name:
     :param _file_path:
     :param _metadata:
     :return:
     """
     if _file_path is not None:
-        image = Image(_file_name, _file_path)
-        image.load_metadata(_metadata)
-        return image
+        sample = Sample(_file_name, _file_path)
+        sample.load_metadata(_metadata)
+        return sample
     else:
         warnings.warn(f"File not found: {_file_name}\n")
         return None
 
 
-def init_images(_metadata, _filename_column, _image_dirs):
+def init_samples(_metadata, _filename_column, _image_dirs):
     """
-    Create a list of image instance based on the filtered and sampled data
+    Create a list of sample instance based on the filtered and sampled data
     :param _metadata:
     :param _filename_column:
     :param _image_dirs:
     :return:
     """
 
-    # Initialise empty array of images
-    images = []
+    # Initialise empty array of samples
+    samples = []
 
     # Creating the array
     for _, row in _metadata.iterrows():
         file_name = row[_filename_column]
         file_path = io_utils.find_path(_image_dirs, file_name)
-        image = init_image(file_name, file_path, row)
-        if image is not None:
-            images.append(image)
+        sample = init_sample(file_name, file_path, row)
+        if sample is not None:
+            samples.append(sample)
         else:
             continue
 
-    return images
+    return samples
 
 
 def get_metadata(_metadata_path, _number_of_samples, *args):
@@ -87,6 +87,6 @@ def get_metadata(_metadata_path, _number_of_samples, *args):
     return metadata.sample(n=sample_count)
 
 
-def save_images():
+def save_sample():
     # TODO
     return None
