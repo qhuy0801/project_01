@@ -24,3 +24,11 @@ DEVICE = config["device"]
 
 # Visualising setting
 SEGMENT_CMAP = config["visualisations"]["segment_cmap"]
+
+# Segmentation annotation dictionary
+SEGMENT_DICT = {
+    0: "peri_wound",
+    1: "wound",
+    2: "skin",
+    3: "background"
+}
