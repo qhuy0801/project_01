@@ -2,8 +2,8 @@
 /.idea/
 
 # Ignore models
-/src/models/segmentation/segmentation-lv1.pt
-/src/models/segmentation/SegmentationLevel1.onnx
+/src/models/segmentation/segmentation_lv1/segmentation-lv1.pt
+/src/models/segmentation/segmentation_lv1/SegmentationLevel1.onnx
 
 # Ignore data
 /data/
