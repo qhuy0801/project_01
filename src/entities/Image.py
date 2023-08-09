@@ -6,9 +6,8 @@ from entities.File import File
 
 
 class Image(File):
-
     # Image pixel matrix in RGB
-    img: np.ndarray
+    image_matrix: np.ndarray
 
     # Other metadata
     metadata: pd.Series
@@ -26,7 +25,7 @@ class Image(File):
         Load image from file to RGB matrix using OpenCV
         :return:
         """
-        self.img = cv2.cvtColor(cv2.imread(self.file_path), cv2.COLOR_BGR2RGB)
+        self.image_matrix = cv2.cvtColor(cv2.imread(self.file_path), cv2.COLOR_BGR2RGB)
 
     def load_metadata(self, _metadata: pd.Series) -> None:
         """
