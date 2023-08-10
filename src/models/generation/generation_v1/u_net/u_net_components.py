@@ -1,4 +1,5 @@
 from torch import nn
+import torch.nn.functional as functional
 
 
 class SelfAttentionLayer(nn.Module):
@@ -9,6 +10,7 @@ class SelfAttentionLayer(nn.Module):
     In the self attention layer, we implemented multi-headed attention.
     We set the default head number of multi-headed attention component is 4
     """
+
     # Depth of embedded layer
     channels: int
 
@@ -24,7 +26,9 @@ class SelfAttentionLayer(nn.Module):
         """
         super().__init__(*args, **kwargs)
         self.channels = _channels
-        self.multi_head_at = nn.MultiheadAttention(_channels, self.head_num, batch_first=True)
+        self.multi_head_at = nn.MultiheadAttention(
+            _channels, self.head_num, batch_first=True
+        )
         self.layer_norm = nn.LayerNorm([_channels])
         self.self_forward = nn.Sequential(
             nn.LayerNorm([_channels]),
@@ -46,3 +50,67 @@ class SelfAttentionLayer(nn.Module):
         at_value = at_value + _x
         at_value = self.self_forward(at_value) + at_value
         return at_value.swapaxes(2, 1).view(-1, self.channels, depth, depth)
+
+
+class DoubleConvolutionLayer(nn.Module):
+    """
+    This a combination of 2 convolutional layer created for convenience of constructing the U-Net.
+    The component can be modified by changing `kernel_size`.
+    GeLU activation function as possesses a smoother and more continuous form compared to the
+    ReLU function, potentially enhancing its ability to discern intricate patterns in the data.
+    """
+
+    # Default setting: kernel_size of convolutional layers
+    kernel_size = 3
+
+    def __init__(
+        self,
+        _in_channels,
+        _out_channels,
+        _middle_channels=None,
+        _residual=False,
+        *args,
+        **kwargs
+    ) -> None:
+        """
+        Constructor
+        :param _in_channels:
+        :param _out_channels:
+        :param _middle_channels:
+        :param _residual:
+        :param args:
+        :param kwargs:
+        """
+        super().__init__(*args, **kwargs)
+        self.residual = _residual
+        if not _middle_channels:
+            _middle_channels = _out_channels
+        self.double_convolution = nn.Sequential(
+            nn.Conv2d(
+                _in_channels,
+                _middle_channels,
+                kernel_size=self.kernel_size,
+                padding=1,
+                bias=False,
+            ),
+            nn.GroupNorm(1, _middle_channels),
+            nn.GELU(),
+            nn.Conv2d(
+                _middle_channels,
+                _out_channels,
+                kernel_size=self.kernel_size,
+                padding=1,
+                bias=False,
+            ),
+            nn.GroupNorm(1, _out_channels),
+        )
+
+    def forward(self, _x):
+        """
+        Forward function
+        :param _x:
+        :return:
+        """
+        if self.residual:
+            return functional.gelu(_x + self.double_convolution(_x))
+        return self.double_convolution(_x)
