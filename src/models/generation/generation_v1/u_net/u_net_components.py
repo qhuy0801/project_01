@@ -52,7 +52,7 @@ class SelfAttentionLayer(nn.Module):
         return at_value.swapaxes(2, 1).view(-1, self.channels, depth, depth)
 
 
-class DoubleConvolutionLayer(nn.Module):
+class DoubleConvolutionComponent(nn.Module):
     """
     This a combination of 2 convolutional layer created for convenience of constructing the U-Net.
     The component can be modified by changing `kernel_size`.
@@ -114,3 +114,45 @@ class DoubleConvolutionLayer(nn.Module):
         if self.residual:
             return functional.gelu(_x + self.double_convolution(_x))
         return self.double_convolution(_x)
+
+
+class DownSamplingComponent(nn.Module):
+    """
+    Down sampling component includes:
+    Max-pooling layer (Down sample)
+    Double convolutional component
+    """
+    def __init__(
+        self, _in_channels, _out_channels, _embedding_dimensions=256, *args, **kwargs
+    ) -> None:
+        """
+        Constructor
+        :param _in_channels:
+        :param _out_channels:
+        :param _embedding_dimensions:
+        :param args:
+        :param kwargs:
+        """
+        super().__init__(*args, **kwargs)
+        self.down_sampling_convolution = nn.Sequential(
+            nn.MaxPool2d(2),
+            DoubleConvolutionComponent(_in_channels, _in_channels, residual=True),
+            DoubleConvolutionComponent(_in_channels, _out_channels),
+        )
+
+        self.embedding_layer = nn.Sequential(
+            nn.SiLU(), nn.Linear(_embedding_dimensions, _out_channels)
+        )
+
+    def forward(self, _x, _step):
+        """
+        Forward function
+        :param _x:
+        :param _step:
+        :return:
+        """
+        _x = self.down_sampling_convolution(_x)
+        embedding = self.embedding_layer(_step)[:, :, None, None].repeat(
+            1, 1, _x.shape[-2], _x.shape[-1]
+        )
+        return _x + embedding
