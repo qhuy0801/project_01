@@ -1,3 +1,4 @@
+import torch
 from torch import nn
 import torch.nn.functional as functional
 
@@ -122,6 +123,7 @@ class DownSamplingComponent(nn.Module):
     Max-pooling layer (Down sample)
     Double convolutional component
     """
+
     def __init__(
         self, _in_channels, _out_channels, _embedding_dimensions=256, *args, **kwargs
     ) -> None:
@@ -144,15 +146,64 @@ class DownSamplingComponent(nn.Module):
             nn.SiLU(), nn.Linear(_embedding_dimensions, _out_channels)
         )
 
-    def forward(self, _x, _step):
+    def forward(self, _x, _encoding):
         """
         Forward function
         :param _x:
-        :param _step:
+        :param _encoding:
         :return:
         """
         _x = self.down_sampling_convolution(_x)
-        embedding = self.embedding_layer(_step)[:, :, None, None].repeat(
+        embedding = self.embedding_layer(_encoding)[:, :, None, None].repeat(
+            1, 1, _x.shape[-2], _x.shape[-1]
+        )
+        return _x + embedding
+
+
+class UpSamplingComponent(nn.Module):
+    """
+    Up sampling component includes:
+    Up sample layer (default scale factor here is "bi-linear")
+    Double convolutional component
+    """
+
+    def __init__(
+        self, _in_channels, _out_channels, _embedding_dimensions=256, *args, **kwargs
+    ) -> None:
+        """
+        Constructor
+        :param _in_channels:
+        :param _out_channels:
+        :param _embedding_dimensions:
+        :param args:
+        :param kwargs:
+        """
+        super().__init__(*args, **kwargs)
+        self.up_sampling = nn.Upsample(
+            scale_factor=2, mode="bilinear", align_corners=True
+        )
+        self.double_convolution = nn.Sequential(
+            DoubleConvolutionComponent(_in_channels, _in_channels, residual=True),
+            DoubleConvolutionComponent(_in_channels, _out_channels, _in_channels // 2),
+        )
+
+        self.embedding_layer = nn.Sequential(
+            nn.SiLU(),
+            nn.Linear(_embedding_dimensions, _out_channels),
+        )
+
+    def forward(self, _x, _skip_x, _encoding):
+        """
+        Forward function
+        :param _x:
+        :param _skip_x:
+        :param _encoding:
+        :return:
+        """
+        _x = self.up_sampling(_x)
+        _x = torch.cat([_skip_x, _x], dim=1)
+        _x = self.double_convolution(_x)
+        embedding = self.embedding_layer(_encoding)[:, :, None, None].repeat(
             1, 1, _x.shape[-2], _x.shape[-1]
         )
         return _x + embedding
