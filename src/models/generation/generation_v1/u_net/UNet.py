@@ -2,10 +2,10 @@ import torch
 from torch import nn
 
 from models.generation.generation_v1.u_net.u_net_components import (
-    DoubleConvolutionComponent,
-    DownSamplingComponent,
+    DoubleConvolution,
+    DownBlock,
     SelfAttentionLayer,
-    UpSamplingComponent,
+    UpBlock,
 )
 
 
@@ -35,45 +35,44 @@ class UNet(nn.Module):
         :param kwargs:
         """
         super().__init__(*args, **kwargs)
-        self.input_layer = DoubleConvolutionComponent(self.in_channels, 64)
-        self.down_sampling_1 = DownSamplingComponent(64, 128)
+        self.input_layer = DoubleConvolution(self.in_channels, 64)
+        self.down_sampling_1 = DownBlock(64, 128)
         self.self_attention_1 = SelfAttentionLayer(128)
-        self.down_sampling_1 = DownSamplingComponent(128, 256)
+        self.down_sampling_1 = DownBlock(128, 256)
         self.self_attention_2 = SelfAttentionLayer(256)
-        self.down_sampling_3 = DownSamplingComponent(256, 256)
+        self.down_sampling_3 = DownBlock(256, 256)
         self.self_attention_3 = SelfAttentionLayer(256)
 
-        self.convolution_1 = DoubleConvolutionComponent(256, 256)
-        self.convolution_2 = DoubleConvolutionComponent(256, 256)
+        self.convolution_1 = DoubleConvolution(256, 256)
+        self.convolution_2 = DoubleConvolution(256, 256)
 
-        self.up_sampling_1 = UpSamplingComponent(512, 128)
+        self.up_sampling_1 = UpBlock(512, 128)
         self.self_attention_1 = SelfAttentionLayer(128)
-        self.up_sampling_2 = UpSamplingComponent(256, 64)
+        self.up_sampling_2 = UpBlock(256, 64)
         self.self_attention_5 = SelfAttentionLayer(64)
-        self.up_sampling_3 = UpSamplingComponent(128, 64)
+        self.up_sampling_3 = UpBlock(128, 64)
         self.self_attention_6 = SelfAttentionLayer(64)
         self.output_layer = nn.Conv2d(64, self.out_channels, kernel_size=1)
 
-    def position_encoding(self, _encoding, _channels):
+    def position_encoding(self, _encoding, _target_channel):
         """
         Position (step) encoding to allow network know which noise step it is at
         :param _encoding:
-        :param _channels:
+        :param _target_channel:
         :return:
         """
-        inv_freq = 1.0 / (
+        normalising_factor = 1.0 / (
             10000
             ** (
                 torch.arange(
-                    0, _channels, 2, device=next(iter(self.parameters())).device
+                    0, _target_channel, 2, device=next(iter(self.parameters())).device
                 ).float()
-                / _channels
+                / _target_channel
             )
         )
-        pos_enc_a = torch.sin(_encoding.repeat(1, _channels // 2) * inv_freq)
-        pos_enc_b = torch.cos(_encoding.repeat(1, _channels // 2) * inv_freq)
-        pos_enc = torch.cat([pos_enc_a, pos_enc_b], dim=-1)
-        return pos_enc
+        position_a = torch.sin(_encoding.repeat(1, _target_channel // 2) * normalising_factor)
+        position_b = torch.cos(_encoding.repeat(1, _target_channel // 2) * normalising_factor)
+        return torch.cat([position_a, position_b], dim=-1)
 
     def unet_forward(self, _x, _encoding):
         """
@@ -109,12 +108,12 @@ class UNet(nn.Module):
         :param _encoding:
         :return:
         """
-        _encoding = _encoding.unsqueeze(-1)
-        _encoding = self.position_encoding(_encoding, self.time_channel)
-        return self.unet_forward(_x, _encoding)
+        encoding = _encoding.unsqueeze(-1)
+        encoding = self.position_encoding(encoding, self.time_channel)
+        return self.unet_forward(_x, encoding)
 
 
-class UNet_text_embedding(UNet):
+class UNet_Conditional(UNet):
     class_count = None
 
     def __init__(self, _class_count=class_count, *args, **kwargs) -> None:

@@ -9,7 +9,7 @@ from fastprogress import progress_bar
 import torch
 from torch import nn, optim
 
-from models.generation.generation_v1.u_net.UNet import UNet_text_embedding
+from models.generation.generation_v1.u_net.UNet import UNet_Conditional
 from models.generation.generation_v1.ema import EMA
 from utils.io_utils import *
 
@@ -36,7 +36,7 @@ class Diffuser:
         self.alpha_hat = torch.cumprod(self.alpha, dim=0)
 
         self.img_size = img_size
-        self.model = UNet_text_embedding(
+        self.model = UNet_Conditional(
             c_in, c_out, num_classes=num_classes, **kwargs
         ).to(device)
         self.ema_model = copy.deepcopy(self.model).eval().requires_grad_(False)
@@ -106,7 +106,7 @@ class Diffuser:
         self.scaler.scale(loss).backward()
         self.scaler.step(self.optimizer)
         self.scaler.update()
-        self.ema.step_ema(self.ema_model, self.model)
+        self.ema.take_step(self.ema_model, self.model)
         self.scheduler.step()
 
     def one_epoch(self, train=True):

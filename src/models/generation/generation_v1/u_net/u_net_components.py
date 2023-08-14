@@ -53,7 +53,7 @@ class SelfAttentionLayer(nn.Module):
         return at_value.swapaxes(2, 1).view(-1, self.channels, depth, depth)
 
 
-class DoubleConvolutionComponent(nn.Module):
+class DoubleConvolution(nn.Module):
     """
     This a combination of 2 convolutional layer created for convenience of constructing the U-Net.
     The component can be modified by changing `kernel_size`.
@@ -117,7 +117,7 @@ class DoubleConvolutionComponent(nn.Module):
         return self.double_convolution(_x)
 
 
-class DownSamplingComponent(nn.Module):
+class DownBlock(nn.Module):
     """
     Down sampling component includes:
     Max-pooling layer (Down sample)
@@ -138,8 +138,8 @@ class DownSamplingComponent(nn.Module):
         super().__init__(*args, **kwargs)
         self.down_sampling_convolution = nn.Sequential(
             nn.MaxPool2d(2),
-            DoubleConvolutionComponent(_in_channels, _in_channels, residual=True),
-            DoubleConvolutionComponent(_in_channels, _out_channels),
+            DoubleConvolution(_in_channels, _in_channels, residual=True),
+            DoubleConvolution(_in_channels, _out_channels),
         )
 
         self.embedding_layer = nn.Sequential(
@@ -160,7 +160,7 @@ class DownSamplingComponent(nn.Module):
         return _x + embedding
 
 
-class UpSamplingComponent(nn.Module):
+class UpBlock(nn.Module):
     """
     Up sampling component includes:
     Up sample layer (default scale factor here is "bi-linear")
@@ -183,8 +183,8 @@ class UpSamplingComponent(nn.Module):
             scale_factor=2, mode="bilinear", align_corners=True
         )
         self.double_convolution = nn.Sequential(
-            DoubleConvolutionComponent(_in_channels, _in_channels, residual=True),
-            DoubleConvolutionComponent(_in_channels, _out_channels, _in_channels // 2),
+            DoubleConvolution(_in_channels, _in_channels, residual=True),
+            DoubleConvolution(_in_channels, _out_channels, _in_channels // 2),
         )
 
         self.embedding_layer = nn.Sequential(
