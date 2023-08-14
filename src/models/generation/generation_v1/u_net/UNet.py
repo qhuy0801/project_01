@@ -70,8 +70,12 @@ class UNet(nn.Module):
                 / _target_channel
             )
         )
-        position_a = torch.sin(_encoding.repeat(1, _target_channel // 2) * normalising_factor)
-        position_b = torch.cos(_encoding.repeat(1, _target_channel // 2) * normalising_factor)
+        position_a = torch.sin(
+            _encoding.repeat(1, _target_channel // 2) * normalising_factor
+        )
+        position_b = torch.cos(
+            _encoding.repeat(1, _target_channel // 2) * normalising_factor
+        )
         return torch.cat([position_a, position_b], dim=-1)
 
     def unet_forward(self, _x, _encoding):
