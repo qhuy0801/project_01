@@ -26,7 +26,7 @@ class UNet(nn.Module):
     out_channels = 3
 
     # Time encoding
-    time_channel = 256
+    embedding_dimension = 256
 
     def __init__(self, *args, **kwargs) -> None:
         """
@@ -113,7 +113,7 @@ class UNet(nn.Module):
         :return:
         """
         encoding = _embedding.unsqueeze(-1)
-        encoding = self.position_embedding(encoding, self.time_channel)
+        encoding = self.position_embedding(encoding, self.embedding_dimension)
         return self.unet_forward(_x, encoding)
 
 
@@ -133,18 +133,18 @@ class UNet_Conditional(UNet):
         """
         super().__init__(*args, **kwargs)
         if _class_count is not None:
-            self.label_embedding = nn.Embedding(_class_count, self.time_channel)
+            self.label_embedding = nn.Embedding(_class_count, self.embedding_dimension)
 
-    def forward(self, _x, _embedding, _y=None):
+    def forward(self, _x, _position_embedding, _y=None):
         """
         Forward function with encoding
         :param _x:
-        :param _embedding:
+        :param _position_embedding:
         :param _y:
         :return:
         """
-        encoding = _embedding.unsqueeze(-1)
-        encoding = self.position_embedding(encoding, self.time_dim)
+        position_embedding = _position_embedding.unsqueeze(-1)
+        embedding = self.position_embedding(position_embedding, self.time_dim)
         if _y is not None:
-            encoding += self.label_embedding(_y)
-        return self.unet_forwad(_x, encoding)
+            embedding += self.label_embedding(_y)
+        return self.unet_forwad(_x, embedding)
