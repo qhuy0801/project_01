@@ -14,6 +14,17 @@ def find_path(root_dir, filename):
     return None
 
 
+def make_segmentation_dir(_path):
+    """
+    To make a directory to save segmented images
+    :param _path:
+    :return:
+    """
+    os.makedirs(_path, exist_ok=True)
+    os.makedirs(os.path.join(_path, "background"), exist_ok=True)
+    os.makedirs(os.path.join(_path, "roi"), exist_ok=True)
+
+
 def make_run_dir(_run_name):
     """
     To make the directory to save models weights and output in each run
@@ -24,3 +35,13 @@ def make_run_dir(_run_name):
     os.makedirs("output", exist_ok=True)
     os.makedirs(os.path.join("model", _run_name), exist_ok=True)
     os.makedirs(os.path.join("output", _run_name), exist_ok=True)
+
+
+def make_dir(_path):
+    """
+    Make new directory if not exists
+    :param _path:
+    :return:
+    """
+    if not os.path.exists(_path):
+        os.makedirs(_path, exist_ok=True)

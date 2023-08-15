@@ -7,6 +7,9 @@ config = read_config(CONFIG_FILE)
 METADATA_PATH = config["data"]["metadata_path"]
 IMAGES_DIR = config["data"]["images_dirs"]
 
+# Segmentation output directory
+SEGMENTED_DIR = config["data"]["segmentation_output"]
+
 # Settings for .csv metadata file
 FILENAME_COLUMN = config["data"]["column_names"]["file_name"]
 

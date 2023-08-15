@@ -35,4 +35,6 @@ class Sample(Image):
     def divide_segmentation(self, _segment_matrix, _segment_dict):
         for key in _segment_dict:
             _mask = _segment_matrix == key
-            self.segments[_segment_dict.get(key)] = cv2.bitwise_and(self.image_matrix, self.image_matrix, mask=_mask.astype(np.uint8))
+            self.segments[_segment_dict.get(key)] = cv2.bitwise_and(
+                self.image_matrix, self.image_matrix, mask=_mask.astype(np.uint8)
+            )

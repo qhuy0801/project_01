@@ -1,14 +1,16 @@
 data:
   metadata_path: ../../data/annotations/merged_wound_details_july_2022.csv
   images_dirs: ../../data/images/
+  segmentation_output: ../../data/segmented/
   column_names:
     file_name: ImageDetail.ImageFilename
   filters: [
     ("ImageDetail.hasRuler", None, True)
   ]
 
+
 samples:
-  sample_count: 10 # 0: to scan ALL annotated image
+  sample_count: 0 # 0: to scan ALL annotated image
 
 model:
   path: ../models/segmentation/segmentation_lv1/SegmentationLevel1.onnx
