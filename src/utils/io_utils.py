@@ -14,8 +14,13 @@ def find_path(root_dir, filename):
     return None
 
 
-def mk_folders(run_name):
-    os.makedirs("models", exist_ok=True)
-    os.makedirs("results", exist_ok=True)
-    os.makedirs(os.path.join("models", run_name), exist_ok=True)
-    os.makedirs(os.path.join("results", run_name), exist_ok=True)
+def make_run_dir(_run_name):
+    """
+    To make the directory to save models weights and output in each run
+    :param _run_name:
+    :return:
+    """
+    os.makedirs("model", exist_ok=True)
+    os.makedirs("output", exist_ok=True)
+    os.makedirs(os.path.join("model", _run_name), exist_ok=True)
+    os.makedirs(os.path.join("output", _run_name), exist_ok=True)
