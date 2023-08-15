@@ -12,9 +12,6 @@ class SelfAttentionLayer(nn.Module):
     We set the default head number of multi-headed attention component is 4
     """
 
-    # Depth of embedded layer
-    channels: int
-
     # Number of heads in multi-headed attention component
     head_num = 4
 
@@ -40,7 +37,7 @@ class SelfAttentionLayer(nn.Module):
 
     def forward(self, _x):
         """
-        Forward function
+        Forward function ò attention module
         :param _x:
         :return:
         """
@@ -146,15 +143,15 @@ class DownBlock(nn.Module):
             nn.SiLU(), nn.Linear(_embedding_dimensions, _out_channels)
         )
 
-    def forward(self, _x, _encoding):
+    def forward(self, _x, _embedding):
         """
         Forward function
         :param _x:
-        :param _encoding:
+        :param _embedding:
         :return:
         """
         _x = self.down_sampling_convolution(_x)
-        embedding = self.embedding_layer(_encoding)[:, :, None, None].repeat(
+        embedding = self.embedding_layer(_embedding)[:, :, None, None].repeat(
             1, 1, _x.shape[-2], _x.shape[-1]
         )
         return _x + embedding
@@ -192,18 +189,18 @@ class UpBlock(nn.Module):
             nn.Linear(_embedding_dimensions, _out_channels),
         )
 
-    def forward(self, _x, _skip_x, _encoding):
+    def forward(self, _x, _skip_x, _embedding):
         """
         Forward function
         :param _x:
         :param _skip_x:
-        :param _encoding:
+        :param _embedding:
         :return:
         """
         _x = self.up_sampling(_x)
         _x = torch.cat([_skip_x, _x], dim=1)
         _x = self.double_convolution(_x)
-        embedding = self.embedding_layer(_encoding)[:, :, None, None].repeat(
+        embedding = self.embedding_layer(_embedding)[:, :, None, None].repeat(
             1, 1, _x.shape[-2], _x.shape[-1]
         )
         return _x + embedding

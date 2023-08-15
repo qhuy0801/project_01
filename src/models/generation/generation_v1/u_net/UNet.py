@@ -54,9 +54,9 @@ class UNet(nn.Module):
         self.self_attention_6 = SelfAttentionLayer(64)
         self.output_layer = nn.Conv2d(64, self.out_channels, kernel_size=1)
 
-    def position_encoding(self, _encoding, _target_channel):
+    def position_embedding(self, _encoding, _target_channel):
         """
-        Position (step) encoding to allow network know which noise step it is at
+        Position (step) embedding to allow network know which noise step it is at
         :param _encoding:
         :param _target_channel:
         :return:
@@ -78,42 +78,42 @@ class UNet(nn.Module):
         )
         return torch.cat([position_a, position_b], dim=-1)
 
-    def unet_forward(self, _x, _encoding):
+    def unet_forward(self, _x, _embedding):
         """
         Forward function
         :param _x:
-        :param _encoding:
+        :param _embedding:
         :return:
         """
         _x1 = self.input_layer(_x)
-        _x2 = self.down_sampling_1(_x1, _encoding)
+        _x2 = self.down_sampling_1(_x1, _embedding)
         _x2 = self.self_attention_1(_x2)
-        _x3 = self.down_sampling_1(_x2, _encoding)
+        _x3 = self.down_sampling_1(_x2, _embedding)
         _x3 = self.self_attention_2(_x3)
-        _x4 = self.down_sampling_3(_x3, _encoding)
+        _x4 = self.down_sampling_3(_x3, _embedding)
         _x4 = self.self_attention_3(_x4)
 
         _x4 = self.convolution_1(_x4)
         _x4 = self.convolution_2(_x4)
 
-        _x = self.up_sampling_1(_x4, _x3, _encoding)
+        _x = self.up_sampling_1(_x4, _x3, _embedding)
         _x = self.self_attention_1(_x)
-        _x = self.up_sampling_2(_x, _x2, _encoding)
+        _x = self.up_sampling_2(_x, _x2, _embedding)
         _x = self.self_attention_5(_x)
-        _x = self.up_sampling_3(_x, _x1, _encoding)
+        _x = self.up_sampling_3(_x, _x1, _embedding)
         _x = self.self_attention_6(_x)
         output = self.output_layer(_x)
         return output
 
-    def forward(self, _x, _encoding):
+    def forward(self, _x, _embedding):
         """
         Forward with encodings
         :param _x:
-        :param _encoding:
+        :param _embedding:
         :return:
         """
-        encoding = _encoding.unsqueeze(-1)
-        encoding = self.position_encoding(encoding, self.time_channel)
+        encoding = _embedding.unsqueeze(-1)
+        encoding = self.position_embedding(encoding, self.time_channel)
         return self.unet_forward(_x, encoding)
 
 
@@ -124,6 +124,9 @@ class UNet_Conditional(UNet):
         """
         Constructor, here, we add number of class for further turn it into
         semantic embedding (encoding)
+        Further works: In this implementation, we only do simple class embedding
+        In the case that we need more specified encoding for labels (or semantics)
+        we can do separated dedicated label and timestep encoding and embed in tho the network
         :param _class_count:
         :param args:
         :param kwargs:
@@ -132,16 +135,16 @@ class UNet_Conditional(UNet):
         if _class_count is not None:
             self.label_embedding = nn.Embedding(_class_count, self.time_channel)
 
-    def forward(self, _x, _encoding, _y=None):
+    def forward(self, _x, _embedding, _y=None):
         """
         Forward function with encoding
         :param _x:
-        :param _encoding:
+        :param _embedding:
         :param _y:
         :return:
         """
-        encoding = _encoding.unsqueeze(-1)
-        encoding = self.position_encoding(encoding, self.time_dim)
+        encoding = _embedding.unsqueeze(-1)
+        encoding = self.position_embedding(encoding, self.time_dim)
         if _y is not None:
             encoding += self.label_embedding(_y)
         return self.unet_forwad(_x, encoding)
