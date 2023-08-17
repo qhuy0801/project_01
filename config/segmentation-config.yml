@@ -4,6 +4,7 @@ data:
   segmentation_output: ../../data/segmented/
   column_names:
     file_name: ImageDetail.ImageFilename
+    wound_label: ImageDetail.WoundType
   filters: [
     ("ImageDetail.hasRuler", None, True)
   ]

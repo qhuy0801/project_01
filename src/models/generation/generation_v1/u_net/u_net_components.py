@@ -135,7 +135,7 @@ class DownBlock(nn.Module):
         super().__init__(*args, **kwargs)
         self.down_sampling_convolution = nn.Sequential(
             nn.MaxPool2d(2),
-            DoubleConvolution(_in_channels, _in_channels, residual=True),
+            DoubleConvolution(_in_channels, _in_channels, _residual=True),
             DoubleConvolution(_in_channels, _out_channels),
         )
 
@@ -180,7 +180,7 @@ class UpBlock(nn.Module):
             scale_factor=2, mode="bilinear", align_corners=True
         )
         self.double_convolution = nn.Sequential(
-            DoubleConvolution(_in_channels, _in_channels, residual=True),
+            DoubleConvolution(_in_channels, _in_channels, _residual=True),
             DoubleConvolution(_in_channels, _out_channels, _in_channels // 2),
         )
 

@@ -12,6 +12,7 @@ SEGMENTED_DIR = config["data"]["segmentation_output"]
 
 # Settings for .csv metadata file
 FILENAME_COLUMN = config["data"]["column_names"]["file_name"]
+WOUND_LABEL_COLUMN = config["data"]["column_names"]["wound_label"]
 
 # Setting for segmentation models
 MODEL_PATH = config["model"]["path"]

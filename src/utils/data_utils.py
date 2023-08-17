@@ -90,3 +90,7 @@ def get_metadata(_metadata_path, _number_of_samples, *args):
 def save_sample():
     # TODO
     return None
+
+
+def load_data():
+    return None, None
