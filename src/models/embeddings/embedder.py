@@ -9,6 +9,7 @@ class Embedder(ABC):
     Dependency Injection (DI) principles to facilitate the integration of later upgraded
     embedding method.
     """
+
     @abstractmethod
     def __init__(self, *args, **kwargs) -> None:
         """

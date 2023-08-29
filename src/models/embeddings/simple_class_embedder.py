@@ -15,10 +15,10 @@ class ClassEmbedder(Embedder, ABC):
         1., 2., 3.,
     """
 
-    def __init__(self, class_count, embedded_dim=256, device="cpu") -> None:
+    def __init__(self, class_count, embedded_dim=256) -> None:
         super().__init__()
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.embedded_dim = embedded_dim
-        self.device = device
         self.class_count = class_count
         self.class_embedding = nn.Embedding(self.class_count, self.embedded_dim)
 
