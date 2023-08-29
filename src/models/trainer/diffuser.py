@@ -191,7 +191,7 @@ class Diffuser:
         self.scaler.step(self.optimiser)
         self.scaler.update()
         # loss.backward()
-        self.optimiser.step()
+        # self.optimiser.step()
         self.scheduler.step()
 
     def add_noise(self, image, timestep):
