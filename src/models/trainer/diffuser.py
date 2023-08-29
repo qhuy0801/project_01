@@ -57,7 +57,7 @@ class Diffuser:
         max_lr: float = 1e-4,
         eps: float = 1e-5,
         epochs: int = 1000,
-        **kwargs
+        **kwargs,
     ) -> None:
         """
         Constructor
@@ -86,7 +86,9 @@ class Diffuser:
         self.beta_start = beta_start
         self.beta_end = beta_end
         self.noise_steps = noise_steps
-        self.beta = linear_noise_schedule(self.beta_start, self.beta_end, self.noise_steps).to(self.device)
+        self.beta = linear_noise_schedule(
+            self.beta_start, self.beta_end, self.noise_steps
+        ).to(self.device)
 
         self.alpha = 1.0 - self.beta
         self.alpha_cumulative = torch.cumprod(self.alpha, dim=0)
@@ -143,19 +145,26 @@ class Diffuser:
         # Breakdown data using progress bar
         batches = progress_bar(data, leave=False)
         for _, (images, semantics) in enumerate(batches):
-            with torch.autocast(self.device.type) and (torch.enable_grad() if is_training else torch.inference_mode()):
+            with torch.autocast(self.device.type) and (
+                torch.enable_grad() if is_training else torch.inference_mode()
+            ):
                 # Transfer data to devices
                 images = images.to(self.device)
                 semantics = semantics.to(self.device)
 
                 # Get a random timestep for each image
-                timesteps = torch.randint(low=1, high=self.noise_steps, size=(images.shape[0],))
+                timesteps = torch.randint(
+                    low=1, high=self.noise_steps, size=(images.shape[0],)
+                )
 
                 # Add noise to image
                 noised_images, noises = self.add_noise(images, timesteps)
 
                 # Conditioning
-                conditions = self.embedder.combine_embedding(self.embedder.step_embedding(timesteps), self.embedder.semantic_embedding(semantics))
+                conditions = self.embedder.combine_embedding(
+                    self.embedder.step_embedding(timesteps),
+                    self.embedder.semantic_embedding(semantics),
+                )
 
                 # Push noised image to the network
                 pred_noises = self.model(noised_images, conditions)
@@ -166,8 +175,8 @@ class Diffuser:
                 # Store loss
                 epoch_loss.append(loss.item())
 
-        if is_training:
-            self.backward(loss)
+            if is_training:
+                self.backward(loss)
 
         return epoch_loss
 
@@ -181,6 +190,8 @@ class Diffuser:
         self.scaler.scale(loss).backward()
         self.scaler.step(self.optimiser)
         self.scaler.update()
+        # loss.backward()
+        self.optimiser.step()
         self.scheduler.step()
 
     def add_noise(self, image, timestep):
@@ -193,6 +204,7 @@ class Diffuser:
         epsilon = torch.randn_like(image)
         return (
             torch.sqrt(self.alpha_cumulative[timestep])[:, None, None, None] * image
-            + torch.sqrt(1 - self.alpha_cumulative[timestep])[:, None, None, None] * epsilon,
+            + torch.sqrt(1 - self.alpha_cumulative[timestep])[:, None, None, None]
+            * epsilon,
             epsilon,
         )

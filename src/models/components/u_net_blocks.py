@@ -8,7 +8,7 @@ class DownBlock(nn.Module):
     """
     Down sampling component includes:
     Max-pooling layer (Down sample)
-    Double convolutional component
+    Double convolutional component5
     """
 
     def __init__(
@@ -34,7 +34,7 @@ class DownBlock(nn.Module):
                 residual=True,
             ),
             DoubleConvolution(
-                in_channels=self.out_channels, out_channels=self.out_channels
+                in_channels=self.in_channels, out_channels=self.out_channels
             ),
         )
 
@@ -51,9 +51,12 @@ class DownBlock(nn.Module):
         :return:
         """
         x = self.down_conv(x)
-        embeddings = self.embedded_layer(embeddings)[:, :, None, None].repeat(
+        embeddings = self.embedded_layer(embeddings)
+        embeddings = embeddings[:, :, None, None]
+        embeddings = embeddings.repeat(
             1, 1, x.shape[-2], x.shape[-1]
         )
+        a = x + embeddings
         return x + embeddings
 
 

@@ -10,7 +10,7 @@ class SelfAttention(nn.Module):
     We set the default head number of multi-headed attention component is 4
     """
 
-    def __init__(self, embedded_dim, *args, **kwargs) -> None:
+    def __init__(self, embedded_dim, head_num=4, *args, **kwargs) -> None:
         """
         Constructor
         :param embedded_dim: dimension of input (which equal to convolution size)
@@ -19,6 +19,7 @@ class SelfAttention(nn.Module):
         """
         super().__init__(*args, **kwargs)
         self.channels = embedded_dim
+        self.head_num = head_num
         self.multi_head_at = nn.MultiheadAttention(
             embedded_dim, self.head_num, batch_first=True
         )
@@ -38,7 +39,7 @@ class SelfAttention(nn.Module):
         """
         depth = x.shape[-1]
         x = x.view(-1, self.channels, depth * depth).swapaxes(1, 2)
-        x_ln = self.ln(x)
+        x_ln = self.layer_norm(x)
         at_value, _ = self.multi_head_at(x_ln, x_ln, x_ln)
         at_value = at_value + x
         at_value = self.self_forward(at_value) + at_value

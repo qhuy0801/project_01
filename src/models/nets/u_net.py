@@ -15,7 +15,9 @@ class UNet(nn.Module):
     the training process
     """
 
-    def __init__(self, in_channels=3, out_channels=3, embedded_dim=256, *args, **kwargs) -> None:
+    def __init__(
+        self, in_channels=3, out_channels=3, embedded_dim=256, *args, **kwargs
+    ) -> None:
         """
         Constructor
         :param args:
@@ -30,7 +32,7 @@ class UNet(nn.Module):
         self.in_conv = DoubleConvolution(self.in_channels, 64)
         self.down_sampling_1 = DownBlock(64, 128)
         self.self_attention_1 = SelfAttention(128)
-        self.down_sampling_1 = DownBlock(128, 256)
+        self.down_sampling_2 = DownBlock(128, 256)
         self.self_attention_2 = SelfAttention(256)
         self.down_sampling_3 = DownBlock(256, 256)
         self.self_attention_3 = SelfAttention(256)

@@ -56,12 +56,12 @@ class DoubleConvolution(nn.Module):
             nn.GroupNorm(1, out_channels),
         )
 
-    def forward(self, _x):
+    def forward(self, x):
         """
         Forward function
-        :param _x:
+        :param x:
         :return:
         """
         if self.residual:
-            return functional.gelu(_x + self.double_convolution(_x))
-        return self.double_convolution(_x)
+            return functional.gelu(x + self.double_convolution(x))
+        return self.double_convolution(x)
