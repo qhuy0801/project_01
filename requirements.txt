@@ -4,3 +4,8 @@ fastprogress==1.0.0
 opencv_python==4.8.0.74
 opencv_python_headless==4.8.0.74
 torch==2.1.0.dev20230726
+
+diffusers~=0.20.1
+opencv-python~=4.8.0.74
+tqdm~=4.65.0
+accelerate~=0.22.0
