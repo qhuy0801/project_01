@@ -12,7 +12,6 @@ class Diffuser_v1:
             self,
             train_data: torch.utils.data.Dataset,
             batch_size: int = 10,
-            image_size: int = 512,
             beta_start: float = 1e-4,
             beta_end: float = 0.02,
             noise_steps: int = 1000,
@@ -30,7 +29,6 @@ class Diffuser_v1:
         self.train_data = DataLoader(train_data, batch_size=batch_size)
 
         # Settings
-        self.image_size = image_size
         self.beta_start = beta_start
         self.beta_end = beta_end
         self.epochs = epochs
@@ -39,7 +37,7 @@ class Diffuser_v1:
 
         # Dependencies
         self.model = UNet2DModel(
-            sample_size=self.image_size,
+            sample_size=train_data.image_size,
             in_channels=3,
             out_channels=3,
             layers_per_block=2,
@@ -125,8 +123,8 @@ class Diffuser_v1:
             # Forward progress
             with self.accelerator.accumulate(self.model):
                 pred_noise = self.model(
-                    sample=noised_images, timestep=time_steps, class_labels=labels
-                )
+                    sample=noised_images, timestep=time_steps, class_labels=labels, return_dict=False
+                )[0]
                 loss = self.loss_func(pred_noise, noise)
                 print(loss.item())  # TODO: remove
                 self.backward(loss)
