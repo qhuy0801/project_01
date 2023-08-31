@@ -7,7 +7,7 @@ from models.nets.u_net import UNet
 from utils import linear_noise_schedule
 
 
-class Diffuser:
+class Diffuser_v1:
     """
     In this implementation of diffuser, we hard-coded the dependencies.
     We let the training parameters open for customisation
