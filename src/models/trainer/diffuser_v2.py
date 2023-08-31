@@ -1,8 +1,10 @@
+import os.path
+import random
 from datetime import datetime
 
 import torch
 from accelerate import Accelerator
-from diffusers import UNet2DModel, DDPMScheduler
+from diffusers import UNet2DModel, DDPMScheduler, DDPMPipeline
 from fastprogress import progress_bar
 from torch.utils.data import DataLoader
 
@@ -17,13 +19,14 @@ class Diffuser_v2:
         noise_steps: int = 1000,
         max_lr: float = 1e-4,
         epochs: int = 1000,
-        **kwargs
+        **kwargs,
     ) -> None:
         super().__init__()
 
         # Platform
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.run_name = "diffusion_v1" + datetime.now().strftime("%m%d%H%M")
+        self.run_name = "diffusion_v3"
+        self.run_dir = os.path.join("../output/", self.run_name)
 
         # Data
         self.train_data = DataLoader(train_dataset, batch_size=batch_size)
@@ -80,8 +83,9 @@ class Diffuser_v2:
         # Hardware controlling
         self.accelerator = Accelerator(
             mixed_precision="fp16",
-            gradient_accumulation_steps=1
-            # log_with="tensorboard"
+            gradient_accumulation_steps=1,
+            log_with="tensorboard",
+            project_dir=self.run_dir,
         )
 
         # Wrap everything in with accelerator
@@ -94,12 +98,30 @@ class Diffuser_v2:
             [self.model, self.optimiser, self.train_data, self.lr_scheduler]
         )
 
+        # Tracker
+        logging_hps = {
+            "image_size": train_dataset.target_size,
+            "batch_soze": batch_size,
+            "max_lr": self.max_lr,
+            "noise_steps": self.noise_steps,
+            "epochs": self.epochs,
+        }
+        self.accelerator.init_trackers(
+            datetime.now().strftime("%m%d%H%M"), config=logging_hps
+        )
+
+        # Step counter
+        self.current_step = 0
+
+        # Seed for replication
+        self.seed = 42
+
     def fit(self):
         for epoch in range(self.epochs):
-            print(f"Epoch: {epoch}")
-            self.one_epoch()
+            print(f"Epoch {epoch} ")
+            self.one_epoch(epoch)
 
-    def one_epoch(self):
+    def one_epoch(self, current_epoch: int):
         # Break down to batches
         batches = progress_bar(self.train_data, leave=False)
 
@@ -124,11 +146,27 @@ class Diffuser_v2:
             # Forward progress
             with self.accelerator.accumulate(self.model):
                 pred_noise = self.model(
-                    sample=noised_images, timestep=time_steps, class_labels=labels, return_dict=False
+                    sample=noised_images,
+                    timestep=time_steps,
+                    class_labels=labels,
+                    return_dict=False,
                 )[0]
                 loss = self.loss_func(pred_noise, noise)
-                print(loss.item())  # TODO: remove
+                progress_bar.comment = f"MSE={loss.item():2.3f}"
+
+                # Backward weight updating
                 self.backward(loss)
+
+            # Log
+            _log = {
+                "loss": loss.detach().item(),
+                "lr": self.lr_scheduler.get_last_lr()[0],
+                "epoch": current_epoch,
+            }
+            self.accelerator.log(_log, step=self.current_step)
+
+            # Step count
+            self.current_step += 1
 
     def backward(self, loss):
         self.accelerator.backward(loss)
@@ -136,3 +174,7 @@ class Diffuser_v2:
         self.optimiser.step()
         self.lr_scheduler.step()
         self.optimiser.zero_grad()
+
+    @torch.no_grad()
+    def sample(self, num_samples: int = 4):
+        return None
