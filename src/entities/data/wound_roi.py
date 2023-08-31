@@ -14,11 +14,14 @@ class WoundROI(Dataset):
     """
 
     def __init__(
-        self, dataset_dir: str = "../data/segmented/08151709all/roi/"
+        self,
+        dataset_dir: str = "../data/segmented/08151709all/roi/",
+        target_size: int = 128,
     ) -> None:
         super().__init__()
 
         self.dataset_dir = dataset_dir
+        self.target_size = target_size
         self.data = []
         self.class_tuple = ()
 
@@ -34,7 +37,9 @@ class WoundROI(Dataset):
         self.transform = A.Compose(
             [
                 A.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
-                A.Resize(512, 512, interpolation=cv2.INTER_NEAREST),
+                A.Resize(
+                    self.target_size, self.target_size, interpolation=cv2.INTER_NEAREST
+                ),
                 ToTensorV2(),
             ]
         )

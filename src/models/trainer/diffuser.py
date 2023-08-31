@@ -33,7 +33,6 @@ class Diffuser:
 
     # Parameters
     # Model settings
-    image_size: int = 512
     in_channels: int = 3
     out_channels: int = 3
 
@@ -49,8 +48,9 @@ class Diffuser:
 
     def __init__(
         self,
-        train_data: DataLoader,
+        train_dataset: Dataset,
         embedder: Embedder,
+        batch_size: int = 10,
         beta_start: float = 1e-4,
         beta_end: float = 0.02,
         noise_steps: int = 1000,
@@ -72,7 +72,7 @@ class Diffuser:
         :param kwargs:
         """
         super().__init__()
-        self.train_data = train_data
+        self.train_data = DataLoader(train_dataset, batch_size=batch_size)
         self.embedder = embedder
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = UNet(
@@ -171,6 +171,7 @@ class Diffuser:
 
                 # Loss function
                 loss = self.loss_func(noises, pred_noises)
+                print(loss.item())
 
                 # Store loss
                 epoch_loss.append(loss.item())
@@ -190,8 +191,6 @@ class Diffuser:
         self.scaler.scale(loss).backward()
         self.scaler.step(self.optimiser)
         self.scaler.update()
-        # loss.backward()
-        # self.optimiser.step()
         self.scheduler.step()
 
     def add_noise(self, image, timestep):

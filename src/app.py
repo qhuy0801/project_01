@@ -5,13 +5,13 @@ from models.embeddings.simple_class_embedder import ClassEmbedder
 from models.trainer.diffuser import Diffuser
 
 if __name__ == '__main__':
-    wound_roi_data = WoundROI()
-    wound_roi_loader = DataLoader(wound_roi_data, batch_size=10)
+    wound_roi = WoundROI()
 
     # test = next(iter(wound_roi_loader))
     # print(test)
     diffuser = Diffuser(
-        train_data=wound_roi_loader,
-        embedder=ClassEmbedder(wound_roi_data.class_tuple.__len__())
+        train_dataset=wound_roi,
+        embedder=ClassEmbedder(wound_roi.class_tuple.__len__()),
+        batch_size=1,
     )
     diffuser.fit()

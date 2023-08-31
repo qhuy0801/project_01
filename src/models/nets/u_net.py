@@ -58,7 +58,7 @@ class UNet(nn.Module):
         _x1 = self.in_conv(x)
         _x2 = self.down_sampling_1(_x1, embeddings)
         _x2 = self.self_attention_1(_x2)
-        _x3 = self.down_sampling_1(_x2, embeddings)
+        _x3 = self.down_sampling_2(_x2, embeddings)
         _x3 = self.self_attention_2(_x3)
         _x4 = self.down_sampling_3(_x3, embeddings)
         _x4 = self.self_attention_3(_x4)
