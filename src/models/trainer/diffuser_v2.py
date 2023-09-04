@@ -6,7 +6,7 @@ import torch
 from accelerate import Accelerator
 from diffusers import UNet2DModel, DDPMScheduler, DDPMPipeline
 from fastprogress import progress_bar
-from torch.utils.data import DataLoader, RandomSampler
+from torch.utils.data import DataLoader
 
 
 class Diffuser_v2:
@@ -29,7 +29,6 @@ class Diffuser_v2:
         self.run_dir = os.path.join("../output/", self.run_name)
 
         # Data
-        self.train_dataset = train_dataset
         self.train_data = DataLoader(train_dataset, batch_size=batch_size)
 
         # Settings
@@ -41,7 +40,7 @@ class Diffuser_v2:
 
         # Dependencies
         self.model = UNet2DModel(
-            sample_size=self.train_dataset.target_size,
+            sample_size=train_dataset.target_size,
             in_channels=3,
             out_channels=3,
             layers_per_block=2,
@@ -63,7 +62,7 @@ class Diffuser_v2:
                 "UpBlock2D",
             ),
             class_embed_type=None,
-            num_class_embeds=self.train_dataset.class_tuple.__len__(),
+            num_class_embeds=train_dataset.class_tuple.__len__(),
         ).to(self.device)
         self.noise_scheduler = DDPMScheduler(
             num_train_timesteps=self.noise_steps,
@@ -127,8 +126,22 @@ class Diffuser_v2:
         batches = progress_bar(self.train_data, leave=False)
 
         # Loop
-        for _, (images, _labels) in enumerate(batches):
-            noised_images, labels, noise, time_steps = self.prepare_batch(images, _labels)
+        for _, (images, labels) in enumerate(batches):
+            # Push to device
+            images = images.to(self.device)
+            labels = labels.to(self.device)
+
+            # Noise and noise steps
+            noise = torch.randn(images.shape).to(images.device)
+            time_steps = torch.randint(
+                low=0,
+                high=self.noise_steps,
+                size=(images.shape[0],),
+                device=images.device,
+            ).long()
+
+            # Add noise to images
+            noised_images = self.noise_scheduler.add_noise(images, noise, time_steps)
 
             # Forward progress
             with self.accelerator.accumulate(self.model):
@@ -140,7 +153,6 @@ class Diffuser_v2:
                 )[0]
                 loss = self.loss_func(pred_noise, noise)
                 progress_bar.comment = f"MSE={loss.item():2.3f}"
-                print(loss.item())
 
                 # Backward weight updating
                 self.backward(loss)
@@ -156,24 +168,6 @@ class Diffuser_v2:
             # Step count
             self.current_step += 1
 
-    def prepare_batch(self, images, _labels):
-        # Push to device
-        images = images.to(self.device)
-        labels = _labels.to(self.device)
-
-        # Noise and noise steps
-        noise = torch.randn(images.shape).to(images.device)
-        time_steps = torch.randint(
-            low=0,
-            high=self.noise_steps,
-            size=(images.shape[0],),
-            device=images.device,
-        ).long()
-
-        # Add noise to images
-        noised_images = self.noise_scheduler.add_noise(images, noise, time_steps)
-        return noised_images, labels, noise, time_steps
-
     def backward(self, loss):
         self.accelerator.backward(loss)
         self.accelerator.clip_grad_norm_(self.model.parameters(), 1.0)
@@ -181,12 +175,6 @@ class Diffuser_v2:
         self.lr_scheduler.step()
         self.optimiser.zero_grad()
 
-    def random_sampler(self, num_samples: int = 4):
-        sample_loader = DataLoader(
-            self.train_dataset,
-            batch_size=num_samples,
-            sampler=RandomSampler(
-                self.train_dataset, replacement=True, num_samples=num_samples
-            ),
-        )
-        return next(iter(sample_loader))
+    @torch.no_grad()
+    def sample(self, num_samples: int = 4):
+        return None
