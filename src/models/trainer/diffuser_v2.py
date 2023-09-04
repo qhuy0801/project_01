@@ -27,6 +27,7 @@ class Diffuser_v2:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.run_name = "diffusion_v3"
         self.run_dir = os.path.join("../output/", self.run_name)
+        self.run_time = datetime.now().strftime("%m%d%H%M")
 
         # Data
         self.train_dataset = train_dataset
@@ -107,9 +108,7 @@ class Diffuser_v2:
             "noise_steps": self.noise_steps,
             "epochs": self.epochs,
         }
-        self.accelerator.init_trackers(
-            datetime.now().strftime("%m%d%H%M"), config=logging_hps
-        )
+        self.accelerator.init_trackers(self.run_time, config=logging_hps)
 
         # Step counter
         self.current_step = 0
@@ -127,32 +126,20 @@ class Diffuser_v2:
         batches = progress_bar(self.train_data, leave=False)
 
         # Loop
-        for _, (images, labels) in enumerate(batches):
-            # Push to device
-            images = images.to(self.device)
-            labels = labels.to(self.device)
-
-            # Noise and noise steps
-            noise = torch.randn(images.shape).to(images.device)
-            time_steps = torch.randint(
-                low=0,
-                high=self.noise_steps,
-                size=(images.shape[0],),
-                device=images.device,
-            ).long()
-
-            # Add noise to images
-            noised_images = self.noise_scheduler.add_noise(images, noise, time_steps)
+        for _, (images, _labels) in enumerate(batches):
+            noised_images, time_steps, noise, labels = self.prepare_samples(
+                images, _labels
+            )
 
             # Forward progress
             with self.accelerator.accumulate(self.model):
-                pred_noise = self.model(
+                pred_noises = self.model(
                     sample=noised_images,
                     timestep=time_steps,
                     class_labels=labels,
                     return_dict=False,
                 )[0]
-                loss = self.loss_func(pred_noise, noise)
+                loss = self.loss_func(pred_noises, noise)
                 progress_bar.comment = f"MSE={loss.item():2.3f}"
 
                 # Backward weight updating
@@ -169,12 +156,83 @@ class Diffuser_v2:
             # Step count
             self.current_step += 1
 
+    @torch.no_grad()
+    def sample(self, epoch: int, num_samples: int = 4):
+        # Get random samples
+        samples_batch = self.random_sampler(num_samples=num_samples)
+
+        # Unpack
+        images = samples_batch[0]
+        _labels = samples_batch[1]
+
+        # Prepare
+        noised_images, time_steps, _, labels = self.prepare_samples(images, _labels)
+
+        # Push
+        pred_noises = self.model(
+            sample=noised_images,
+            timestep=time_steps,
+            class_labels=labels,
+            return_dict=False,
+        )[0]
+
+        # Save samples
+        # for i in range(len(images)):
+        #     save_pil_image(
+        #         images[i],
+        #         os.path.join(
+        #             self.run_dir,
+        #             self.run_time,
+        #             str(f"epoch{epoch}")
+        #             + str(_labels[i])
+        #             + str(time_steps[i])
+        #             + "original",
+        #         ),
+        #     )
+        #     save_pil_image(
+        #         noised_images[i],
+        #         os.path.join(
+        #             self.run_dir,
+        #             self.run_time,
+        #             str(epoch) + str(_labels[i]) + str(time_steps[i]) + "noised",
+        #         ),
+        #     )
+        #     save_pil_image(
+        #         pred_noises[i],
+        #         os.path.join(
+        #             self.run_dir,
+        #             self.run_time,
+        #             str(f"epoch{epoch}")
+        #             + str(_labels[i])
+        #             + str(time_steps[i])
+        #             + "pred_noises",
+        #         ),
+        #     )
+
     def backward(self, loss):
         self.accelerator.backward(loss)
         self.accelerator.clip_grad_norm_(self.model.parameters(), 1.0)
         self.optimiser.step()
         self.lr_scheduler.step()
         self.optimiser.zero_grad()
+
+    def prepare_samples(self, images, labels):
+        # Push to device
+        images = images.to(self.device)
+        _labels = labels.to(self.device)
+
+        # Noise and noise steps
+        noise = torch.randn(images.shape).to(images.device)
+        time_steps = torch.randint(
+            low=0,
+            high=self.noise_steps,
+            size=(images.shape[0],),
+            device=images.device,
+        ).long()
+
+        # Add noise to images
+        noised_images = self.noise_scheduler.add_noise(images, noise, time_steps)
+        return noised_images, time_steps, noise, _labels
 
     def random_sampler(self, num_samples: int = 4):
         sample_loader = DataLoader(
