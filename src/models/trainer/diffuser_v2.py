@@ -6,7 +6,7 @@ import torch
 from accelerate import Accelerator
 from diffusers import UNet2DModel, DDPMScheduler, DDPMPipeline
 from fastprogress import progress_bar
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, RandomSampler
 
 
 class Diffuser_v2:
@@ -29,6 +29,7 @@ class Diffuser_v2:
         self.run_dir = os.path.join("../output/", self.run_name)
 
         # Data
+        self.train_dataset = train_dataset
         self.train_data = DataLoader(train_dataset, batch_size=batch_size)
 
         # Settings
@@ -40,7 +41,7 @@ class Diffuser_v2:
 
         # Dependencies
         self.model = UNet2DModel(
-            sample_size=train_dataset.target_size,
+            sample_size=self.train_dataset.target_size,
             in_channels=3,
             out_channels=3,
             layers_per_block=2,
@@ -62,7 +63,7 @@ class Diffuser_v2:
                 "UpBlock2D",
             ),
             class_embed_type=None,
-            num_class_embeds=train_dataset.class_tuple.__len__(),
+            num_class_embeds=self.train_dataset.class_tuple.__len__(),
         ).to(self.device)
         self.noise_scheduler = DDPMScheduler(
             num_train_timesteps=self.noise_steps,
@@ -100,7 +101,7 @@ class Diffuser_v2:
 
         # Tracker
         logging_hps = {
-            "image_size": train_dataset.target_size,
+            "image_size": self.train_dataset.target_size,
             "batch_soze": batch_size,
             "max_lr": self.max_lr,
             "noise_steps": self.noise_steps,
@@ -175,6 +176,12 @@ class Diffuser_v2:
         self.lr_scheduler.step()
         self.optimiser.zero_grad()
 
-    @torch.no_grad()
-    def sample(self, num_samples: int = 4):
-        return None
+    def random_sampler(self, num_samples: int = 4):
+        sample_loader = DataLoader(
+            self.train_dataset,
+            batch_size=num_samples,
+            sampler=RandomSampler(
+                self.train_dataset, replacement=True, num_samples=num_samples
+            ),
+        )
+        return next(iter(sample_loader))
