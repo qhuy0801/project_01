@@ -2,13 +2,13 @@ import glob
 
 import cv2
 import torch
-from torch.utils.data import Dataset
 from torch.utils.data.dataset import T_co
-import albumentations as A
-from albumentations.pytorch import ToTensorV2
+
+from entities.data.image_dataset import ImageDataset
+from utils import forward_transform
 
 
-class WoundROI(Dataset):
+class WoundROI(ImageDataset):
     """
     Wound ROI dataset for training of the pattern
     """
@@ -23,33 +23,20 @@ class WoundROI(Dataset):
         self.dataset_dir = dataset_dir
         self.target_size = target_size
         self.data = []
-        self.class_tuple = ()
+        self.__class_tuple = ()
 
-        file_list = glob.glob(self.dataset_dir + "*")
-        for class_path in file_list:
-            class_name = class_path.split("/")[-1]
-            self.class_tuple = (*self.class_tuple, class_name)
-            for img_path in glob.glob(class_path + "/*.jpeg"):
-                self.data.append([img_path, class_name])
+        __file_list = glob.glob(self.dataset_dir + "*")
+        for __class_path in __file_list:
+            __class_name = __class_path.split("/")[-1]
+            self.__class_tuple = (*self.__class_tuple, __class_name)
+            for __img_path in glob.glob(__class_path + "/*.jpeg"):
+                self.data.append([__img_path, __class_name])
 
-        self.class_dict = dict(zip(self.class_tuple, range(self.class_tuple.__len__())))
-
-        self.transform = A.Compose(
-            [
-                A.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
-                A.Resize(
-                    self.target_size, self.target_size, interpolation=cv2.INTER_NEAREST
-                ),
-                ToTensorV2(),
-            ]
-        )
-
-    def __len__(self):
-        return len(self.data)
+        self.class_dict = dict(zip(self.__class_tuple, range(len(self.__class_tuple))))
 
     def __getitem__(self, index) -> T_co:
         image_path, label = self.data[index]
         image = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB)
-        return self.transform(image=image)["image"], torch.tensor(
+        return forward_transform(image=image, target_size=self.target_size), torch.tensor(
             self.class_dict[label]
         )
