@@ -11,6 +11,7 @@ def plot_chw(chw_tensor):
     plt.axis('off')
     plt.show()
 
+
 def plot_hwc(hwc_ndarray):
     """
     PLot single HWC numpy array to image
