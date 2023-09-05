@@ -1,12 +1,16 @@
+import os
+from datetime import datetime
+
+import numpy as np
 import torch
 from fastprogress import progress_bar
-from torch.utils.data import Dataset, DataLoader, RandomSampler
+from torch.utils.data import Dataset, DataLoader
+from torch.utils.tensorboard import SummaryWriter
 
 from entities.data.image_dataset import ImageDataset
 from models.embeddings.embedder import Embedder
 from models.nets.u_net import UNet
-from utils import linear_noise_schedule, revert_transform
-from utils.visualise_utils import plot_hwc
+from utils import linear_noise_schedule, save_checkpoint
 
 
 class Diffuser_v1:
@@ -29,10 +33,6 @@ class Diffuser_v1:
     train_data: torch.utils.data.DataLoader
     validate_data: torch.utils.data.DataLoader = None
 
-    # Sampler
-    sampler: torch.utils.data.DataLoader
-    sample_num: int = 4
-
     # Embedder
     embedder: Embedder
     embedded_dim: int = 256
@@ -52,12 +52,15 @@ class Diffuser_v1:
     max_lr: float
     eps: float
     epochs: int
+    best_epoch_lost: float = 1000.0
 
     def __init__(
         self,
         train_dataset: ImageDataset,
         embedder: Embedder,
-        batch_size: int = 10,
+        resume_training: bool = False,
+        checkpoint_path: str = "",
+        batch_size: int = 4,
         beta_start: float = 1e-4,
         beta_end: float = 0.02,
         noise_steps: int = 1000,
@@ -81,17 +84,19 @@ class Diffuser_v1:
         super().__init__()
         # Data setting
         self.train_data = DataLoader(train_dataset, batch_size=batch_size)
-        self.sampler = DataLoader(
-            train_dataset,
-            batch_size=self.sample_num,
-            sampler=RandomSampler(
-                train_dataset, replacement=True, num_samples=self.sample_num
-            ),
-        )
         self.image_size = train_dataset.target_size
 
         # Embedding
         self.embedder = embedder
+
+        # Run name and run directory
+        self.run_name = "diffusion_v1"
+        self.run_time = datetime.now().strftime("%m%d%H%M")
+        self.run_dir = os.path.join("../output/", self.run_name, self.run_time)
+
+        # Logs
+        self.log = SummaryWriter(log_dir=f"{self.run_dir}/logs/")
+        self.global_step = 0
 
         # Devices and models
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -131,28 +136,23 @@ class Diffuser_v1:
 
     def fit(self):
         """
-        Training trigger
+        Training loop trigger
         :return:
         """
-        #
-        # for epoch in progress_bar(range(self.epochs), total=self.epochs, leave=True):
-        #     # Print log # TODO: update this
-        #     print(f"Epoch: {epoch}")
-        #     train_loss = self.one_epoch(is_training=True)
-        #     print(f"Epoch train loss: {train_loss}")
-        #
-        #     # Validation
-        #     if self.validate_data is not None:
-        #         validation_loss = self.one_epoch(is_training=False)
-        #         print(f"Epoch validation loss: {validation_loss}")
-
-        # for _ in range(5):
-        #     self.one_epoch(is_training=True)
-        #
-        # labels = torch.Tensor([1., 3., 0., 2.]).long()
-        # images = self.sample(labels)
-        # image = images[0]
-        # plot_hwc(revert_transform(image))
+        for epoch in progress_bar(range(self.epochs), total=self.epochs, leave=True):
+            epoch_loss = self.one_epoch(is_training=True)
+            if epoch_loss < self.best_epoch_lost:
+                save_checkpoint(
+                    {
+                        "current_epoch": epoch,
+                        "current_loss": epoch_loss,
+                        "model": self.model.state_dict(),
+                        "optimiser": self.optimiser.state_dict(),
+                    },
+                    self.run_name,
+                    self.run_dir,
+                )
+                self.best_epoch_lost = epoch_loss
 
     def one_epoch(self, is_training: bool = True):
         """
@@ -190,15 +190,22 @@ class Diffuser_v1:
 
                 # Loss function
                 loss = self.loss_func(noises, pred_noises)
-                print(loss.item())
 
                 # Store loss
                 epoch_loss.append(loss.item())
 
+                # Logs
+                self.log.add_scalar("batch_loss", loss.item(), self.global_step)
+                self.log.add_scalar(
+                    "learning_rate", self.scheduler.get_last_lr()[0], self.global_step
+                )
+                self.log.flush()
+                self.global_step += 1
+
             if is_training:
                 self.backward(loss)
 
-        return epoch_loss
+        return np.mean(epoch_loss)
 
     def prepare_batch(self, batch):
         """
@@ -214,7 +221,9 @@ class Diffuser_v1:
         semantics = semantics.to(self.device)
 
         # Get a random timestep for each image
-        time_steps = torch.randint(low=1, high=self.noise_steps, size=(images.shape[0],))
+        time_steps = torch.randint(
+            low=1, high=self.noise_steps, size=(images.shape[0],)
+        )
 
         # Add noise to image
         noised_images, noises = self.add_noise(images, time_steps)
@@ -236,7 +245,7 @@ class Diffuser_v1:
     @torch.inference_mode()
     def sample(self, labels, interpolate_weight: int = 0):
         """
-
+        Generate a number of sample based on input labels
         :param labels:
         :param interpolate_weight:
         :return:
@@ -285,6 +294,7 @@ class Diffuser_v1:
                 else:
                     iteration_noises = torch.zeros_like(images)
 
+                # Denoise the images
                 images = self.denoise(images, pred_noises, iteration_noises, time_steps)
 
         return images

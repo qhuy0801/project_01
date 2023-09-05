@@ -1,5 +1,6 @@
 import os
 
+import torch
 from PIL import Image
 
 
@@ -27,3 +28,15 @@ def save_pil_image(image_ndarray, file_name, location, file_extension=".jpg"):
     """
     img = Image.fromarray(image_ndarray)
     img.save(os.path.join(location, file_name + file_extension))
+
+
+def save_checkpoint(checkpoint, run_name, directory):
+    """
+    Save a checkpoint
+    :param checkpoint:
+    :param run_name:
+    :param directory:
+    :return:
+    """
+    path = os.path.join(directory, f"{run_name}.pt")
+    torch.save(checkpoint, path)

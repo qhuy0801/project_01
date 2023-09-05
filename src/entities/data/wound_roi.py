@@ -15,7 +15,8 @@ class WoundROI(ImageDataset):
 
     def __init__(
         self,
-        dataset_dir: str = "../data/segmented/08151709all/roi/",
+        # dataset_dir: str = "../data/segmented/08151709all/roi/",
+        dataset_dir: str = "../data/segmented/test/",
         target_size: int = 128,
     ) -> None:
         super().__init__()
@@ -29,7 +30,7 @@ class WoundROI(ImageDataset):
         for __class_path in __file_list:
             __class_name = __class_path.split("/")[-1]
             self.__class_tuple = (*self.__class_tuple, __class_name)
-            for __img_path in glob.glob(__class_path + "/*.jpeg"):
+            for __img_path in glob.glob(__class_path + "/*"):
                 self.data.append([__img_path, __class_name])
 
         self.class_dict = dict(zip(self.__class_tuple, range(len(self.__class_tuple))))
