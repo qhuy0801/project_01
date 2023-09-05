@@ -40,3 +40,12 @@ def save_checkpoint(checkpoint, run_name, directory):
     """
     path = os.path.join(directory, f"{run_name}.pt")
     torch.save(checkpoint, path)
+
+
+def load_checkpoint(file_path):
+    """
+    Load a pytorch file
+    :param file_path:
+    :return:
+    """
+    return torch.load(file_path)

@@ -10,7 +10,7 @@ from torch.utils.tensorboard import SummaryWriter
 from entities.data.image_dataset import ImageDataset
 from models.embeddings.embedder import Embedder
 from models.nets.u_net import UNet
-from utils import linear_noise_schedule, save_checkpoint
+from utils import linear_noise_schedule, save_checkpoint, load_checkpoint
 
 
 class Diffuser_v1:
@@ -132,6 +132,13 @@ class Diffuser_v1:
             epochs=self.epochs,
         )
 
+        # If resume training from checkpoint
+        if resume_training:
+            checkpoint = load_checkpoint(checkpoint_path)
+            self.best_epoch_lost = checkpoint["current_loss"]
+            self.model.load_state_dict(checkpoint["model"])
+            self.optimiser.load_state_dict(checkpoint["optimiser"])
+
         self.__dict__.update(kwargs)
 
     def fit(self):
@@ -139,12 +146,11 @@ class Diffuser_v1:
         Training loop trigger
         :return:
         """
-        for epoch in progress_bar(range(self.epochs), total=self.epochs, leave=True):
+        for _ in progress_bar(range(self.epochs), total=self.epochs, leave=True):
             epoch_loss = self.one_epoch(is_training=True)
             if epoch_loss < self.best_epoch_lost:
                 save_checkpoint(
                     {
-                        "current_epoch": epoch,
                         "current_loss": epoch_loss,
                         "model": self.model.state_dict(),
                         "optimiser": self.optimiser.state_dict(),
