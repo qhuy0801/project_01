@@ -1,21 +1,34 @@
 import os.path
-import random
 from datetime import datetime
+import bitsandbytes as bnb
+import numpy as np
 
 import torch
 from accelerate import Accelerator
-from diffusers import UNet2DModel, DDPMScheduler, DDPMPipeline
-from fastprogress import progress_bar
-from torch.utils.data import DataLoader, RandomSampler
+from diffusers import (
+    UNet2DModel,
+    DDIMScheduler,
+)
+
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+
+from entities.data.image_dataset import ImageDataset
+from utils import save_checkpoint
 
 
 class Diffuser_v2:
     def __init__(
         self,
-        train_dataset: torch.utils.data.Dataset,
+        train_dataset: ImageDataset,
         batch_size: int = 10,
+        num_workers: int = 30,
+        in_channels: int = 3,
+        out_channels: int = 3,
+        block_out_channels: tuple = (128, 128, 256, 256, 512, 512),
         beta_start: float = 1e-4,
         beta_end: float = 0.02,
+        scheduler_prediction_type: str = "v_prediction",
         noise_steps: int = 1000,
         max_lr: float = 1e-4,
         epochs: int = 1000,
@@ -31,7 +44,9 @@ class Diffuser_v2:
 
         # Data
         self.train_dataset = train_dataset
-        self.train_data = DataLoader(train_dataset, batch_size=batch_size)
+        self.train_data = DataLoader(
+            train_dataset, batch_size=batch_size, num_workers=num_workers
+        )
 
         # Settings
         self.beta_start = beta_start
@@ -42,11 +57,10 @@ class Diffuser_v2:
 
         # Dependencies
         self.model = UNet2DModel(
-            sample_size=self.train_dataset.target_size,
-            in_channels=3,
-            out_channels=3,
+            in_channels=in_channels,
+            out_channels=out_channels,
             layers_per_block=2,
-            block_out_channels=(128, 128, 256, 256, 512, 512),
+            block_out_channels=block_out_channels,
             down_block_types=(
                 "DownBlock2D",
                 "DownBlock2D",
@@ -64,14 +78,15 @@ class Diffuser_v2:
                 "UpBlock2D",
             ),
             class_embed_type=None,
-            num_class_embeds=self.train_dataset.class_tuple.__len__(),
+            num_class_embeds=len(train_dataset.class_dict),
         ).to(self.device)
-        self.noise_scheduler = DDPMScheduler(
+        self.noise_scheduler = DDIMScheduler(
             num_train_timesteps=self.noise_steps,
             beta_start=self.beta_start,
             beta_end=self.beta_end,
+            prediction_type=scheduler_prediction_type,
         )
-        self.optimiser = torch.optim.AdamW(self.model.parameters(), lr=self.max_lr)
+        self.optimiser = bnb.optim.AdamW(self.model.parameters(), lr=self.max_lr)
         self.lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(
             optimizer=self.optimiser,
             max_lr=self.max_lr,
@@ -102,8 +117,8 @@ class Diffuser_v2:
 
         # Tracker
         logging_hps = {
-            "image_size": self.train_dataset.target_size,
-            "batch_soze": batch_size,
+            "run_name": self.run_name,
+            "batch_size": batch_size,
             "max_lr": self.max_lr,
             "noise_steps": self.noise_steps,
             "epochs": self.epochs,
@@ -116,113 +131,107 @@ class Diffuser_v2:
         # Seed for replication
         self.seed = 42
 
+        # Best loss for model saving conditioning
+        self.best_loss = 1000
+
     def fit(self):
+        # Iterate the epochs
         for epoch in range(self.epochs):
-            print(f"Epoch {epoch} ")
-            self.one_epoch(epoch)
+            epoch_loss = self.__one_epoch(epoch)
+            if epoch_loss <= self.best_loss:
+                save_checkpoint(
+                    {
+                        "current_loss": epoch_loss,
+                        "model": self.model.state_dict(),
+                        "optimiser": self.optimiser.state_dict(),
+                        "lr_scheduler": self.lr_scheduler.state_dict(),
+                    },
+                    self.run_name,
+                    self.run_dir,
+                )
+                self.noise_scheduler.save_pretrained(save_directory=self.run_dir)
+                self.best_loss = epoch_loss
 
-    def one_epoch(self, current_epoch: int):
-        # Break down to batches
-        batches = progress_bar(self.train_data, leave=False)
+    def __one_epoch(self, epoch):
+        """
+        Perform 1 training epoch
+        :param epoch:
+        :return:
+        """
+        # Array to store epoch loss
+        __epoch_loss = []
 
-        # Loop
-        for _, (images, _labels) in enumerate(batches):
-            noised_images, time_steps, noise, labels = self.prepare_samples(
-                images, _labels
+        # Iterate the dataloader
+        for _, batch in enumerate(
+            tqdm(
+                self.train_data,
+                desc=f"Epoch {epoch}",
+                disable=not self.accelerator.is_local_main_process,
             )
+        ):
+            # Prepare batch
+            noised_images, time_steps, noises, labels = self.__prepare_batch(batch)
 
-            # Forward progress
+            # Forward and backward
             with self.accelerator.accumulate(self.model):
-                pred_noises = self.model(
-                    sample=noised_images,
-                    timestep=time_steps,
-                    class_labels=labels,
-                    return_dict=False,
-                )[0]
-                loss = self.loss_func(pred_noises, noise)
-                progress_bar.comment = f"MSE={loss.item():2.3f}"
+                pred_noise = self.__forward(noised_images, time_steps, labels)
+                __loss = self.loss_func(pred_noise, noises)
+                self.__backward(__loss)
 
-                # Backward weight updating
-                self.backward(loss)
-
-            # Log
-            _log = {
-                "loss": loss.detach().item(),
+            # Logs
+            __log = {
+                "loss": __loss.detach().item(),
                 "lr": self.lr_scheduler.get_last_lr()[0],
-                "epoch": current_epoch,
+                "epoch": epoch,
             }
-            self.accelerator.log(_log, step=self.current_step)
+            self.accelerator.log(__log, step=self.current_step)
 
             # Step count
             self.current_step += 1
 
-    @torch.no_grad()
-    def sample(self, epoch: int, num_samples: int = 4):
-        # Get random samples
-        samples_batch = self.random_sampler(num_samples=num_samples)
+            # Store the loss
+            __epoch_loss.append(__loss)
+        return np.mean(__epoch_loss)
 
-        # Unpack
-        images = samples_batch[0]
-        _labels = samples_batch[1]
-
-        # Prepare
-        noised_images, time_steps, _, labels = self.prepare_samples(images, _labels)
-
-        # Push
-        pred_noises = self.model(
-            sample=noised_images,
-            timestep=time_steps,
-            class_labels=labels,
-            return_dict=False,
+    def __forward(self, x, time_steps, labels):
+        """
+        Forward function of model
+        :param x:
+        :param time_steps:
+        :param labels:
+        :return:
+        """
+        return self.model(
+            sample=x, timestep=time_steps, class_labels=labels, return_dict=False
         )[0]
 
-        # Save samples
-        # for i in range(len(images)):
-        #     save_pil_image(
-        #         images[i],
-        #         os.path.join(
-        #             self.run_dir,
-        #             self.run_time,
-        #             str(f"epoch{epoch}")
-        #             + str(_labels[i])
-        #             + str(time_steps[i])
-        #             + "original",
-        #         ),
-        #     )
-        #     save_pil_image(
-        #         noised_images[i],
-        #         os.path.join(
-        #             self.run_dir,
-        #             self.run_time,
-        #             str(epoch) + str(_labels[i]) + str(time_steps[i]) + "noised",
-        #         ),
-        #     )
-        #     save_pil_image(
-        #         pred_noises[i],
-        #         os.path.join(
-        #             self.run_dir,
-        #             self.run_time,
-        #             str(f"epoch{epoch}")
-        #             + str(_labels[i])
-        #             + str(time_steps[i])
-        #             + "pred_noises",
-        #         ),
-        #     )
-
-    def backward(self, loss):
+    def __backward(self, loss):
+        """
+        Get the loss and update the weights
+        :param loss:
+        :return:
+        """
         self.accelerator.backward(loss)
         self.accelerator.clip_grad_norm_(self.model.parameters(), 1.0)
         self.optimiser.step()
         self.lr_scheduler.step()
         self.optimiser.zero_grad()
 
-    def prepare_samples(self, images, labels):
+    def __prepare_batch(self, batch):
+        """
+        Prepare the batch: transfer to desired device, add noises
+        :param batch:
+        :return:
+        """
+        # Unpack
+        images, labels = batch
+
         # Push to device
         images = images.to(self.device)
-        _labels = labels.to(self.device)
+        labels = labels.to(self.device)
 
         # Noise and noise steps
-        noise = torch.randn(images.shape).to(images.device)
+        noises = torch.randn(images.shape).to(images.device)
         time_steps = torch.randint(
             low=0,
             high=self.noise_steps,
@@ -231,15 +240,6 @@ class Diffuser_v2:
         ).long()
 
         # Add noise to images
-        noised_images = self.noise_scheduler.add_noise(images, noise, time_steps)
-        return noised_images, time_steps, noise, _labels
+        noised_images = self.noise_scheduler.add_noise(images, noises, time_steps)
 
-    def random_sampler(self, num_samples: int = 4):
-        sample_loader = DataLoader(
-            self.train_dataset,
-            batch_size=num_samples,
-            sampler=RandomSampler(
-                self.train_dataset, replacement=True, num_samples=num_samples
-            ),
-        )
-        return next(iter(sample_loader))
+        return noised_images, time_steps, noises, labels

@@ -20,14 +20,14 @@ class ClassEmbedder(Embedder, ABC):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.embedded_dim = embedded_dim
         self.class_count = class_count
-        self.class_embedding = nn.Embedding(self.class_count, self.embedded_dim)
+        self.class_embedding = nn.Embedding(self.class_count, self.embedded_dim).to(self.device)
 
     def step_embedding(self, step):
         """
         Take step input and return step embedded matrix
         :return:
         """
-        step = step.unsqueeze(-1)
+        step = step.unsqueeze(-1).to(self.device)
         normalising_factor = 1.0 / (
             10000
             ** (

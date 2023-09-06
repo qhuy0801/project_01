@@ -5,8 +5,7 @@ if __name__ == '__main__':
     wound_roi = WoundROI()
     diffuser = Diffuser_v2(
         train_dataset=wound_roi,
-        batch_size=1,
+        batch_size=2,
     )
 
-    diffuser.sample(epoch=4, num_samples=2)
-    # diffuser.fit()
+    diffuser.fit()
