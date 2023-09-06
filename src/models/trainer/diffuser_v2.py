@@ -134,6 +134,10 @@ class Diffuser_v2:
         self.best_loss = 1000
 
     def fit(self):
+        """
+        Training trigger
+        :return:
+        """
         print(f"Starting training for {self.epochs} epochs...")
         # Iterate the epochs
         for epoch in range(self.epochs):
@@ -149,7 +153,9 @@ class Diffuser_v2:
                     self.run_name,
                     os.path.join(self.run_dir, self.run_time),
                 )
-                self.noise_scheduler.save_pretrained(save_directory=self.run_dir)
+                self.noise_scheduler.save_pretrained(
+                    save_directory=os.path.join(self.run_dir, self.run_time)
+                )
                 self.best_loss = epoch_loss
 
     def __one_epoch(self, epoch):
@@ -159,7 +165,7 @@ class Diffuser_v2:
         :return:
         """
         # Array to store epoch loss
-        __epoch_loss = 0.
+        __epoch_loss = 0.0
 
         # Iterate the dataloader
         for _, batch in enumerate(
