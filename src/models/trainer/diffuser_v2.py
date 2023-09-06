@@ -1,7 +1,6 @@
 import os.path
 from datetime import datetime
 import bitsandbytes as bnb
-import numpy as np
 
 import torch
 from accelerate import Accelerator
@@ -135,6 +134,7 @@ class Diffuser_v2:
         self.best_loss = 1000
 
     def fit(self):
+        print(f"Starting training for {self.epochs} epochs...")
         # Iterate the epochs
         for epoch in range(self.epochs):
             epoch_loss = self.__one_epoch(epoch)
@@ -147,7 +147,7 @@ class Diffuser_v2:
                         "lr_scheduler": self.lr_scheduler.state_dict(),
                     },
                     self.run_name,
-                    self.run_dir,
+                    os.path.join(self.run_dir, self.run_time),
                 )
                 self.noise_scheduler.save_pretrained(save_directory=self.run_dir)
                 self.best_loss = epoch_loss
@@ -159,7 +159,7 @@ class Diffuser_v2:
         :return:
         """
         # Array to store epoch loss
-        __epoch_loss = []
+        __epoch_loss = 0.
 
         # Iterate the dataloader
         for _, batch in enumerate(
@@ -190,8 +190,8 @@ class Diffuser_v2:
             self.current_step += 1
 
             # Store the loss
-            __epoch_loss.append(__loss)
-        return np.mean(__epoch_loss)
+            __epoch_loss += __loss
+        return __epoch_loss.mean().item()
 
     def __forward(self, x, time_steps, labels):
         """
