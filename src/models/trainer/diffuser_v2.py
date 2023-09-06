@@ -4,16 +4,14 @@ import bitsandbytes as bnb
 
 import torch
 from accelerate import Accelerator
-from diffusers import (
-    UNet2DModel,
-    DDIMScheduler,
-)
+from diffusers import UNet2DModel, DDIMScheduler
 
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 from entities.data.image_dataset import ImageDataset
-from utils import save_checkpoint
+from models.pipeline.ddim import DDIMPipeline
+from utils import save_checkpoint, save_pil_image
 
 
 class Diffuser_v2:
@@ -157,6 +155,30 @@ class Diffuser_v2:
                     save_directory=os.path.join(self.run_dir, self.run_time)
                 )
                 self.best_loss = epoch_loss
+                save_pil_image(
+                    image_ndarray=self.sample(),
+                    file_name=epoch,
+                    location=os.path.join(self.run_dir, self.run_time),
+                )
+
+    def sample(self):
+        """
+        Generate a sample
+        :return:
+        """
+        pipeline = DDIMPipeline(
+            unet=self.accelerator.unwrap_model(self.model),
+            scheduler=self.noise_scheduler,
+        )
+        return pipeline(
+            batch_size=1,
+            labels=torch.tensor(
+                [
+                    1.0,
+                ]
+            ),
+            generator=torch.manual_seed(self.seed),
+        ).images
 
     def __one_epoch(self, epoch):
         """
@@ -171,7 +193,7 @@ class Diffuser_v2:
         for _, batch in enumerate(
             tqdm(
                 self.train_data,
-                desc=f"Epoch {epoch}",
+                desc=f"Epoch {epoch:5d}",
                 disable=not self.accelerator.is_local_main_process,
             )
         ):
