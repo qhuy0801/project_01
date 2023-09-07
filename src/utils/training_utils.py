@@ -49,3 +49,12 @@ def linear_noise_schedule(start, end, steps):
     :return:
     """
     return torch.linspace(start, end, steps)
+
+
+def to_uint8(image_tensor):
+    """
+    Convert float image matrix to uint8
+    :param image_tensor:
+    :return:
+    """
+    return (image_tensor * 255).round().astype("uint8")

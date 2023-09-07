@@ -42,10 +42,11 @@ def save_checkpoint(checkpoint, run_name, directory):
     torch.save(checkpoint, path)
 
 
-def load_checkpoint(file_path):
+def load_checkpoint(file_path, device_str):
     """
-    Load a pytorch file
+    Load a pt file
     :param file_path:
+    :param device_str:
     :return:
     """
-    return torch.load(file_path)
+    return torch.load(file_path, map_location=device_str)

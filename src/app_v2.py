@@ -1,3 +1,5 @@
+import gc
+
 from entities.data.wound_roi import WoundROI
 from models.trainer.diffuser_v2 import Diffuser_v2
 
@@ -8,5 +10,5 @@ if __name__ == '__main__':
         batch_size=8,
         num_workers=30
     )
-
+    gc.collect()
     diffuser.fit()

@@ -1,4 +1,5 @@
 import os.path
+import gc
 from datetime import datetime
 import bitsandbytes as bnb
 
@@ -12,7 +13,8 @@ from tqdm import tqdm
 
 from entities.data.image_dataset import ImageDataset
 from models.pipeline.ddim import DDIMPipeline
-from utils import save_checkpoint
+from utils import save_checkpoint, load_checkpoint
+from utils.training_utils import to_uint8
 
 
 class Diffuser_v2:
@@ -20,6 +22,7 @@ class Diffuser_v2:
         self,
         train_dataset: ImageDataset,
         batch_size: int = 10,
+        checkpoint_path: str = None,
         num_workers: int = 30,
         in_channels: int = 3,
         out_channels: int = 3,
@@ -57,6 +60,7 @@ class Diffuser_v2:
         self.model = UNet2DModel(
             in_channels=in_channels,
             out_channels=out_channels,
+            sample_size=self.train_dataset.target_size,
             layers_per_block=2,
             block_out_channels=block_out_channels,
             down_block_types=(
@@ -95,6 +99,10 @@ class Diffuser_v2:
 
         self.__dict__.update(kwargs)
 
+        # If there is path, restore from checkpoint
+        if checkpoint_path is not None:
+            self.__from_checkpoint(checkpoint_path=checkpoint_path)
+
         # Hardware controlling
         self.accelerator = Accelerator(
             mixed_precision="fp16",
@@ -127,6 +135,27 @@ class Diffuser_v2:
         # Best loss for model saving conditioning
         self.best_loss = 1000
 
+        # Class for samples
+        self.class_samples = train_dataset.get_sample_labels(2)
+
+        # Clear all unreferenced instances
+        gc.collect()
+
+    def __from_checkpoint(self, checkpoint_path):
+        """
+        Restore the model and optimiser from checkpoint and collect un-referenced instances
+        :param checkpoint_path:
+        :return:
+        """
+        print(f"Restored from checkpoint {checkpoint_path}")
+        __checkpoint = load_checkpoint(
+            checkpoint_path, device_str=str(self.device)
+        )
+        self.model.load_state_dict(__checkpoint["model"])
+        self.optimiser.load_state_dict(__checkpoint["optimiser"])
+        self.lr_scheduler.load_state_dict(__checkpoint["lr_scheduler"])
+        gc.collect()
+
     def fit(self):
         """
         Training trigger
@@ -151,32 +180,28 @@ class Diffuser_v2:
                     save_directory=os.path.join(self.run_dir, self.run_time)
                 )
                 self.best_loss = epoch_loss
-                sample_images = self.sample()
-                for _, image in enumerate(sample_images):
-                    self.log.add_image(
-                        img_tensor=image,
+                self.log.add_images(
+                        tag=f"{epoch}_samples",
+                        img_tensor=to_uint8(self.sample()),
                         global_step=self.current_step,
-                        dataformats="HWC",
-                    )
-                    self.log.flush()
+                        dataformats="NCHW")
+                self.log.flush()
 
+    @torch.no_grad()
     def sample(self):
         """
         Generate a sample
-        :return:
+        :return: (N,C,H,W) tensor
         """
         pipeline = DDIMPipeline(
             unet=self.accelerator.unwrap_model(self.model),
             scheduler=self.noise_scheduler,
         )
         return pipeline(
-            batch_size=1,
-            labels=torch.tensor(
-                [
-                    1.0,
-                ]
-            ),
+            batch_size=len(self.class_samples),
+            labels=self.class_samples,
             generator=torch.manual_seed(self.seed),
+            output_type="numpy",
         ).images
 
     def __one_epoch(self, epoch):
