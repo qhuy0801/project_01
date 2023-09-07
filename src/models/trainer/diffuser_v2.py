@@ -7,11 +7,12 @@ from accelerate import Accelerator
 from diffusers import UNet2DModel, DDIMScheduler
 
 from torch.utils.data import DataLoader
+from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
 from entities.data.image_dataset import ImageDataset
 from models.pipeline.ddim import DDIMPipeline
-from utils import save_checkpoint, save_pil_image
+from utils import save_checkpoint
 
 
 class Diffuser_v2:
@@ -112,15 +113,10 @@ class Diffuser_v2:
             [self.model, self.optimiser, self.train_data, self.lr_scheduler]
         )
 
-        # Tracker
-        logging_hps = {
-            "run_name": self.run_name,
-            "batch_size": batch_size,
-            "max_lr": self.max_lr,
-            "noise_steps": self.noise_steps,
-            "epochs": self.epochs,
-        }
-        self.accelerator.init_trackers(self.run_time, config=logging_hps)
+        # Logger
+        self.log = SummaryWriter(
+            log_dir=f"{os.path.join(self.run_dir, self.run_time)}/logs/"
+        )
 
         # Step counter
         self.current_step = 0
@@ -155,11 +151,14 @@ class Diffuser_v2:
                     save_directory=os.path.join(self.run_dir, self.run_time)
                 )
                 self.best_loss = epoch_loss
-                save_pil_image(
-                    image_ndarray=self.sample(),
-                    file_name=epoch,
-                    location=os.path.join(self.run_dir, self.run_time),
-                )
+                sample_images = self.sample()
+                for _, image in enumerate(sample_images):
+                    self.log.add_image(
+                        img_tensor=image,
+                        global_step=self.current_step,
+                        dataformats="HWC",
+                    )
+                    self.log.flush()
 
     def sample(self):
         """
@@ -206,13 +205,14 @@ class Diffuser_v2:
                 __loss = self.loss_func(pred_noise, noises)
                 self.__backward(__loss)
 
-            # Logs
-            __log = {
-                "loss": __loss.detach().item(),
-                "lr": self.lr_scheduler.get_last_lr()[0],
-                "epoch": epoch,
-            }
-            self.accelerator.log(__log, step=self.current_step)
+                # Logs
+                self.log.add_scalar("batch_loss", __loss.item(), self.current_step)
+                self.log.add_scalar(
+                    "learning_rate",
+                    self.lr_scheduler.get_last_lr()[0],
+                    self.current_step,
+                )
+                self.log.flush()
 
             # Step count
             self.current_step += 1
