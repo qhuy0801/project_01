@@ -263,11 +263,11 @@ class Diffuser_v2:
         :param loss:
         :return:
         """
+        self.optimiser.zero_grad()
         self.accelerator.backward(loss)
         self.accelerator.clip_grad_norm_(self.model.parameters(), 1.0)
         self.optimiser.step()
         self.lr_scheduler.step()
-        self.optimiser.zero_grad()
 
     def __prepare_batch(self, batch):
         """
