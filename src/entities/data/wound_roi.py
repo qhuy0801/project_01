@@ -38,6 +38,6 @@ class WoundROI(ImageDataset):
     def __getitem__(self, index) -> T_co:
         image_path, label = self.data[index]
         image = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB)
-        return forward_transform(image=image, target_size=self.target_size), torch.tensor(
-            self.class_dict[label]
-        )
+        return forward_transform(
+            image=image, target_size=self.target_size
+        ), torch.tensor(self.class_dict[label])

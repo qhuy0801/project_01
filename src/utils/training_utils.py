@@ -43,6 +43,18 @@ def revert_transform(image_tensor):
     )
 
 
+def get_conv_output_size(input_size, kernel_size, stride, padding):
+    """
+    Calculate the output size of a convolutional layer
+    :param input_size:
+    :param kernel_size:
+    :param stride:
+    :param padding:
+    :return:
+    """
+    return ((input_size - kernel_size + 2 * padding) // stride) + 1
+
+
 def linear_noise_schedule(start, end, steps):
     """
     Linear noise schedule for diffusion model

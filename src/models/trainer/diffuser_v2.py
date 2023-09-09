@@ -136,7 +136,7 @@ class Diffuser_v2:
         self.best_loss = 1000
 
         # Class for samples
-        self.class_samples = train_dataset.get_sample_labels(2)
+        self.class_samples = train_dataset.get_sample_labels(2).to(self.device)
 
         # Clear all unreferenced instances
         gc.collect()
@@ -148,9 +148,7 @@ class Diffuser_v2:
         :return:
         """
         print(f"Restored from checkpoint {checkpoint_path}")
-        __checkpoint = load_checkpoint(
-            checkpoint_path, device_str=str(self.device)
-        )
+        __checkpoint = load_checkpoint(checkpoint_path, device_str=str(self.device))
         self.model.load_state_dict(__checkpoint["model"])
         self.optimiser.load_state_dict(__checkpoint["optimiser"])
         self.lr_scheduler.load_state_dict(__checkpoint["lr_scheduler"])
@@ -181,10 +179,11 @@ class Diffuser_v2:
                 )
                 self.best_loss = epoch_loss
                 self.log.add_images(
-                        tag=f"{epoch}_samples",
-                        img_tensor=to_uint8(self.sample()),
-                        global_step=self.current_step,
-                        dataformats="NCHW")
+                    tag=f"{epoch}_samples",
+                    img_tensor=to_uint8(self.sample()),
+                    global_step=self.current_step,
+                    dataformats="NHWC",
+                )
                 self.log.flush()
 
     @torch.no_grad()

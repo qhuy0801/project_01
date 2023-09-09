@@ -20,7 +20,9 @@ class ClassEmbedder(Embedder, ABC):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.embedded_dim = embedded_dim
         self.class_count = class_count
-        self.class_embedding = nn.Embedding(self.class_count, self.embedded_dim).to(self.device)
+        self.class_embedding = nn.Embedding(self.class_count, self.embedded_dim).to(
+            self.device
+        )
 
     def step_embedding(self, step):
         """

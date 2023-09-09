@@ -53,9 +53,7 @@ class DownBlock(nn.Module):
         x = self.down_conv(x)
         embeddings = self.embedded_layer(embeddings)
         embeddings = embeddings[:, :, None, None]
-        embeddings = embeddings.repeat(
-            1, 1, x.shape[-2], x.shape[-1]
-        )
+        embeddings = embeddings.repeat(1, 1, x.shape[-2], x.shape[-1])
         a = x + embeddings
         return x + embeddings
 

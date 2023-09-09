@@ -7,3 +7,6 @@
 
 # Ignore data
 /data/
+
+# Ignore training output and logs
+/output/

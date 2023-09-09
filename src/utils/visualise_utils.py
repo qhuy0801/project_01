@@ -8,7 +8,7 @@ def plot_chw(chw_tensor):
     :return:
     """
     plt.imshow(chw_tensor.permute(1, 2, 0).numpy())
-    plt.axis('off')
+    plt.axis("off")
     plt.show()
 
 
@@ -19,5 +19,5 @@ def plot_hwc(hwc_ndarray):
     :return:
     """
     plt.imshow(hwc_ndarray)
-    plt.axis('off')
+    plt.axis("off")
     plt.show()
