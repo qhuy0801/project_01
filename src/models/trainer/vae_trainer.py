@@ -70,10 +70,10 @@ class VAETrainer:
 
             # Logs
             self.log.add_scalar(
-                "Epoch_loss/KL_loss", epoch_kl_loss.item(), self.current_step
+                "Epoch_loss/KL_loss", epoch_kl_loss, self.current_step
             )
             self.log.add_scalar(
-                "Epoch_loss/MSE_loss", epoch_mse_loss.item(), self.current_step
+                "Epoch_loss/MSE_loss", epoch_mse_loss, self.current_step
             )
             self.log.flush()
 
