@@ -35,7 +35,7 @@ def de_normalise(image_tensor, device):
     """
     __mean = torch.tensor(MEAN).view(1, 3, 1, 1).to(device)
     __std = torch.tensor(STD).view(1, 3, 1, 1).to(device)
-    return ((image_tensor * __std + __mean) * 225).round()
+    return image_tensor * __std + __mean
 
 
 def get_conv_output_size(input_size, kernel_size, stride, padding):
