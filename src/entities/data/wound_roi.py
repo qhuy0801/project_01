@@ -15,8 +15,7 @@ class WoundROI(ImageDataset):
 
     def __init__(
         self,
-        # dataset_dir: str = "../data/segmented/08151709all/roi/",
-        dataset_dir: str = "../data/segmented/test/",
+        dataset_dir: str = "../../data/segmented/roi/",
         target_size: int = 128,
     ) -> None:
         super().__init__()
