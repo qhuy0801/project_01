@@ -15,13 +15,15 @@ class WoundROI(ImageDataset):
 
     def __init__(
         self,
-        dataset_dir: str = "../../data/segmented/roi/",
-        target_size: int = 512,
+        # dataset_dir: str = "../data/segmented/08151709all/roi/",
+        dataset_dir: str = "../data/segmented/test/",
+        target_size: int = 128,
     ) -> None:
         super().__init__()
 
         self.dataset_dir = dataset_dir
         self.target_size = target_size
+        self.data = []
         self.__class_tuple = ()
 
         __file_list = glob.glob(self.dataset_dir + "*")

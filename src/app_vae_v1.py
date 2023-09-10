@@ -6,6 +6,6 @@ if __name__ == '__main__':
     vae_trainer = VAETrainer(
         train_dataset=dataset
     )
-    a, b = vae_trainer.reconstruct_sample()
-    print(a)
-    print(b)
+    vae_trainer.fit()
+    # data = dataset.data
+    # print(data)

@@ -99,10 +99,16 @@ class VAETrainer:
                 )
 
                 # Log a reconstructed image
-                sample, reconstructed_sample = self.reconstruct_sample
+                sample, reconstructed_sample = self.reconstruct_sample()
                 self.log.add_images(
                     tag=f"Samples/Random/Epoch:{epoch}",
-                    img_tensor=torch.cat((sample, reconstructed_sample), dim=0),
+                    img_tensor=torch.cat(
+                        (
+                            de_normalise(sample, self.device),
+                            de_normalise(reconstructed_sample, self.device),
+                        ),
+                        dim=0,
+                    ),
                     global_step=self.current_step,
                     dataformats="NCHW",
                 )
@@ -180,6 +186,7 @@ class VAETrainer:
         :return:
         """
         sample_image, _ = next(iter(self.sample_loader))
+        sample_image = sample_image.to(self.device)
         return sample_image, self.reconstruct(sample_image)
 
     @torch.no_grad()
