@@ -72,6 +72,7 @@ class VAE(nn.Module):
                         kernel_size=self.kernel_size,
                         stride=self.stride,
                         padding=self.padding,
+                        output_padding=1
                     ),
                     nn.BatchNorm2d(out_c),
                     nn.LeakyReLU(),
@@ -90,7 +91,7 @@ class VAE(nn.Module):
             )
         self.compressed_conv_size = compressed_conv_size
         self.compressed_size = (
-            self.compressed_conv_size * self.dims[-1][-1] * self.dims[-1][-1]
+            self.compressed_conv_size * self.compressed_conv_size * self.dims[-1][-1]
         )
 
         # Compressed fully-connected layers (mu and sigma)
