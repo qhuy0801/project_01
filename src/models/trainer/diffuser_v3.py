@@ -1,1 +1,0 @@
-from diffusers import ControlNetModel, KandinskyV22ControlnetPipeline

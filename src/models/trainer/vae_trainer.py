@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 from entities.data.image_dataset import ImageDataset
 from models.nets.vae import VAE
-from utils import save_checkpoint
+from utils import save_checkpoint, de_normalise
 
 
 class VAETrainer:
@@ -20,7 +20,7 @@ class VAETrainer:
         batch_size: int = 10,
         checkpoint_path: str = None,
         num_workers: int = 30,
-        epochs: int = 10000,
+        epochs: int = 5000,
         max_lr: float = 1e-4,
     ) -> None:
         super().__init__()
@@ -61,7 +61,7 @@ class VAETrainer:
         self.current_step = 0
 
         # Best loss for checkpoints
-        self.best_mse_loss = 1000.0
+        self.best_mse_loss = 2000.0
 
     def fit(self):
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
@@ -69,9 +69,7 @@ class VAETrainer:
             epoch_kl_loss, epoch_mse_loss = self.__one_epoch(epoch)
 
             # Logs
-            self.log.add_scalar(
-                "Epoch_loss/KL_loss", epoch_kl_loss, self.current_step
-            )
+            self.log.add_scalar("Epoch_loss/KL_loss", epoch_kl_loss, self.current_step)
             self.log.add_scalar(
                 "Epoch_loss/MSE_loss", epoch_mse_loss, self.current_step
             )
@@ -89,6 +87,14 @@ class VAETrainer:
                     },
                     self.run_name,
                     os.path.join(self.run_dir, self.run_time),
+                )
+
+                # Log a sample image
+                self.log.add_images(
+                    tag=f"Samples/Random/Epoch:{epoch}",
+                    img_tensor=de_normalise(self.random_sample(4), self.device),
+                    global_step=self.current_step,
+                    dataformats="NCHW",
                 )
 
         print("Training completed!")
@@ -156,3 +162,17 @@ class VAETrainer:
         loss.backward()
         self.optimiser.step()
         self.lr_scheduler.step()
+
+    @torch.no_grad()
+    def random_sample(self, sample_num):
+        sample = torch.randn(sample_num, self.model.latent_dim).to(self.device)
+        return self.model.decode(sample)
+
+    @torch.no_grad()
+    def reconstruct(self, x):
+        """
+        Reconstruct an image
+        :param x:
+        :return:
+        """
+        return self.model(x)[0]

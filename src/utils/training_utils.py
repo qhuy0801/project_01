@@ -27,20 +27,15 @@ def forward_transform(image, target_size):
     return __transform_pipeline(image=image)["image"]
 
 
-def revert_transform(image_tensor):
+def de_normalise(image_tensor, device):
     """
     Revert transformation which include de-normalisation, convert from float32 to uint8
-    :param image_tensor: single CHW tensor
-    :return: HWC numpy matrix
+    :param image_tensor: Tensor(NCHW)
+    :return: Tensor(NCHW)
     """
-    __mean = torch.tensor(MEAN).view(3, 1, 1)
-    __std = torch.tensor(STD).view(3, 1, 1)
-    return (
-        ((image_tensor * __std + __mean) * 225)
-        .numpy()
-        .transpose(1, 2, 0)
-        .astype(np.uint8)
-    )
+    __mean = torch.tensor(MEAN).view(1, 3, 1, 1).to(device)
+    __std = torch.tensor(STD).view(1, 3, 1, 1).to(device)
+    return ((image_tensor * __std + __mean) * 225).round()
 
 
 def get_conv_output_size(input_size, kernel_size, stride, padding):

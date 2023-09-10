@@ -22,7 +22,7 @@ class ImageDataset(Dataset, ABC):
         """
         if len(self.class_dict) < sample_num:
             raise ValueError(
-                f"You've requested to get random {sample_num} classes while there are only "
+                f"You've requested to get random {sample_num} classes while there are only"
                 f"{len(self.class_dict)} classes in the dataset"
             )
         return torch.tensor(random.sample(list(self.class_dict.values()), sample_num))
