@@ -20,6 +20,7 @@ class VAETrainer:
         batch_size: int = 10,
         checkpoint_path: str = None,
         num_workers: int = 30,
+        num_samples: int = 1,
         epochs: int = 5000,
         max_lr: float = 1e-4,
     ) -> None:
@@ -34,6 +35,14 @@ class VAETrainer:
         self.train_dataset = train_dataset
         self.train_data = DataLoader(
             train_dataset, batch_size=batch_size, num_workers=num_workers
+        )
+
+        # Random sample
+        random_sampler = torch.utils.data.RandomSampler(
+            train_dataset, replacement=True, num_samples=num_samples
+        )
+        self.sample_loader = DataLoader(
+            train_dataset, batch_size=num_samples, sampler=random_sampler
         )
 
         # Training settings
@@ -89,10 +98,11 @@ class VAETrainer:
                     os.path.join(self.run_dir, self.run_time),
                 )
 
-                # Log a sample image
+                # Log a reconstructed image
+                sample, reconstructed_sample = self.reconstruct_sample
                 self.log.add_images(
                     tag=f"Samples/Random/Epoch:{epoch}",
-                    img_tensor=de_normalise(self.random_sample(4), self.device),
+                    img_tensor=torch.cat((sample, reconstructed_sample), dim=0),
                     global_step=self.current_step,
                     dataformats="NCHW",
                 )
@@ -162,6 +172,15 @@ class VAETrainer:
         loss.backward()
         self.optimiser.step()
         self.lr_scheduler.step()
+
+    @torch.no_grad()
+    def reconstruct_sample(self):
+        """
+        Reconstruct a random image
+        :return:
+        """
+        sample_image, _ = next(iter(self.sample_loader))
+        return sample_image, self.reconstruct(sample_image)
 
     @torch.no_grad()
     def random_sample(self, sample_num):

@@ -1,9 +1,11 @@
-from entities.data.wound_roi import WoundROI
+from entities.data.wound_original import WoundOriginal
 from models.trainer.vae_trainer import VAETrainer
 
 if __name__ == '__main__':
-    wound_roi = WoundROI()
+    dataset = WoundOriginal()
     vae_trainer = VAETrainer(
-        train_dataset=wound_roi
+        train_dataset=dataset
     )
-    vae_trainer.fit()
+    a, b = vae_trainer.reconstruct_sample()
+    print(a)
+    print(b)

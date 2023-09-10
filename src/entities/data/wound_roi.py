@@ -22,7 +22,6 @@ class WoundROI(ImageDataset):
 
         self.dataset_dir = dataset_dir
         self.target_size = target_size
-        self.data = []
         self.__class_tuple = ()
 
         __file_list = glob.glob(self.dataset_dir + "*")
