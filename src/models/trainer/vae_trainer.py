@@ -20,7 +20,7 @@ class VAETrainer:
         batch_size: int = 10,
         checkpoint_path: str = None,
         num_workers: int = 30,
-        epochs: int = 1000,
+        epochs: int = 10000,
         max_lr: float = 1e-4,
     ) -> None:
         super().__init__()
@@ -126,6 +126,11 @@ class VAETrainer:
             self.log.add_scalar("Batch_loss/KL_loss", kl_loss.item(), self.current_step)
             self.log.add_scalar(
                 "Batch_loss/MSE_loss", mse_loss.item(), self.current_step
+            )
+            self.log.add_scalar(
+                "Learning_rate",
+                self.lr_scheduler.get_last_lr()[0],
+                self.current_step,
             )
             self.log.flush()
 
