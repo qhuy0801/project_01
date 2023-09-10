@@ -133,7 +133,7 @@ class Diffuser_v2:
         self.seed = 42
 
         # Best loss for model saving conditioning
-        self.best_loss = 1000
+        self.best_loss = 1000.0
 
         # Class for samples
         self.class_samples = train_dataset.get_sample_labels(2).to(self.device)
@@ -185,6 +185,8 @@ class Diffuser_v2:
                     dataformats="NHWC",
                 )
                 self.log.flush()
+
+        print("Training completed!")
 
     @torch.no_grad()
     def sample(self):
