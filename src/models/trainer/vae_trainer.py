@@ -1,3 +1,4 @@
+import gc
 import os
 from datetime import datetime
 import bitsandbytes as bnb
@@ -10,7 +11,7 @@ from tqdm import tqdm
 
 from entities.data.image_dataset import ImageDataset
 from models.nets.vae import VAE
-from utils import save_checkpoint, de_normalise
+from utils import save_checkpoint, de_normalise, load_checkpoint
 
 
 class VAETrainer:
@@ -28,7 +29,7 @@ class VAETrainer:
         # Platform
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.run_name = "vae_v1"
-        self.run_dir = os.path.join("../output/", self.run_name)
+        self.run_dir = os.path.join("./output/", self.run_name)
         self.run_time = datetime.now().strftime("%m%d%H%M")
 
         # Data
@@ -60,6 +61,17 @@ class VAETrainer:
             epochs=epochs,
             anneal_strategy="cos",
         )
+
+        # If there is back-up
+        if checkpoint_path is not None:
+            checkpoint = load_checkpoint(checkpoint_path, str(self.device))
+            self.model.load_state_dict(checkpoint["model"])
+            self.optimiser.load_state_dict(checkpoint["optimiser"])
+            self.lr_scheduler.load_state_dict(checkpoint["lr_scheduler"])
+
+            # Un-reference and clear
+            checkpoint = None
+            gc.collect()
 
         # Logger
         self.log = SummaryWriter(

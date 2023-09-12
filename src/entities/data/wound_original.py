@@ -3,6 +3,7 @@ import os
 import cv2
 import torch
 from torch.utils.data.dataset import T_co
+from skimage import io
 
 from entities.data.image_dataset import ImageDataset
 from utils import forward_transform, get_metadata, find_path
@@ -15,8 +16,8 @@ class WoundOriginal(ImageDataset):
 
     def __init__(
         self,
-        metadata_path: str = "../../data/annotations/merged_wound_details_july_2022.csv",
-        dataset_dir: str = "../../data/original/images/",
+        metadata_path: str = "./data/annotations/merged_wound_details_july_2022.csv",
+        dataset_dir: str = "./data/original/",
         target_size: int = 512,
     ) -> None:
         super().__init__()
