@@ -4,6 +4,7 @@ from .components.u_net_blocks import DownBlock, UpBlock
 
 from .nets.u_net import UNet
 from .nets.vae import VAE
+from .nets.vae_v2 import VAEv2
 from .nets.multi_headed_vae import MultiHeadedVAE
 
 from .embeddings.embedder import Embedder

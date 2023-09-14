@@ -6,7 +6,7 @@ from torch import nn
 from utils import get_conv_output_size
 
 
-class VAE(nn.Module):
+class VAEv2(nn.Module):
     # Default setting
     intput_size: int = 512
     dims: [int] = [3, 8, 16, 32, 64, 128]

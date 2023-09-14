@@ -20,7 +20,7 @@ class VAETrainer:
         train_dataset: ImageDataset,
         batch_size: int = 10,
         checkpoint_path: str = None,
-        num_workers: int = 30,
+        num_workers: int = 16,
         num_samples: int = 1,
         epochs: int = 5000,
         max_lr: float = 1e-4,
@@ -28,7 +28,7 @@ class VAETrainer:
         super().__init__()
         # Platform
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.run_name = "vae_v1"
+        self.run_name = "vae_v2"
         self.run_dir = os.path.join("./output/", self.run_name)
         self.run_time = datetime.now().strftime("%m%d%H%M")
 
@@ -50,7 +50,9 @@ class VAETrainer:
         self.epochs = epochs
 
         # Model
-        self.model = VAE().to(self.device)
+        self.model = VAE(
+            input_size=self.train_dataset.target_size, dims=[3, 8, 16, 32, 64, 128]
+        ).to(self.device)
 
         # Dependencies
         self.optimiser = bnb.optim.AdamW(self.model.parameters(), lr=max_lr)
@@ -135,7 +137,7 @@ class VAETrainer:
         :return:
         """
         # Store the epoch loss
-        __epoch_kl_loss = 0.0
+        __epoch_loss = 0.0
         __epoch_mse_loss = 0.0
 
         # Iterate the dataloader
@@ -146,20 +148,26 @@ class VAETrainer:
             # Forwarding
             pred_images, mu, sigma = self.model(images)
 
-            # Loss = BCE loss + KL divergence loss
+            # Losses
+            # KL
             kl = 0.5 * torch.sum(-1 - sigma + mu.pow(2) + sigma.exp())
-            kl_loss = (
-                functional.binary_cross_entropy(pred_images, images, size_average=False)
-                + kl
-            )
+
+            # BCE
+            bce = functional.binary_cross_entropy(pred_images, images, size_average=False)
 
             # Reconstruction loss (MSE loss)
-            mse_loss = functional.mse_loss(pred_images, images)
+            mse = functional.mse_loss(pred_images, images)
+
+            # Total loss
+            loss = kl + bce
 
             # Logs
-            self.log.add_scalar("Batch_loss/KL_loss", kl_loss.item(), self.current_step)
+            self.log.add_scalar("Batch_loss/KL_loss", kl.item(), self.current_step)
             self.log.add_scalar(
-                "Batch_loss/MSE_loss", mse_loss.item(), self.current_step
+                "Batch_loss/MSE_loss", mse.item(), self.current_step
+            )
+            self.log.add_scalar(
+                "Batch_loss/BCE_loss", bce.item(), self.current_step
             )
             self.log.add_scalar(
                 "Learning_rate",
@@ -169,16 +177,16 @@ class VAETrainer:
             self.log.flush()
 
             # Backward
-            self.__backward(kl_loss)
+            self.__backward(loss)
 
             # Step count
             self.current_step += 1
 
             # Store the loss
-            __epoch_kl_loss += kl_loss
-            __epoch_mse_loss += mse_loss
+            __epoch_loss += loss
+            __epoch_mse_loss += mse
 
-        return __epoch_kl_loss.mean().item(), __epoch_mse_loss.mean().item()
+        return __epoch_loss.mean().item(), __epoch_mse_loss.mean().item()
 
     def __backward(self, loss):
         """
