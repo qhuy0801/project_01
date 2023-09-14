@@ -1,5 +1,7 @@
 import os
 
+import onnx
+import onnxruntime
 import torch
 from PIL import Image
 
@@ -50,3 +52,23 @@ def load_checkpoint(file_path, device_str):
     :return:
     """
     return torch.load(file_path, map_location=device_str)
+
+
+def load_onnx(onnx_path):
+    """
+    Load an ONNX model
+    :param onnx_path:
+    :return:
+    """
+    model = onnx.load(onnx_path)
+    onnx.checker.check_model(model)
+    return model
+
+
+def init_session_onnx(model):
+    """
+    Initialise an inference session using ONNX model
+    :param model:
+    :return:
+    """
+    return onnxruntime.InferenceSession(model.SerializeToString(), None)

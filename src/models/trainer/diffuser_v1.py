@@ -169,7 +169,7 @@ class Diffuser_v1:
         # Storing the loss
         epoch_loss = []
 
-        # Switch model to correct mode
+        # Switch model to correct model
         if is_training:
             self.model.train()
             data = self.train_data
@@ -259,7 +259,7 @@ class Diffuser_v1:
         # Number of samples
         sample_num = len(labels)
 
-        # Get the model into correct mode
+        # Get the model into correct model
         self.model.eval()
         with torch.inference_mode():
             # Initial noised image (input) in generation (sampling) process is pure gaussian noise

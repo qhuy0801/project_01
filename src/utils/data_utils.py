@@ -1,6 +1,25 @@
 import warnings
 
+import cv2
 import pandas as pd
+
+
+def load_image(file_path):
+    """
+    Load the image using OpenCV
+    :param file_path:
+    :return: np.ndarray
+    """
+    return cv2.cvtColor(cv2.imread(file_path), cv2.COLOR_BGR2RGB)
+
+
+def remove_image_extension(file_name):
+    """
+    Remove image extension such
+    :param file_name:
+    :return:
+    """
+    return file_name.replace(".jpeg", "").replace(".jpg", "").replace(".png", "")
 
 
 def get_metadata(_metadata_path, _number_of_samples, *args):

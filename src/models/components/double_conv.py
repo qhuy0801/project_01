@@ -28,7 +28,7 @@ class DoubleConvolution(nn.Module):
         :param in_channels: number of input convolutional chanel
         :param out_channels: number of output convolutional chanel
         :param additional_channels: (optional) number of convolutional chanel in the middle layer
-        :param residual: whether if we want to use residual mode (similar to ResNet backbone)
+        :param residual: whether if we want to use residual model (similar to ResNet backbone)
         :param args:
         :param kwargs:
         """

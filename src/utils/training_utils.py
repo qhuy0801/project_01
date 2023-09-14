@@ -8,22 +8,22 @@ MEAN = [0.485, 0.456, 0.406]
 STD = [0.229, 0.224, 0.225]
 
 
-def forward_transform(image, target_size):
+def forward_transform(image, target_size, to_tensor: bool = True):
     """
     Simple transformation which include normalisation and resizing
     :param image:
     :param target_size:
     :return: CHW tensors
     """
-    __transform_pipeline = albumentations.Compose(
-        [
-            albumentations.Normalize(MEAN, STD),
-            albumentations.Resize(
-                target_size, target_size, interpolation=cv2.INTER_NEAREST
-            ),
-            ToTensorV2(),
-        ]
-    )
+    __transform_steps = [
+        albumentations.Normalize(MEAN, STD),
+        albumentations.Resize(
+            target_size, target_size, interpolation=cv2.INTER_NEAREST
+        ),
+    ]
+    if to_tensor:
+        __transform_steps = [*__transform_steps, ToTensorV2()]
+    __transform_pipeline = albumentations.Compose(__transform_steps)
     return __transform_pipeline(image=image)["image"]
 
 
