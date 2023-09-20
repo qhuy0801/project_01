@@ -2,6 +2,37 @@ import warnings
 
 import cv2
 import pandas as pd
+from pandas import DataFrame
+
+
+def num_duplicated_values(df: DataFrame, column_name: str):
+    """
+    Count the number of duplicated values in a specific column
+    :param df:
+    :param column_name:
+    :return:
+    """
+    return (df[column_name].value_counts() > 1).sum()
+
+
+def filter_empty_columns(df: DataFrame, column_name):
+    """
+    Filter data where a specific column is null of empty
+    :param df:
+    :param column_name:
+    :return:
+    """
+    return df[df[column_name].notnull() & (df[column_name] != '')]
+
+
+def save_csv(df: DataFrame, file_path: str):
+    """
+    Save a dataframe to csv
+    :param df:
+    :param file_path:
+    :return:
+    """
+    return df.to_csv(file_path, index=False)
 
 
 def load_image(file_path):

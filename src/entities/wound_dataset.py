@@ -8,16 +8,16 @@ import pandas as pd
 from torch.utils.data import Dataset
 from torch.utils.data.dataset import T_co
 
-from entities.data.preprocessing import CONST
+import CONST
 from utils import forward_transform
 
 
 class WoundDataset(Dataset):
     def __init__(
         self,
-        image_dir: str = "./../../../../data/processed/roi/",
-        segment_dir: str = "./../../../../data/processed/segment/",
-        annotation_path: str = "./../../../../data/processed/annotations/wound_details.csv",
+        image_dir: str = CONST.PROCESSED_IMAGES_DIR,
+        segment_dir: str = CONST.PROCESSED_SEGMENT_DIR,
+        annotation_path: str = CONST.ANNOTATION_PROCESSED_PATH,
         target_tensor_size: int = 256,
     ) -> None:
         super().__init__()
@@ -59,6 +59,6 @@ class WoundDataset(Dataset):
             ),
             self.annotation[
                 self.annotation[CONST.FILE_NAME].str.contains(file_name, case=False, na=False
-                )
+                                                              )
             ].iloc[0],
         )

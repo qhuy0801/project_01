@@ -1,9 +1,9 @@
 # Paths
-ANNOTATION_PATH = "./data/annotations/merged_wound_details_july_2022.csv"
-ANNOTATION_PROCESSED_PATH = "./../../../../data/processed/annotations/wound_details.csv"
-UNPROCESSED_IMAGES_DIR = "./../../../../data/images/"
-PROCESSED_IMAGES_DIR = "./../../../../data/processed/roi/"
-PROCESSED_SEGMENT_DIR = "./../../../../data/processed/segment/"
+ANNOTATION_PATH = "../data/annotations/merged_wound_details_july_2022.csv"
+ANNOTATION_PROCESSED_PATH = "../data/processed/annotations/wound_details.csv"
+UNPROCESSED_IMAGES_DIR = "../data/images/"
+PROCESSED_IMAGES_DIR = "../data/processed/roi/"
+PROCESSED_SEGMENT_DIR = "../data/processed/segment/"
 
 # Annotations
 FILE_NAME = "ImageDetail.ImageFilename"
@@ -34,7 +34,7 @@ SELECT_COLUMN = [
 ]
 
 # Segmentation model
-SEG_MODEl_PATH = "./../../../../data/model/SegmentationLevel1.onnx"
+SEG_MODEl_PATH = "../data/model/SegmentationLevel1.onnx"
 
 # Segmentation input size
 SEG_INPUT_SIZE = 336
@@ -46,4 +46,3 @@ SEGMENT_DICT = {
     2: "skin",
     3: "background"
 }
-
