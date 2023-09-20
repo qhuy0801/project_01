@@ -18,7 +18,7 @@ class WoundDataset(Dataset):
         image_dir: str = CONST.PROCESSED_IMAGES_DIR,
         segment_dir: str = CONST.PROCESSED_SEGMENT_DIR,
         annotation_path: str = CONST.ANNOTATION_PROCESSED_PATH,
-        target_tensor_size: int = 256,
+        target_tensor_size: int = 512,
     ) -> None:
         super().__init__()
         self.image_dir = image_dir
@@ -58,7 +58,11 @@ class WoundDataset(Dataset):
                 interpolation=cv2.INTER_NEAREST,
             ),
             self.annotation[
-                self.annotation[CONST.FILE_NAME].str.contains(file_name, case=False, na=False
-                                                              )
+                self.annotation[CONST.FILE_NAME].str.contains(
+                    file_name, case=False, na=False
+                )
             ].iloc[0],
         )
+
+    def __len__(self):
+        return len(self.data)

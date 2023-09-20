@@ -4,12 +4,11 @@ from datetime import datetime
 import bitsandbytes as bnb
 
 import torch
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Dataset
 import torch.nn.functional as functional
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-from entities.data.image_dataset import ImageDataset
 from models.nets.vae import VAE
 from utils import save_checkpoint, de_normalise, load_checkpoint
 
@@ -17,7 +16,8 @@ from utils import save_checkpoint, de_normalise, load_checkpoint
 class VAETrainer:
     def __init__(
         self,
-        train_dataset: ImageDataset,
+        train_dataset: Dataset,
+        model: VAE,
         batch_size: int = 10,
         checkpoint_path: str = None,
         num_workers: int = 16,
@@ -28,7 +28,7 @@ class VAETrainer:
         super().__init__()
         # Platform
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.run_name = "vae_v2"
+        self.run_name = "vae_v1"
         self.run_dir = os.path.join("./output/", self.run_name)
         self.run_time = datetime.now().strftime("%m%d%H%M")
 
@@ -50,9 +50,7 @@ class VAETrainer:
         self.epochs = epochs
 
         # Model
-        self.model = VAE(
-            input_size=self.train_dataset.target_size, dims=[3, 8, 16, 32, 64, 128]
-        ).to(self.device)
+        self.model = model.to(self.device)
 
         # Dependencies
         self.optimiser = bnb.optim.AdamW(self.model.parameters(), lr=max_lr)

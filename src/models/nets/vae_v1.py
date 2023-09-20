@@ -3,10 +3,12 @@ import torch
 
 from torch import nn
 
+from models.nets.vae import VAE
 from utils import get_conv_output_size
 
 
-class VAEv2(nn.Module):
+class VAE_v1(VAE):
+
     # Default setting
     intput_size: int = 512
     dims: [int] = [3, 8, 16, 32, 64, 128]

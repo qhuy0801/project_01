@@ -46,3 +46,22 @@ SEGMENT_DICT = {
     2: "skin",
     3: "background"
 }
+
+
+# Model settings
+class VAE_SETTING:
+    """
+    Setting for VAE
+    """
+    # Initialisation
+    INPUT_SIZE: int = 256
+    DIM_CONFIG: [int] = [3, 4, 4, 4]
+    LATENT_DIM: int = 512
+
+    # Training
+    BATCH_SIZE: int = 10
+    CHECK_POINT_PATH: str = None
+    NUM_WORKERS: int = 16
+    NUM_SAMPLES: int = 1
+    EPOCHS = 5000
+    MAX_LR = 1e-4
