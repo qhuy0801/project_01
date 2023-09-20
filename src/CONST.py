@@ -1,9 +1,9 @@
 # Paths
 ANNOTATION_PATH = "../data/annotations/merged_wound_details_july_2022.csv"
-ANNOTATION_PROCESSED_PATH = "../data/processed/annotations/wound_details.csv"
+ANNOTATION_PROCESSED_PATH = "../wound-data/processed/annotations/wound_details.csv"
 UNPROCESSED_IMAGES_DIR = "../data/images/"
-PROCESSED_IMAGES_DIR = "../data/processed/roi/"
-PROCESSED_SEGMENT_DIR = "../data/processed/segment/"
+PROCESSED_IMAGES_DIR = "../wound-data/processed/roi/"
+PROCESSED_SEGMENT_DIR = "../wound-data/processed/segment/"
 
 # Annotations
 FILE_NAME = "ImageDetail.ImageFilename"
@@ -47,21 +47,27 @@ SEGMENT_DICT = {
     3: "background"
 }
 
+# Models output directory
+OUTPUT_DIR = "../wound-data/output/"
+
 
 # Model settings
 class VAE_SETTING:
     """
     Setting for VAE
     """
+    # Identifier
+    RUN_NAME = "vae_v3"
+
     # Initialisation
     INPUT_SIZE: int = 256
     DIM_CONFIG: [int] = [3, 4, 4, 4]
     LATENT_DIM: int = 512
 
     # Training
-    BATCH_SIZE: int = 10
+    BATCH_SIZE: int = 32
     CHECK_POINT_PATH: str = None
-    NUM_WORKERS: int = 16
+    NUM_WORKERS: int = 32
     NUM_SAMPLES: int = 1
-    EPOCHS = 5000
-    MAX_LR = 1e-4
+    EPOCHS = 15000
+    MAX_LR = 5e-4

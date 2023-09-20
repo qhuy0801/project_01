@@ -29,7 +29,9 @@ if __name__ == '__main__':
         num_workers=CONST.VAE_SETTING.NUM_WORKERS,
         num_samples=CONST.VAE_SETTING.NUM_SAMPLES,
         epochs=CONST.VAE_SETTING.EPOCHS,
-        max_lr=CONST.VAE_SETTING.MAX_LR
+        max_lr=CONST.VAE_SETTING.MAX_LR,
+        output_dir=CONST.OUTPUT_DIR,
+        run_name=CONST.VAE_SETTING.RUN_NAME,
     )
 
     # As we created extra instances, we will need to un-referent them before training

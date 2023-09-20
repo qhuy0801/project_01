@@ -57,11 +57,11 @@ class WoundDataset(Dataset):
                 (self.target_tensor_size, self.target_tensor_size),
                 interpolation=cv2.INTER_NEAREST,
             ),
-            self.annotation[
-                self.annotation[CONST.FILE_NAME].str.contains(
-                    file_name, case=False, na=False
-                )
-            ].iloc[0],
+            # self.annotation[
+            #     self.annotation[CONST.FILE_NAME].str.contains(
+            #         file_name, case=False, na=False
+            #     )
+            # ].iloc[0].to_dict(),
         )
 
     def __len__(self):

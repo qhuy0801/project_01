@@ -24,12 +24,14 @@ class VAETrainer:
         num_samples: int = 1,
         epochs: int = 5000,
         max_lr: float = 1e-4,
+        run_name: str = "vae",
+        output_dir: str = "./output/",
     ) -> None:
         super().__init__()
         # Platform
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.run_name = "vae_v1"
-        self.run_dir = os.path.join("./output/", self.run_name)
+        self.run_name = run_name
+        self.run_dir = os.path.join(output_dir, self.run_name)
         self.run_time = datetime.now().strftime("%m%d%H%M")
 
         # Data
@@ -90,7 +92,7 @@ class VAETrainer:
             epoch_kl_loss, epoch_mse_loss = self.__one_epoch(epoch)
 
             # Logs
-            self.log.add_scalar("Epoch_loss/KL_loss", epoch_kl_loss, self.current_step)
+            self.log.add_scalar("Epoch_loss/KL+BCE", epoch_kl_loss, self.current_step)
             self.log.add_scalar(
                 "Epoch_loss/MSE_loss", epoch_mse_loss, self.current_step
             )
@@ -132,7 +134,7 @@ class VAETrainer:
         """
         Perform one epoch of training
         :param epoch:
-        :return:
+        :return: combination loss (KL + BCE), reconstruction loss (MSE)
         """
         # Store the epoch loss
         __epoch_loss = 0.0
@@ -140,7 +142,7 @@ class VAETrainer:
 
         # Iterate the dataloader
         for _, batch in enumerate(tqdm(self.train_data, desc=f"Epoch {epoch:5d}")):
-            images, _ = batch
+            images, segment = batch
             images = images.to(self.device)
 
             # Forwarding
@@ -166,6 +168,9 @@ class VAETrainer:
             )
             self.log.add_scalar(
                 "Batch_loss/BCE_loss", bce.item(), self.current_step
+            )
+            self.log.add_scalar(
+                "Batch_loss/KL+BCE", loss, self.current_step
             )
             self.log.add_scalar(
                 "Learning_rate",
