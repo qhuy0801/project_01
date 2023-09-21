@@ -65,9 +65,10 @@ class VAE_SETTING:
     LATENT_DIM: int = 512
 
     # Training
-    BATCH_SIZE: int = 32
-    CHECK_POINT_PATH: str = None
+    BATCH_SIZE: int = 16
+    CHECKPOINT_PATH: str = "../wound-data/output/vae_v3/09201948/vae_v3.pt"
     NUM_WORKERS: int = 32
     NUM_SAMPLES: int = 1
     EPOCHS = 15000
-    MAX_LR = 5e-4
+    MAX_LR = 0.1
+    DECAY_RATE = .9999

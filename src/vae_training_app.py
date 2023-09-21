@@ -1,5 +1,7 @@
 import gc
 
+import torch
+
 import CONST
 from entities import WoundDataset
 from models.nets.vae_v1 import VAE_v1
@@ -26,12 +28,21 @@ if __name__ == '__main__':
         train_dataset=dataset,
         model=model,
         batch_size=CONST.VAE_SETTING.BATCH_SIZE,
+        checkpoint_path=CONST.VAE_SETTING.CHECKPOINT_PATH,
         num_workers=CONST.VAE_SETTING.NUM_WORKERS,
         num_samples=CONST.VAE_SETTING.NUM_SAMPLES,
         epochs=CONST.VAE_SETTING.EPOCHS,
         max_lr=CONST.VAE_SETTING.MAX_LR,
         output_dir=CONST.OUTPUT_DIR,
         run_name=CONST.VAE_SETTING.RUN_NAME,
+    )
+
+    # Re-train: get new learning rate scheduler
+    vae_trainer.lr_scheduler = torch.optim.lr_scheduler.StepLR(
+        optimizer=vae_trainer.optimiser,
+        step_size=len(vae_trainer.train_data),
+        gamma=CONST.VAE_SETTING.DECAY_RATE,
+        last_epoch=-1,
     )
 
     # As we created extra instances, we will need to un-referent them before training
