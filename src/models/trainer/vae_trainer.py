@@ -16,18 +16,18 @@ from utils import save_checkpoint, de_normalise, load_checkpoint
 
 class VAETrainer:
     def __init__(
-        self,
-        train_dataset: Dataset,
-        model: VAE,
-        batch_size: int = 10,
-        checkpoint_path: str = None,
-        num_workers: int = 16,
-        num_samples: int = 1,
-        epochs: int = 5000,
-        max_lr: float = 1e-4,
-        lr_decay: float = .999,
-        run_name: str = "vae",
-        output_dir: str = "./output/",
+            self,
+            train_dataset: Dataset,
+            model: VAE,
+            batch_size: int = 10,
+            checkpoint_path: str = None,
+            num_workers: int = 16,
+            num_samples: int = 1,
+            epochs: int = 5000,
+            max_lr: float = 1e-4,
+            lr_decay: float = 0.999,
+            run_name: str = "vae",
+            output_dir: str = "./output/",
     ) -> None:
         super().__init__()
         # Platform
@@ -61,7 +61,7 @@ class VAETrainer:
         self.lr_scheduler = torch.optim.lr_scheduler.StepLR(
             optimizer=self.optimiser,
             step_size=len(self.train_data),
-            gamma=1-lr_decay,
+            gamma=lr_decay,
             last_epoch=-1,
         )
 
@@ -83,19 +83,14 @@ class VAETrainer:
 
         # Log information
         self.model.eval()
-        with open(
-            f"{os.path.join(self.run_dir, self.run_time)}/summary.txt", "w"
-        ) as file:
-            file.write(
-                summary(
-                    self.model,
-                    (
-                        self.model.dims[0][0],
-                        self.model.intput_size,
-                        self.model.intput_size,
-                    ),
-                )
-            )
+        summary(
+            self.model,
+            (
+                self.model.dims[0][0],
+                self.model.intput_size,
+                self.model.intput_size,
+            ),
+        )
 
         # Step count
         self.current_step = 0
@@ -108,6 +103,7 @@ class VAETrainer:
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
         for epoch in range(self.epochs):
             epoch_kl_loss, epoch_mse_loss = self.__one_epoch(epoch)
+            self.__step_epoch()
 
             # Logs
             self.log.add_scalar("Epoch_loss/KL+BCE", epoch_kl_loss, self.current_step)
@@ -214,6 +210,19 @@ class VAETrainer:
         self.optimiser.zero_grad()
         loss.backward()
         self.optimiser.step()
+
+    def __step_batch(self):
+        """
+        Take step after one back, to be implemented later
+        :return:
+        """
+        return None
+
+    def __step_epoch(self):
+        """
+        Take step after one epoch
+        :return:
+        """
         if self.lr_scheduler is not None:
             self.lr_scheduler.step()
 

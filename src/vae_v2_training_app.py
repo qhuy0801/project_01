@@ -39,6 +39,14 @@ if __name__ == '__main__':
         run_name=CONST.VAE_SETTING.RUN_NAME,
     )
 
+    # Create new LR scheduler as we need to reset it
+    vae_trainer.lr_scheduler = torch.optim.lr_scheduler.StepLR(
+        optimizer=vae_trainer.optimiser,
+        step_size=len(vae_trainer.train_data),
+        gamma=CONST.VAE_SETTING.DECAY_RATE,
+        last_epoch=-1,
+    )
+
     # Un-reference instances
     model = None
     gc.collect()
