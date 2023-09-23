@@ -1,6 +1,5 @@
 import gc
-
-from torchsummary import summary
+import torch
 
 import CONST
 from entities import WoundDataset
@@ -15,7 +14,7 @@ if __name__ == '__main__':
         latent_dim=CONST.VAE_SETTING.LATENT_DIM,
     )
 
-    print(summary(model, (3, 256, 256)))
+    # print(summary(model, (3, 256, 256)))
 
     # Initialise dataset
     dataset = WoundDataset(
@@ -30,11 +29,12 @@ if __name__ == '__main__':
         train_dataset=dataset,
         model=model,
         batch_size=CONST.VAE_SETTING.BATCH_SIZE,
-        checkpoint_path=None,
+        checkpoint_path=CONST.VAE_SETTING.CHECKPOINT_PATH,
         num_workers=CONST.VAE_SETTING.NUM_WORKERS,
         num_samples=CONST.VAE_SETTING.NUM_SAMPLES,
         epochs=CONST.VAE_SETTING.EPOCHS,
         max_lr=CONST.VAE_SETTING.MAX_LR,
+        lr_decay=CONST.VAE_SETTING.DECAY_RATE,
         output_dir=CONST.OUTPUT_DIR,
         run_name=CONST.VAE_SETTING.RUN_NAME,
     )

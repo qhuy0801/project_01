@@ -2,6 +2,7 @@ import gc
 import os
 from datetime import datetime
 import bitsandbytes as bnb
+from torchsummary import summary
 
 import torch
 from torch.utils.data import DataLoader, Dataset
@@ -24,6 +25,7 @@ class VAETrainer:
         num_samples: int = 1,
         epochs: int = 5000,
         max_lr: float = 1e-4,
+        lr_decay: float = .999,
         run_name: str = "vae",
         output_dir: str = "./output/",
     ) -> None:
@@ -56,12 +58,11 @@ class VAETrainer:
 
         # Dependencies
         self.optimiser = bnb.optim.AdamW(self.model.parameters(), lr=max_lr)
-        self.lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(
+        self.lr_scheduler = torch.optim.lr_scheduler.StepLR(
             optimizer=self.optimiser,
-            max_lr=max_lr,
-            steps_per_epoch=len(self.train_data),
-            epochs=epochs,
-            anneal_strategy="cos",
+            step_size=len(self.train_data),
+            gamma=1-lr_decay,
+            last_epoch=-1,
         )
 
         # If there is back-up
@@ -80,6 +81,22 @@ class VAETrainer:
             log_dir=f"{os.path.join(self.run_dir, self.run_time)}/logs/"
         )
 
+        # Log information
+        self.model.eval()
+        with open(
+            f"{os.path.join(self.run_dir, self.run_time)}/summary.txt", "w"
+        ) as file:
+            file.write(
+                summary(
+                    self.model,
+                    (
+                        self.model.dims[0][0],
+                        self.model.intput_size,
+                        self.model.intput_size,
+                    ),
+                )
+            )
+
         # Step count
         self.current_step = 0
 
@@ -87,6 +104,7 @@ class VAETrainer:
         self.best_mse_loss = 2000.0
 
     def fit(self):
+        self.model.train()
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
         for epoch in range(self.epochs):
             epoch_kl_loss, epoch_mse_loss = self.__one_epoch(epoch)
@@ -153,7 +171,9 @@ class VAETrainer:
             kl = 0.5 * torch.sum(-1 - sigma + mu.pow(2) + sigma.exp())
 
             # BCE
-            bce = functional.binary_cross_entropy(pred_images, images, size_average=False)
+            bce = functional.binary_cross_entropy(
+                pred_images, images, size_average=False
+            )
 
             # Reconstruction loss (MSE loss)
             mse = functional.mse_loss(pred_images, images)
@@ -163,15 +183,9 @@ class VAETrainer:
 
             # Logs
             self.log.add_scalar("Batch_loss/KL_loss", kl.item(), self.current_step)
-            self.log.add_scalar(
-                "Batch_loss/MSE_loss", mse.item(), self.current_step
-            )
-            self.log.add_scalar(
-                "Batch_loss/BCE_loss", bce.item(), self.current_step
-            )
-            self.log.add_scalar(
-                "Batch_loss/KL+BCE", loss, self.current_step
-            )
+            self.log.add_scalar("Batch_loss/MSE_loss", mse.item(), self.current_step)
+            self.log.add_scalar("Batch_loss/BCE_loss", bce.item(), self.current_step)
+            self.log.add_scalar("Batch_loss/KL+BCE", loss, self.current_step)
             self.log.add_scalar(
                 "Learning_rate",
                 self.lr_scheduler.get_last_lr()[0],
@@ -200,7 +214,8 @@ class VAETrainer:
         self.optimiser.zero_grad()
         loss.backward()
         self.optimiser.step()
-        self.lr_scheduler.step()
+        if self.lr_scheduler is not None:
+            self.lr_scheduler.step()
 
     @torch.no_grad()
     def reconstruct_sample(self):

@@ -66,9 +66,9 @@ class VAE_SETTING:
 
     # Training
     BATCH_SIZE: int = 32
-    CHECKPOINT_PATH: str = "../wound-data/output/vae_v3/09211134/vae_v3.pt"
+    CHECKPOINT_PATH: str = "../wound-data/output/vae_v4/09222153/vae_v4.pt"
     NUM_WORKERS: int = 16
     NUM_SAMPLES: int = 1
-    EPOCHS = 15000
-    MAX_LR = 1e-2
-    DECAY_RATE = .9995
+    EPOCHS = 5000
+    MAX_LR = 1e-4
+    DECAY_RATE = .999
