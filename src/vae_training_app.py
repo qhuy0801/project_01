@@ -1,6 +1,7 @@
 import gc
 
-import torch
+import bitsandbytes as bnb
+from torchsummary import summary
 
 import CONST
 from entities import WoundDataset
@@ -15,6 +16,8 @@ if __name__ == '__main__':
         latent_dim=CONST.VAE_SETTING.LATENT_DIM,
     )
 
+    # print(summary(model, (3, 256, 256)))
+
     # Initialise dataset
     dataset = WoundDataset(
         image_dir=CONST.PROCESSED_IMAGES_DIR,
@@ -22,8 +25,8 @@ if __name__ == '__main__':
         annotation_path=CONST.ANNOTATION_PROCESSED_PATH,
         target_tensor_size=CONST.VAE_SETTING.INPUT_SIZE,
     )
-
-    # Create the training application
+    #
+    # # Create the training application
     vae_trainer = VAETrainer(
         train_dataset=dataset,
         model=model,
@@ -37,18 +40,16 @@ if __name__ == '__main__':
         run_name=CONST.VAE_SETTING.RUN_NAME,
     )
 
-    # Re-train: get new learning rate scheduler
-    vae_trainer.lr_scheduler = torch.optim.lr_scheduler.StepLR(
-        optimizer=vae_trainer.optimiser,
-        step_size=len(vae_trainer.train_data),
-        gamma=CONST.VAE_SETTING.DECAY_RATE,
-        last_epoch=-1,
-    )
+    # Re-train: get new optimiser and remove learning rate scheduler
+    vae_trainer.optimiser = bnb.optim.AdamW(params=vae_trainer.model.parameters(), lr=CONST.VAE_SETTING.MAX_LR)
+
+    # Remove learning rate scheduler
+    vae_trainer.lr_scheduler = None
 
     # As we created extra instances, we will need to un-referent them before training
     model = None
     dataset = None
     gc.collect()
 
-    # Training trigger
+    # # Training trigger
     vae_trainer.fit()

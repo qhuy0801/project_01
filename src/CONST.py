@@ -57,18 +57,18 @@ class VAE_SETTING:
     Setting for VAE
     """
     # Identifier
-    RUN_NAME = "vae_v4"
+    RUN_NAME = "vae_v3"
 
     # Initialisation
     INPUT_SIZE: int = 256
-    DIM_CONFIG: [int] = [3, 16, 32, 64, 128, 256]
+    DIM_CONFIG: [int] = [3, 4, 4, 4]
     LATENT_DIM: int = 512
 
     # Training
     BATCH_SIZE: int = 32
-    CHECKPOINT_PATH: str = "../wound-data/output/vae_v4/09230938/vae_v4.pt"
+    CHECKPOINT_PATH: str = "../wound-data/output/vae_v3/09252226/vae_v3.pt"
     NUM_WORKERS: int = 16
     NUM_SAMPLES: int = 1
-    EPOCHS = 5000
-    MAX_LR = 5e-4
-    DECAY_RATE = .995
+    EPOCHS = 10000
+    MAX_LR = 1e-3
+    DECAY_RATE = 1.

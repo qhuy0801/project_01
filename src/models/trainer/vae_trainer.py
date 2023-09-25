@@ -16,18 +16,18 @@ from utils import save_checkpoint, de_normalise, load_checkpoint
 
 class VAETrainer:
     def __init__(
-            self,
-            train_dataset: Dataset,
-            model: VAE,
-            batch_size: int = 10,
-            checkpoint_path: str = None,
-            num_workers: int = 16,
-            num_samples: int = 1,
-            epochs: int = 5000,
-            max_lr: float = 1e-4,
-            lr_decay: float = 0.999,
-            run_name: str = "vae",
-            output_dir: str = "./output/",
+        self,
+        train_dataset: Dataset,
+        model: VAE,
+        batch_size: int = 10,
+        checkpoint_path: str = None,
+        num_workers: int = 16,
+        num_samples: int = 1,
+        epochs: int = 5000,
+        max_lr: float = 1e-4,
+        lr_decay: float = 0.999,
+        run_name: str = "vae",
+        output_dir: str = "./output/",
     ) -> None:
         super().__init__()
         # Platform
@@ -70,7 +70,8 @@ class VAETrainer:
             checkpoint = load_checkpoint(checkpoint_path, str(self.device))
             self.model.load_state_dict(checkpoint["model"])
             self.optimiser.load_state_dict(checkpoint["optimiser"])
-            self.lr_scheduler.load_state_dict(checkpoint["lr_scheduler"])
+            if checkpoint["lr_scheduler"] is not None:
+                self.lr_scheduler.load_state_dict(checkpoint["lr_scheduler"])
 
             # Un-reference and clear
             checkpoint = None
@@ -120,7 +121,9 @@ class VAETrainer:
                         "mse_loss": epoch_mse_loss,
                         "model": self.model.state_dict(),
                         "optimiser": self.optimiser.state_dict(),
-                        "lr_scheduler": self.lr_scheduler.state_dict(),
+                        "lr_scheduler": self.lr_scheduler.state_dict()
+                        if self.lr_scheduler is not None
+                        else None,
                     },
                     self.run_name,
                     os.path.join(self.run_dir, self.run_time),
@@ -182,11 +185,12 @@ class VAETrainer:
             self.log.add_scalar("Batch_loss/MSE_loss", mse.item(), self.current_step)
             self.log.add_scalar("Batch_loss/BCE_loss", bce.item(), self.current_step)
             self.log.add_scalar("Batch_loss/KL+BCE", loss, self.current_step)
-            self.log.add_scalar(
-                "Learning_rate",
-                self.lr_scheduler.get_last_lr()[0],
-                self.current_step,
-            )
+            if self.lr_scheduler is not None:
+                self.log.add_scalar(
+                    "Learning_rate",
+                    self.lr_scheduler.get_last_lr()[0],
+                    self.current_step,
+                )
             self.log.flush()
 
             # Backward

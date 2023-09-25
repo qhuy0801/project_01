@@ -1,12 +1,13 @@
 import gc
 import torch
+import bitsandbytes as bnb
 
 import CONST
 from entities import WoundDataset
 from models.nets.vae_v2 import VAE_v2
 from models.trainer.vae_trainer import VAETrainer
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Initialise the model
     model = VAE_v2(
         input_size=CONST.VAE_SETTING.INPUT_SIZE,
@@ -40,12 +41,19 @@ if __name__ == '__main__':
     )
 
     # Create new LR scheduler as we need to reset it
-    vae_trainer.lr_scheduler = torch.optim.lr_scheduler.StepLR(
-        optimizer=vae_trainer.optimiser,
-        step_size=len(vae_trainer.train_data),
-        gamma=CONST.VAE_SETTING.DECAY_RATE,
-        last_epoch=-1,
-    )
+    # vae_trainer.lr_scheduler = torch.optim.lr_scheduler.StepLR(
+    #     optimizer=vae_trainer.optimiser,
+    #     step_size=len(vae_trainer.train_data),
+    #     gamma=CONST.VAE_SETTING.DECAY_RATE,
+    #     last_epoch=-1,
+    # )
+
+    # We will train with a constant learning rate to try resolve local minimum
+    # Create new optimiser (not wrapped)
+    # vae_trainer.optimiser = bnb.optim.AdamW(params=vae_trainer.model.parameters(), lr=CONST.VAE_SETTING.MAX_LR)
+
+    # Remove learning rate scheduler
+    vae_trainer.lr_scheduler = None
 
     # Un-reference instances
     model = None
