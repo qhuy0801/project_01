@@ -5,5 +5,6 @@ from .nets.vae_v2 import VAE_v2
 from .nets.attention import SelfAttention
 
 from .embeddings.embedding import Embedding
+from .embeddings.embedding_v1 import Embedding_v1
 
 from .trainer.vae_trainer import VAETrainer

@@ -1,3 +1,4 @@
+import math
 import warnings
 
 import cv2
@@ -91,3 +92,14 @@ def get_metadata(_metadata_path, _number_of_samples, *args):
     else:
         sample_count = _number_of_samples
     return metadata.sample(n=sample_count)
+
+
+def binary_rounding(n):
+    """
+    Round a number to the nearest power of 2
+    Example: 3 -> 4, 6 -> 8, 14 -> 16
+    :param n:
+    :return:
+    """
+    exponent = math.ceil(math.log2(n))
+    return 2 ** exponent

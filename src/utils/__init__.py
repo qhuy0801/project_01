@@ -25,4 +25,5 @@ from .data_utils import (
     filter_empty_columns,
     num_duplicated_values,
     remove_image_extension,
+    binary_rounding,
 )
