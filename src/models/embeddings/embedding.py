@@ -12,7 +12,7 @@ class Embedding(ABC, nn.Module):
     """
 
     @abstractmethod
-    def step_embedding(self, *args, **kwargs):
+    def step_embeddings(self, *args, **kwargs):
         """
         Turn the step into an array of 1-D tensor.
         """
