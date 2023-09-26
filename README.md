@@ -9,7 +9,7 @@ We have taken inspiration from the stable diffusion architecture of Stability AI
 - A modified U-Net architecture that serves the diffusion purpose, adapted to fit the more compressed nature of our autoencoder.
 
 
-- ![Project architecture](./appendices/training.jpg)
+![Project architecture](./appendices/training.jpg)
 
 
 ## Semantic Mapping
@@ -35,7 +35,7 @@ The project is structured into several modules, each serving a distinct purpose 
 
 #### Custom PyTorch Dataset Class
 - After the preprocessing steps, a customized PyTorch dataset class has been constructed.
-- The implementation of this class can be found in the `entity` directory.
+- The implementation of this class can be found in the [`entities`](src/entities) directory.
 
 #### Embedding Class
 - A simple class embedding has been implemented using PyTorch's `Embedding` module.
