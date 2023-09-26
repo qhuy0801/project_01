@@ -9,7 +9,7 @@ We have taken inspiration from the stable diffusion architecture of Stability AI
 - A modified U-Net architecture that serves the diffusion purpose, adapted to fit the more compressed nature of our autoencoder.
 
 
-- ![Project architecture](./appendices/training.jpg)
+![Project architecture](./appendices/training.jpg)
 
 
 ## Semantic Mapping
