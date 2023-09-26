@@ -41,7 +41,7 @@ if __name__ == '__main__':
     )
 
     # Re-train: get new optimiser and remove learning rate scheduler
-    vae_trainer.optimiser = bnb.optim.AdamW(params=vae_trainer.model.parameters(), lr=CONST.VAE_SETTING.MAX_LR)
+    # vae_trainer.optimiser = bnb.optim.AdamW(params=vae_trainer.model.parameters(), lr=CONST.VAE_SETTING.MAX_LR)
 
     # Remove learning rate scheduler
     vae_trainer.lr_scheduler = None

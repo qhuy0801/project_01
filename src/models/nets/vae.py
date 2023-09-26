@@ -12,7 +12,7 @@ class VAE(ABC, nn.Module):
 
     @abstractmethod
     def decode(self, z):
-        """Decode the latent representation into the original space."""
+        """Decode the latent representation into the original pixel space."""
         raise NotImplementedError("The 'decode' method must be overridden by subclasses")
 
     @abstractmethod

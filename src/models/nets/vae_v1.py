@@ -8,6 +8,15 @@ from utils import get_conv_output_size
 
 
 class VAE_v1(VAE):
+    """
+    A Variational Autoencoder (VAE) with a convolutional encoder and a decoder
+    having a similar reversed architecture.
+
+    The encoder is equipped with batch normalization and LeakyReLU activation
+    functions. In the middle of the network, three linear layers serve the
+    purpose of sampling. A separate sigmoid activation function is applied to
+    the output of the encoder, which is not included in the model setup.
+    """
 
     # Default setting
     intput_size: int = 512

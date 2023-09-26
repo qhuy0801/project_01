@@ -8,6 +8,16 @@ from utils import get_conv_output_size
 
 
 class VAE_v2(VAE):
+    """
+    This class represents another implementation of a Variational Autoencoder (VAE),
+    where a sigmoid activation function is embedded inside the decoder architecture.
+
+    The VAE consists of an encoder, a decoder, and a sampling layer in between.
+    The encoder transforms the input data into a latent representation, from which
+    samples are drawn via the reparameterisation trick. The decoder then reconstructs
+    the original data from these samples, applying a sigmoid activation function
+    as part of its architecture to ensure the output is in the appropriate range.
+    """
 
     # Default setting
     intput_size: int = 512
