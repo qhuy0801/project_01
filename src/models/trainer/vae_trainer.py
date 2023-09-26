@@ -39,7 +39,7 @@ class VAETrainer:
         # Data
         self.train_dataset = train_dataset
         self.train_data = DataLoader(
-            train_dataset, batch_size=batch_size, num_workers=num_workers
+            train_dataset, batch_size=batch_size, num_workers=num_workers, shuffle=True
         )
 
         # Random sample
