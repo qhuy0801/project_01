@@ -1,5 +1,4 @@
 import gc
-import torch
 
 from torch import nn
 
@@ -7,22 +6,12 @@ from models.nets.vae import VAE
 from utils import get_conv_output_size
 
 
-class VAE_v2(VAE):
-    """
-    This class represents another implementation of a Variational Autoencoder (VAE),
-    where a sigmoid activation function is embedded inside the decoder architecture.
-
-    The VAE consists of an encoder, a decoder, and a sampling layer in between.
-    The encoder transforms the input data into a latent representation, from which
-    samples are drawn via the reparameterisation trick. The decoder then reconstructs
-    the original data from these samples, applying a sigmoid activation function
-    as part of its architecture to ensure the output is in the appropriate range.
-    """
-
+class VAE_v3(VAE):
     # Default setting
-    intput_size: int = 512
-    dims: [int] = [3, 8, 16, 32, 64, 128]
-    latent_dim: int = 1024
+    input_size: int = 128
+    encoder_dim: [int] = [3, 4]
+    decoder_dim: [int] = [4, 4, 3]
+    latent_dim = int = 512
     kernel_size: int = 3
     stride: int = 2
     padding: int = 1
@@ -30,32 +19,38 @@ class VAE_v2(VAE):
     def __init__(
         self,
         input_size: int = None,
-        dims: [int] = None,
+        encoder_dim: [int] = None,
+        decoder_dim: [int] = None,
         latent_dim: int = None,
         *args,
         **kwargs
     ) -> None:
         super().__init__(*args, **kwargs)
-        # Define input size
+        # None-check all settings and grant
         if input_size is not None:
-            self.intput_size = input_size
+            self.input_size = input_size
 
-        # Define dimensions array
-        if dims is not None:
-            self.dims = dims
+        if encoder_dim is not None:
+            self.encoder_dim = encoder_dim
 
-        # Define latent dim
+        if decoder_dim is not None:
+            self.decoder_dim = decoder_dim
+
         if latent_dim is not None:
             self.latent_dim = latent_dim
 
-        # Convert dimensions array to tuples: [3, 4, 4, 4, 4] to [(3, 4), (4, 4), (4, 4), (4, 4)]
-        self.dims = [
-            (self.dims[i], self.dims[i + 1]) for i in range(len(self.dims) - 1)
+        # Convert array dimensions to tuples
+        self.encoder_dim = [
+            (self.encoder_dim[i], self.encoder_dim[i+1]) for i in range(len(self.encoder_dim) - 1)
         ]
 
-        # Build the encoder
+        self.decoder_dim = [
+            (self.decoder_dim[i], self.decoder_dim[i + 1]) for i in range(len(self.decoder_dim) - 1)
+        ]
+
+        # Build encoder
         layers = []
-        for dim in self.dims:
+        for dim in self.encoder_dim:
             in_c, out_c = dim
             layers.append(
                 nn.Sequential(
@@ -72,10 +67,10 @@ class VAE_v2(VAE):
             )
         self.encoder = nn.Sequential(*layers)
 
-        # Build the decoder
+        # Build decoder
         layers = []
-        for dim in reversed(self.dims[1:]):
-            out_c, in_c = dim
+        for dim in self.decoder_dim[:-1]:
+            in_c, out_c = dim
             layers.append(
                 nn.Sequential(
                     nn.ConvTranspose2d(
@@ -93,29 +88,29 @@ class VAE_v2(VAE):
         layers.append(
             nn.Sequential(
                 nn.ConvTranspose2d(
-                    in_channels=self.dims[0][1],
-                    out_channels=self.dims[0][1],
+                    in_channels=self.decoder_dim[-1][0],
+                    out_channels=self.decoder_dim[-1][0],
                     kernel_size=self.kernel_size,
                     stride=self.stride,
                     padding=self.padding,
                     output_padding=1,
                 ),
-                nn.BatchNorm2d(self.dims[0][1]),
+                nn.BatchNorm2d(self.decoder_dim[-1][0]),
                 nn.LeakyReLU(),
                 nn.Conv2d(
-                    in_channels=self.dims[0][1],
-                    out_channels=self.dims[0][0],
+                    in_channels=self.decoder_dim[-1][0],
+                    out_channels=self.decoder_dim[-1][1],
                     kernel_size=self.kernel_size,
                     padding=self.padding,
                 ),
-                nn.Sigmoid()
+                nn.Tanh()
             )
         )
         self.decoder = nn.Sequential(*layers)
 
         # Get compressed latent size (encoder's output and decoder's input)
-        compressed_conv_size = self.intput_size
-        for _ in range(len(self.dims)):
+        compressed_conv_size = self.input_size
+        for _ in range(len(self.encoder_dim)):
             compressed_conv_size = get_conv_output_size(
                 input_size=compressed_conv_size,
                 kernel_size=self.kernel_size,
@@ -124,7 +119,7 @@ class VAE_v2(VAE):
             )
         self.compressed_conv_size = compressed_conv_size
         self.compressed_size = (
-            self.compressed_conv_size * self.compressed_conv_size * self.dims[-1][-1]
+                self.compressed_conv_size * self.compressed_conv_size * self.encoder_dim[-1][-1]
         )
 
         # Compressed fully-connected layers (mu and sigma)
@@ -134,8 +129,20 @@ class VAE_v2(VAE):
         # Decoder input
         self.decoder_input = nn.Linear(self.latent_dim, self.compressed_size)
 
-        # Latent distribution (mu & sigma) and representation
-
         # Un-referent and clear unreferenced instance
         layers = None
         gc.collect()
+
+    def decode(self, x):
+        """
+        Decode from latent space into pixel space
+        :param x:
+        :return:
+        """
+        x = self.decoder_input(x)
+        x = x.view(
+            -1, self.decoder_dim[0][0], self.compressed_conv_size, self.compressed_conv_size
+        )
+        return self.decoder(x)
+
+

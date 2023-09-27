@@ -54,7 +54,7 @@ OUTPUT_DIR = "../wound-data/output/"
 # Model settings
 class VAE_SETTING:
     """
-    Setting for VAE
+    Setting for VAE_v1
     """
     # Identifier
     RUN_NAME = "vae_v3"
@@ -62,6 +62,28 @@ class VAE_SETTING:
     # Initialisation
     INPUT_SIZE: int = 256
     DIM_CONFIG: [int] = [3, 4, 4, 4]
+    LATENT_DIM: int = 512
+
+    # Training
+    BATCH_SIZE: int = 512
+    CHECKPOINT_PATH: str = "../wound-data/output/vae_v3/09261520/vae_v3.pt"
+    NUM_WORKERS: int = 1
+    NUM_SAMPLES: int = 1
+    EPOCHS = 10000
+    MAX_LR = 5e-6
+    DECAY_RATE = 1.
+
+class VAE_SETTING_v3:
+    """
+    Setting for VAE_v3
+    """
+    # Identifier
+    RUN_NAME = "vae_v3_1"
+
+    # Initialisation
+    INPUT_SIZE: int = 128
+    ENCODER_DIM: [int] = [3, 4]
+    DECODER_DIM: [int] = [4, 4, 3]
     LATENT_DIM: int = 512
 
     # Training

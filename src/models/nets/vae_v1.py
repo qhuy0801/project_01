@@ -19,7 +19,7 @@ class VAE_v1(VAE):
     """
 
     # Default setting
-    intput_size: int = 512
+    input_size: int = 512
     dims: [int] = [3, 8, 16, 32, 64, 128]
     latent_dim: int = 1024
     kernel_size: int = 3
@@ -37,7 +37,7 @@ class VAE_v1(VAE):
         super().__init__(*args, **kwargs)
         # Define input size
         if input_size is not None:
-            self.intput_size = input_size
+            self.input_size = input_size
 
         # Define dimensions array
         if dims is not None:
@@ -92,7 +92,7 @@ class VAE_v1(VAE):
         self.decoder = nn.Sequential(*layers)
 
         # Get compressed latent size (encoder's output and decoder's input)
-        compressed_conv_size = self.intput_size
+        compressed_conv_size = self.input_size
         for _ in range(len(self.dims)):
             compressed_conv_size = get_conv_output_size(
                 input_size=compressed_conv_size,
@@ -118,29 +118,11 @@ class VAE_v1(VAE):
         layers = None
         gc.collect()
 
-    def forward(self, x):
-        """
-        Forward function of VAE: encode > reparameterise > decode
-        :param x:
-        :return:
-        """
-        mu, sigma = self.encode(x)
-        x = self.reparameterise(mu, sigma)
-        return self.decode(x), mu, sigma
-
-    def encode(self, x):
-        """
-        Encode the input
-        :param x: Tensor[N, C, H, W]
-        :return: Tensor[N, latent_dim], Tensor[N, latent_dim]
-        """
-        x = self.encoder(x)
-        x = torch.flatten(x, start_dim=1)
-        return self.fc_mu(x), self.fc_sigma(x)
-
     def decode(self, x):
         """
         Decode from latent space into pixel space
+        In this VAE implementation, we add a sigmoid layer to this decode function
+        as we didn't include sigmoid in to the architecture before
         :param x:
         :return:
         """
@@ -150,14 +132,3 @@ class VAE_v1(VAE):
         )
         x = self.decoder(x)
         return torch.sigmoid(x)
-
-    def reparameterise(self, mu, sigma):
-        """
-        Sample from mu and sigma: mu + std + eps
-        :param mu:
-        :param sigma:
-        :return:
-        """
-        std = torch.exp(sigma * 0.5)
-        eps = torch.randn_like(std)
-        return mu + std * eps
