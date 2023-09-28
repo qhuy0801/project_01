@@ -48,7 +48,7 @@ SEGMENT_DICT = {
 }
 
 # Models output directory
-OUTPUT_DIR = "../wound-data/output/"
+OUTPUT_DIR = "../resources/output/"
 
 
 # Model settings
@@ -88,9 +88,9 @@ class VAE_SETTING_v3:
     LATENT_DIM: int = 512
 
     # Training
-    BATCH_SIZE: int = 16
+    BATCH_SIZE: int = 32
     CHECKPOINT_PATH: str = None
-    NUM_WORKERS: int = 8
+    NUM_WORKERS: int = 16
     NUM_SAMPLES: int = 1
     EPOCHS = 10000
     MAX_LR = 5e-6

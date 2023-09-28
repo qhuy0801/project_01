@@ -53,4 +53,4 @@ if __name__ == '__main__':
     gc.collect()
 
     # Training trigger
-    vae_trainer.fit()
+    # vae_trainer.fit()
