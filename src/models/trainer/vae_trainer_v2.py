@@ -92,7 +92,7 @@ class VAETrainer_v2:
                 self.model,
                 (
                     1,
-                    self.model.encoder_dims[0][0],
+                    self.model.encoder_dim[0][0],
                     self.model.input_size,
                     self.model.input_size,
                 ),

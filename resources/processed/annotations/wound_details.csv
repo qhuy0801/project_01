@@ -1,0 +1,512 @@
+ImageDetail.ImageFilename,ImageDetail.hasRuler,ImageDetail.WoundType,ImageDetail.OtherWoundBedCategory,WoundDetail.WoundDepth,WoundDetail.Location,ImageDetail.AreaOfInterestX,ImageDetail.AreaOfInterestWidth,ImageDetail.AreaOfInterestY,ImageDetail.AreaOfInterestHeight
+VWI11961 2021-05-05-07-51-40.jpg,False,Neuro-Ischemic Ulcers (NIU),Exposed Tendon/Bone,Deep,Right Plantar Calcaneus;,36,1021,498,840
+VWI11949 2021-05-03-08-46-12.jpg,False,Surgical Site Infections (SSI),,Deep,Right Medial Calf;,0,1600,0,1200
+VWI11946 2021-05-03-08-08-53.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Medial Calf;,0,1600,0,1200
+VWI11802 2021-04-01-08-40-23.jpg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Right Medial Calf;Right Medial Malleolus;,102,805,342,942
+VWI11805 2021-04-01-09-39-22.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Metatarsals;Right Plantar Metatarsals;,294,856,94,1400
+VWI11806 2021-04-01-12-33-35.jpg,False,Other,,Deep,Left Lateral Metatarsals;,100,1017,66,1107
+VWI11807 2021-04-02-07-56-15.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Lateral Calf;,150,1373,21,897
+VWI11957 2021-05-04-12-06-39.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe1;Right Plantar Toe1;,0,1200,0,1600
+VWI00001 2015-11-19_9.00.58 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Left Anterior Thigh;Left Posterior Thigh;,0,1191,0,1352
+VWI00002 2015-11-19_9.05.14 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Midfoot;Left Plantar Midfoot;Left Medial Midfoot;Left Lateral Midfoot;,0,1266,0,1051
+VWI00003 2015-11-19_9.25.29 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Metatarsals;Left Plantar Metatarsals;Left Lateral Metatarsals;Left Medial Metatarsals;,0,783,0,1229
+VWI00004 2015-11-19_9.26.57 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Midfoot;Right Plantar Midfoot;Right Lateral Midfoot;Right Medial Midfoot;,0,0,0,0
+VWI00005 2015-11-20_6.40.12 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Plantar Toe5;Right Plantar Toe3;Right Plantar Toe4;,0,0,0,0
+VWI00006 2015-11-20_10.16.12 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Medial Midfoot;Left Lateral Midfoot;Left Plantar Midfoot;Left Dorsal Midfoot;,0,0,0,0
+VWI11960 2021-05-05-07-42-32.jpg,False,Surgical Site Infections (SSI),,Deep,Left Shin;,0,0,0,0
+VWI11955 2021-05-04-10-50-20.jpg,False,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Left Plantar Toe1;Left Plantar Toe2;Left Plantar Toe3;Left Plantar Toe4;Left Plantar Toe5;,0,0,0,0
+VWI00009 2015-11-20_10.45.58 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Right Medial Midfoot;Right Lateral Midfoot;Right Dorsal Midfoot;,0,0,0,0
+VWI00012 2015-11-21_9.33.13 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Left Medial Midfoot;Left Plantar Midfoot;Left Dorsal Midfoot;Left Lateral Midfoot;,0,0,0,0
+VWI00014 2015-11-23_2.12.22 PM.jpeg,False,Surgical Site Infections (SSI),,,Left Dorsal Midfoot;Left Plantar Midfoot;Left Lateral Midfoot;Left Medial Midfoot;,0,0,0,0
+VWI00015 2015-11-23_8.00.52 AM.jpeg,False,Surgical Site Infections (SSI),,Epidermal Layer,Left Anterior Thigh;,0,0,0,0
+VWI00016 2015-11-23_8.29.34 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Right Plantar Metatarsals;Right Dorsal Metatarsals;,0,0,0,0
+VWI00017 2015-11-23_8.52.42 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Left Dorsal Metatarsals;Left Plantar Metatarsals;,0,0,0,0
+VWI00018 2015-11-23_8.54.42 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Left Anterior Thigh;,0,0,0,0
+VWI00019 2015-11-23_9.42.36 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Right Lateral Midfoot;Right Plantar Midfoot;Right Dorsal Midfoot;Right Medial Midfoot;,0,0,0,0
+VWI00022 2015-11-24_9.21.38 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Metatarsals;Right Lateral Metatarsals;Right Medial Metatarsals;Right Plantar Metatarsals;,0,0,0,0
+VWI00026 2015-11-25_10.06.53 AM.jpeg,False,Pressure Injuries (PI),,Deep,Right Posterior Calcaneus;,0,0,0,0
+VWI00027 2015-11-26_7.12.52 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Metatarsals;Right Plantar Metatarsals;,0,0,0,0
+VWI00029 2015-11-26_9.28.15 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Right Posterior Calf;Left Dorsal Toe3;,0,0,0,0
+VWI00031 2015-11-26_9.57.48 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Right Anterior Thigh;,0,0,0,0
+VWI00032 2015-11-26_10.13.54 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Right Posterior Calcaneus;,0,0,0,0
+VWI00034 2015-11-26_11.15.40 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Lateral Midfoot;Right Lateral Metatarsals;,0,0,0,0
+VWI00035 2015-11-26_11.32.19 AM.jpeg,False,Venous Leg Ulcer (VLU),,Deep,Right Shin;,0,0,0,0
+VWI00036 2015-11-27_7.44.17 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Right Plantar Midfoot;Right Dorsal Midfoot;Right Lateral Midfoot;,0,1045,0,1366
+VWI00037 2015-11-27_8.33.57 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Midfoot;,0,0,0,0
+VWI00038 2015-11-27_9.33.30 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Left Plantar Midfoot;Left Lateral Midfoot;Left Dorsal Midfoot;Left Medial Midfoot;,0,0,0,0
+VWI00039 2015-11-29_8.49.45 AM.jpeg,False,Surgical Site Infections (SSI),Incisional wound with partial thickness skin loss,Epidermal Layer,Left Anterior Thigh;,0,0,0,0
+VWI01605 2020-01-13_07.23.10.JPG,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;Right Plantar Toe3;Right Plantar Toe4;Right Plantar Toe5;,0,1200,0,1600
+VWI01608 2020-01-14_08.26.38.JPG,False,Surgical Site Infections (SSI),,Deep,Right Medial Midfoot;Right Dorsal Midfoot;Right Plantar Midfoot;Right Lateral Midfoot;,0,1200,0,1600
+VWI01609 2020-01-14_11.58.16.JPG,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Midfoot;Right Plantar Midfoot;Right Lateral Midfoot;Right Medial Midfoot;,0,1200,0,1600
+VWI01610 2020-01-14_17.13.30.JPG,False,Surgical Site Infections (SSI),,Dermal Layer,Right Medial Midfoot;Right Lateral Midfoot;,0,1200,0,1600
+VWI01611 2020-01-16_07.59.06.JPG,False,Surgical Site Infections (SSI),,Deep,Left Dorsal Toe2;Left Dorsal Toe3;Left Dorsal Toe4;Left Dorsal Toe5;Left Plantar Toe2;Left Plantar Toe3;Left Plantar Toe4;Left Plantar Metatarsals;Left Dorsal Metatarsals;Left Lateral Metatarsals;,0,1200,0,1600
+VWI01612 2020-01-16_08.19.07.JPG,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Medial Metatarsals;Right Lateral Metatarsals;,0,1600,0,1200
+VWI01613 2020-01-17_09.17.36.JPG,False,Surgical Site Infections (SSI),,Deep,Left Plantar Midfoot;Left Medial Midfoot;Left Lateral Midfoot;,0,0,0,0
+VWI01615 2020-01-17_12.24.42 2.JPG,False,Surgical Site Infections (SSI),,,Left Lateral Midfoot;Left Medial Midfoot;Left Dorsal Midfoot;Left Plantar Midfoot;,0,0,0,0
+VWI01616 2020-01-17_15.36.43.JPG,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Plantar Midfoot;Right Plantar Metatarsals;,0,0,0,0
+VWI01617 2020-01-18_08.01.05.JPG,False,Surgical Site Infections (SSI),,Deep,Left Dorsal Midfoot;Left Plantar Midfoot;Left Medial Midfoot;Left Lateral Midfoot;,0,0,0,0
+VWI01618 2020-01-18_10.37.11.JPG,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;Right Plantar Toe3;Right Plantar Toe5;Right Plantar Metatarsals;Right Dorsal Metatarsals;Right Lateral Metatarsals;,0,0,0,0
+VWI01619 2020-01-20_07.48.12.JPG,False,Neuro-Ischemic Ulcers (NIU),,,Right Lateral Midfoot;Right Lateral Metatarsals;Right Plantar Midfoot;Right Plantar Metatarsals;Right Dorsal Midfoot;Right Dorsal Metatarsals;,0,1600,0,1200
+VWI01620 2020-01-20_07.54.19.JPG,False,Surgical Site Infections (SSI),,Deep,Left Medial Midfoot;Left Lateral Midfoot;Left Plantar Midfoot;Left Dorsal Midfoot;,0,0,0,0
+VWI01621 2020-01-20_08.10.22.JPG,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Medial Metatarsals;Right Lateral Metatarsals;,0,0,0,0
+VWI01622 2020-01-20_08.14.34.JPG,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe1;Left Plantar Toe1;Left Plantar Metatarsals;,0,1200,0,1600
+VWI01623 2020-01-20_08.19.00.JPG,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Midfoot;Right Lateral Midfoot;Right Medial Midfoot;,0,1600,0,1461
+VWI01624 2020-01-20_09.28.54.JPG,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Lateral Midfoot;Right Lateral Metatarsals;Right Plantar Metatarsals;Right Plantar Midfoot;Right Dorsal Metatarsals;Right Dorsal Midfoot;,0,1600,0,1200
+VWI01625 2020-01-20_10.57.52.JPG,False,Neuro-Ischemic Ulcers (NIU),healthy tissue,Deep,Left Dorsal Metatarsals;Left Plantar Metatarsals;Left Lateral Midfoot;Left Medial Metatarsals;,0,1600,0,1200
+VWI01628 2020-01-21_14.47.33.JPG,False,Surgical Site Infections (SSI),,Dermal Layer,Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Lateral Metatarsals;Right Medial Metatarsals;,0,0,0,0
+VWI01630 2020-01-24_09.39.31.JPG,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Plantar Midfoot;Left Dorsal Midfoot;Left Lateral Midfoot;Left Medial Midfoot;,0,0,0,0
+VWI01631 2020-01-24_09.59.52.JPG,False,Neuro-Ischemic Ulcers (NIU),Healthy tissue,Deep,Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Lateral Metatarsals;Right Medial Metatarsals;Right Plantar Midfoot;,0,0,0,0
+VWI01632 2020-01-24_16.12.16.JPG,False,Surgical Site Infections (SSI),,Dermal Layer,Right Plantar Metatarsals;Right Plantar Midfoot;Right Medial Midfoot;,0,0,0,0
+VWI01633 2020-01-27_07.31.02.JPG,False,Surgical Site Infections (SSI),susected biofilm,Dermal Layer,Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Lateral Metatarsals;Right Medial Metatarsals;,0,1200,0,1600
+VWI01635 2020-01-28_07.38.58.JPG,False,Surgical Site Infections (SSI),,Deep,Left Plantar Midfoot;Left Dorsal Midfoot;Left Medial Midfoot;Left Lateral Midfoot;,0,0,0,0
+VWI01636 2020-01-28_07.56.17.JPG,False,Neuro-Ischemic Ulcers (NIU),,,Left Plantar Toe4;Left Dorsal Toe4;,0,0,0,0
+VWI01637 2020-01-28_08.41.12.JPG,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe4;Right Plantar Toe2;Right Plantar Toe3;Right Plantar Toe4;Right Plantar Metatarsals;Right Dorsal Metatarsals;,0,1600,0,1200
+VWI01638 2020-01-28_12.46.37.JPG,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Lateral Metatarsals;Right Medial Metatarsals;,0,0,0,0
+VWI01639 2020-01-28_13.29.10.JPG,False,Surgical Site Infections (SSI),,Dermal Layer,Right Plantar Midfoot;Right Plantar Metatarsals;,0,900,0,1600
+VWI01640 2020-01-28_14.48.21.JPG,False,Neuro-Ischemic Ulcers (NIU),,,Left Lateral Malleolus;,0,768,0,1024
+VWI01643 2020-01-31_08.25.55.JPG,False,Surgical Site Infections (SSI),,,Right Lateral Midfoot;Right Plantar Midfoot;Right Dorsal Midfoot;Right Medial Midfoot;,0,0,0,0
+VWI01644 2020-01-31_08.54.55.JPG,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Metatarsals;Right Medial Metatarsals;Right Lateral Metatarsals;,0,0,0,0
+VWI01645 2020-01-31_17.41.10.JPG,False,Surgical Site Infections (SSI),,,Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Lateral Metatarsals;Right Medial Metatarsals;,0,1376,0,774
+VWI01646 2020-02-21_14.19.jpg,False,Venous Leg Ulcer (VLU),,,Left Lateral Malleolus;Left Lateral Midfoot;Left Lateral Metatarsals;Left Dorsal Ankle;Left Dorsal Midfoot;Left Dorsal Metatarsals;Left Dorsal Toe1;Left Dorsal Toe3;Left Dorsal Toe4;Left Dorsal Toe5;Left Dorsal Toe2;Left Plantar Toe1;Left Plantar Toe2;Left Plantar Toe3;Left Plantar Toe4;Left Plantar Toe5;,0,4032,0,3024
+VWI01403 2019-10-11_08.06.30.JPG,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;Right Plantar Toe3;Right Plantar Toe4;Right Plantar Toe5;Right Plantar Metatarsals;Right Dorsal Metatarsals;Right Lateral Metatarsals;,0,0,0,0
+VWI01404 2019-10-11_09.37.23.JPG,False,Surgical Site Infections (SSI),Healthy tissue,Deep,Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Lateral Metatarsals;Right Medial Metatarsals;,0,0,0,0
+VWI01405 2019-10-11_19.09.27.JPG,False,Surgical Site Infections (SSI),,Deep,Left Plantar Toe1;Left Plantar Toe2;Left Plantar Toe3;Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Toe3;Left Dorsal Metatarsals;Left Plantar Metatarsals;Left Medial Metatarsals;,0,0,0,0
+VWI01406 2019-10-12_08.57.31.JPG,False,Neuro-Ischemic Ulcers (NIU),,,Left Medial Calf;Left Shin;,0,0,0,0
+VWI01407 2019-10-14_08.16.00.JPG,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Medial Metatarsals;Right Dorsal Toe1;Right Plantar Toe1;,0,0,0,0
+VWI01409 2019-10-14_14.55.46.JPG,False,Surgical Site Infections (SSI),,Deep,Left Lateral Metatarsals;Left Lateral Midfoot;Left Plantar Toe3;Left Plantar Toe4;Left Plantar Toe5;Left Plantar Metatarsals;Left Dorsal Toe4;Left Dorsal Toe5;Left Dorsal Toe3;Left Dorsal Metatarsals;,0,0,0,0
+VWI01410 2019-10-15_12.57.01.JPG,False,Surgical Site Infections (SSI),,,Left Plantar Toe1;Left Plantar Toe2;Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Metatarsals;Left Plantar Metatarsals;Left Medial Metatarsals;Left Medial Midfoot;,0,0,0,0
+VWI01412 2019-10-17_08.11.10.JPG,False,Surgical Site Infections (SSI),,,Right Plantar Toe4;Right Plantar Toe5;Right Dorsal Toe4;Right Dorsal Toe5;Right Dorsal Metatarsals;Right Lateral Metatarsals;Right Plantar Metatarsals;,0,0,0,0
+VWI01413 2019-10-18_15.44.39.JPG,False,Surgical Site Infections (SSI),,,Right Dorsal Midfoot;Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Medial Midfoot;Right Medial Metatarsals;Right Lateral Midfoot;Right Lateral Metatarsals;Right Plantar Midfoot;,0,0,0,0
+VWI01414 2019-10-22_15.06.21.JPG,False,Surgical Site Infections (SSI),,,Right Dorsal Toe4;Right Dorsal Toe5;Right Plantar Toe4;Right Plantar Toe5;Right Plantar Metatarsals;Right Dorsal Metatarsals;Right Lateral Metatarsals;,0,0,0,0
+VWI01415 2019-10-24_08.57.56.JPG,False,Surgical Site Infections (SSI),,,Right Dorsal Metatarsals;Right Dorsal Toe5;Right Dorsal Toe4;Right Toe Nail5;Right Plantar Toe4;Right Plantar Toe5;Right Plantar Metatarsals;Right Lateral Metatarsals;,0,0,0,0
+VWI01418 2019-10-24_12.42.32.JPG,False,Surgical Site Infections (SSI),,,Right Dorsal Toe4;Right Dorsal Toe5;Right Plantar Toe4;Right Plantar Toe5;Right Plantar Metatarsals;Right Lateral Metatarsals;,0,1200,0,1600
+VWI01419 2019-10-25_14.15.24.JPG,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Midfoot;Right Plantar Midfoot;Right Medial Midfoot;Right Lateral Midfoot;,0,0,0,0
+VWI01421 2019-10-29_08.13.06.JPG,False,Surgical Site Infections (SSI),,,Left Plantar Midfoot;Left Medial Midfoot;Left Lateral Midfoot;,0,0,0,0
+VWI01420 2019-10-25_18.14.53.JPG,False,Surgical Site Infections (SSI),,,Left Plantar Toe1;Left Plantar Toe2;Left Dorsal Toe1;Left Dorsal Toe2;Left Plantar Metatarsals;Left Dorsal Metatarsals;Left Medial Metatarsals;,0,0,0,0
+VWI01425 2019-10-29_12.25.44.JPG,False,Surgical Site Infections (SSI),,,Left Plantar Toe3;Left Plantar Toe4;Left Plantar Toe5;Left Dorsal Toe4;Left Dorsal Metatarsals;Left Plantar Metatarsals;,0,0,0,0
+VWI01426 2019-10-29_18.49.16.JPG,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;Right Plantar Toe3;Right Plantar Toe4;Right Plantar Toe5;Right Plantar Midfoot;Right Plantar Metatarsals;Right Dorsal Midfoot;Right Dorsal Metatarsals;Right Lateral Midfoot;Right Lateral Metatarsals;,0,0,0,0
+VWI01427 2019-10-29_18.49.16 2.JPG,False,Surgical Site Infections (SSI),,Dermal Layer,Left Plantar Toe2;Left Dorsal Toe2;,0,0,0,0
+VWI01428 2019-10-31_08.51.56.JPG,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Toe3;Right Dorsal Metatarsals;Right Plantar Toe3;,0,0,0,0
+VWI01429 2019-10-31_18.09.16.JPG,False,Surgical Site Infections (SSI),,,Left Plantar Toe4;Left Plantar Toe5;Left Toe Nail4;Left Dorsal Toe4;Left Dorsal Toe5;Left Dorsal Metatarsals;Left Plantar Metatarsals;Left Lateral Metatarsals;,0,0,0,0
+VWI01430 2019-11-01_09.33.36.JPG,False,Surgical Site Infections (SSI),,Deep,Right Lateral Metatarsals;Right Lateral Midfoot;Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;Right Dorsal Metatarsals;Right Dorsal Midfoot;Right Plantar Midfoot;Right Plantar Metatarsals;Right Plantar Toe5;Right Plantar Toe3;Right Plantar Toe4;,0,0,0,0
+VWI01432 2019-11-01_12.09.19.JPG,False,Surgical Site Infections (SSI),,Deep,Right Lateral Midfoot;Right Lateral Metatarsals;Right Plantar Metatarsals;Right Plantar Midfoot;Right Dorsal Midfoot;Right Dorsal Metatarsals;Right Dorsal Toe5;Right Dorsal Toe4;Right Dorsal Toe3;Right Plantar Toe3;Right Plantar Toe4;Right Plantar Toe5;,0,0,0,0
+VWI01434 2019-11-04_10.16.43.JPG,False,Surgical Site Infections (SSI),,Dermal Layer,Right Dorsal Toe4;Right Dorsal Toe5;Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Plantar Toe5;Right Plantar Toe4;,0,0,0,0
+VWI01435 2019-11-05_08.00.49.JPG,False,Surgical Site Infections (SSI),,,Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Medial Metatarsals;Right Lateral Metatarsals;,0,0,0,0
+VWI01436 2019-11-05_08.31.21.JPG,False,Surgical Site Infections (SSI),,Deep,Left Plantar Toe2;Left Plantar Toe1;Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Metatarsals;Left Plantar Metatarsals;Left Medial Metatarsals;,0,0,0,0
+VWI01437 2019-11-05_10.46.23.JPG,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;Right Plantar Toe3;Right Plantar Toe4;Right Plantar Toe5;,0,0,0,0
+VWI01438 2019-11-06_08.21.18.JPG,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Toe2;Right Plantar Toe2;,0,0,0,0
+VWI00010 2015-11-20_10.47.52 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Toe1;Right Dorsal Toe2;Right Dorsal Toe3;Right Plantar Toe1;Right Plantar Toe2;Right Plantar Toe3;,0,0,0,0
+VWI00023 2015-11-25_4.59.37 PM.jpeg,False,Surgical Site Infections (SSI),,Deep,Right Dorsal Toe3;Right Dorsal Toe1;Right Dorsal Toe2;Right Plantar Toe1;Right Plantar Toe2;Right Plantar Toe3;,0,0,0,0
+VWI00040 2015-11-29_11.19.25 AM.jpeg,False,Surgical Site Infections (SSI),,Deep,Right Medial Midfoot;,0,0,0,0
+VWI00045 2015-11-30_9.06.46 AM.jpeg,False,Surgical Site Infections (SSI),Incisional wound,Deep,Right Medial Knee;,0,0,0,0
+TSY000002_EP2.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Toe3;,620,1609,2001,800
+TSY000004_EP1.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Right Lateral Midfoot;,1199,1116,608,3615
+TSY000005_EP1.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Toe1;,2571,1030,929,1779
+TSY000008_EP1.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Left Lateral Metatarsals;Left Lateral Midfoot;,2841,1150,1179,1999
+TSY000008_EP3.JPG,False,Neuro-Ischemic Ulcers (NIU),,,Left Lateral Metatarsals;Left Lateral Midfoot;,1009,2059,1110,3251
+TSY000008_EP4.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Left Lateral Midfoot;Left Lateral Metatarsals;,1167,1267,2779,1753
+TSY000009_EP2.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Right Lateral Metatarsals;,700,1699,1150,2801
+TSY000009_EP3.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Right Lateral Metatarsals;Right Lateral Midfoot;,1169,2069,580,3401
+TSY000010_EP2.jpg,False,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Toe2;Left Medial Metatarsals;,227,194,269,442
+TSY000010_EP3.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Left Posterior Calcaneus;,110,1629,2501,1871
+TSY000013_EP3.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Right Toe Nail1;,1109,890,1401,2731
+TSY000013_EP4.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Right Plantar Calcaneus;,1609,1459,1220,2251
+TSY000013_EP5.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Left Toe Nail4;,1039,830,1160,2441
+TSY000015_EP3.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Left Medial Metatarsals;,1659,1269,970,1741
+TSY000015_EP4.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Toe4;,1509,1729,1741,1461
+TSY000016_EP6.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Right Plantar Toe1;,1549,1269,1941,810
+TSY000018_EP1.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Right Plantar Midfoot;,2591,1040,600,1799
+TSY000019_EP3.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Metatarsals;,850,1549,910,2281
+TSY000021_EP3.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Toe5;,1239,1299,2051,1290
+TSY000024_EP3.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Right Plantar Metatarsals;,2191,770,969,1309
+TSY000025_EP1.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Left Toe Nail2;,2521,460,2069,800
+TSY000026_EP1.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Left Lateral Metatarsals;,1659,850,2191,1000
+TSY000029_EP1.JPG,True,Neuro-Ischemic Ulcers (NIU),,,Left Plantar Metatarsals;,2341,1130,520,1819
+VWI00537 2017-05-09_9.05.32 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Left Plantar Calcaneus;,198,762,282,697
+VWI00553 2017-05-10_8.45.43 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Plantar Toe5;,196,254,387,290
+VWI00563 2017-05-10_9.43.40 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe4;Right Lateral Calcaneus;,112,390,533,404
+VWI00568 2017-05-11_8.05.34 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Shin;,442,484,239,508
+VWI00570 2017-05-11_8.18.09 AM.jpeg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Right Lateral Metatarsals;,341,265,668,253
+VWI00597 2017-05-13_8.09.05 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Plantar Toe1;Right Plantar Toe2;,270,276,444,351
+VWI00604 2017-05-13_9.36.54 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Left Plantar Toe3;,299,410,495,392
+VWI00605 2017-05-13_9.52.27 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Shin;,269,348,38,1235
+VWI00620 2017-05-15_11.33.12 AM.jpeg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Left Lateral Ankle;,232,453,42,1054
+VWI00621 2017-05-15_11.33.19 AM.jpeg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Left Medial Calcaneus;,188,388,672,478
+VWI00628 2017-05-16_11.24.37 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Posterior Ankle;,193,536,311,907
+VWI00635 2017-05-18_9.40.33 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Plantar Midfoot;,120,464,433,407
+VWI00647 2017-05-19_8.25.45 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Medial Calcaneus;,337,388,402,388
+VWI00648 2017-05-19_8.26.06 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Right Dorsal Toe4;,561,180,79,339
+VWI00660 2017-05-20_8.34.14 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Lateral Metatarsals;,515,340,233,438
+VWI00669 2017-05-21_11.39.37 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Left Plantar Metatarsals;,320,400,531,371
+VWI00675 2017-05-22_8.36.03 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Plantar Calcaneus;,196,510,412,353
+VWI00678 2017-05-22_9.13.35 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Ankle;,167,516,43,1131
+VWI00683 2017-05-22_10.37.42 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Metatarsals;Left Dorsal Toe2;Left Dorsal Toe3;,424,271,350,667
+VWI00700 2017-05-24_4.40.05 PM.jpeg,False,Venous Leg Ulcer (VLU),,Epidermal Layer,Right Lateral Thigh;,161,269,198,705
+VWI00704 2017-05-24_9.43.40 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Lateral Calcaneus;,281,321,563,249
+VWI00716 2017-05-25_10.42.27 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Midfoot;,180,303,292,685
+VWI00722 2017-05-26_8.38.52 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Medial Ankle;,60,703,412,695
+VWI00723 2017-05-26_8.38.53 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Plantar Metatarsals;,408,748,138,715
+VWI00756 2017-05-30_8.44.28 AM.jpeg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Left Anterior Knee;,247,490,437,520
+VWI00757 2017-05-30_8.46.20 AM.jpeg,False,Venous Leg Ulcer (VLU),,Deep,Left Medial Calf;,255,500,171,906
+VWI00759 2017-05-30_9.13.00 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Plantar Toe5;,300,328,702,393
+VWI00766 2017-05-31_8.28.44 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Medial Ankle;,146,418,484,470
+VWI00773 2017-06-01_4.10.48 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Lateral Metatarsals;,329,355,390,330
+VWI00784 2017-06-01_9.28.19 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Plantar Toe1;,224,354,42,566
+VWI00787 2017-06-02_9.08.08 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe5;,276,264,503,248
+VWI00797 2017-06-02_10.10.29 AM.jpeg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Right Posterior Ankle;,475,355,163,478
+VWI00404 2017-04-17_7.42.18 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Plantar Calcaneus;Left Plantar Midfoot;,259,303,402,569
+VWI00405 2017-04-17_7.53.59 AM.jpeg,False,Surgical Site Infections (SSI),,,Left Medial Metatarsals;,314,413,165,691
+VWI00407 2017-04-18_3.32.51 PM.jpeg,False,Venous Leg Ulcer (VLU),,,Left Posterior Calcaneus;Left Medial Ankle;,83,473,187,713
+VWI00419 2017-04-20_9.25.56 AM.jpeg,False,Venous Leg Ulcer (VLU),,,Left Medial Calcaneus;,206,218,446,506
+VWI00424 2017-04-21_1.38.13 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Plantar Toe3;,194,237,501,262
+VWI00432 2017-04-24_7.59.16 AM.jpeg,False,Surgical Site Infections (SSI),,,Left Lateral Thigh;,468,446,109,434
+VWI00438 2017-04-25_4.18.59 PM.jpeg,False,Venous Leg Ulcer (VLU),,,Left Posterior Ankle;,174,504,43,1237
+VWI00444 2017-04-25_9.13.42 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Posterior Ankle;,240,450,162,661
+VWI00479 2017-05-01_9.01.07 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Lateral Calcaneus;Right Posterior Ankle;,131,478,8,1087
+VWI00481 2017-05-01_10.56.47 AM.jpeg,False,Venous Leg Ulcer (VLU),,,Left Dorsal Midfoot;,228,287,601,468
+VWI00486 2017-05-02_8.00.44 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Posterior Ankle;,261,458,200,914
+VWI00511 2017-05-05_10.26.37 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Lateral Calcaneus;,246,793,139,595
+VWI00513 2017-05-05_10.44.08 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Toe1;Right Dorsal Toe2;Right Dorsal Toe4;Right Dorsal Toe5;Right Dorsal Toe3;,158,667,257,898
+VWI00525 2017-05-08_9.05.28 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Toe1;Right Dorsal Toe2;,379,341,531,418
+VWI00960 2018-12-19_00.47.jpg,False,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Right Dorsal Toe1;,238,413,563,723
+VWI00979 2019-01-07_00.49 02.jpg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Right Dorsal Ankle;,112,357,544,562
+VWI00984 2019-01-10_00.15.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe4;Left Dorsal Toe3;,408,686,361,522
+VWI00985 2019-01-10_00.32.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Plantar Toe3;,485,359,318,414
+VWI00986 2019-01-10_02.35.jpg,False,Venous Leg Ulcer (VLU),,Epidermal Layer,Right Dorsal Ankle;,21,638,400,960
+VWI00992 2019-01-12_01.21.jpg,False,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Right Plantar Toe1;,96,391,41,404
+VWI00993 2019-01-13_23.34.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Medial Metatarsals;Left Medial Midfoot;Left Medial Ankle;,25,1528,125,707
+VWI00995 2019-01-14_04.24 01.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Ankle;,187,523,144,788
+VWI00807 2017-06-04_8.51.41 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Plantar Toe2;,293,372,378,487
+VWI00822 2017-06-05_10.28.13 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Toe Nail1;,251,214,817,251
+VWI00827 2017-06-06_8.27.12 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Left Dorsal Metatarsals;,311,167,779,319
+VWI00837 2017-06-06_10.20.38 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Medial Metatarsals;,271,567,485,416
+VWI00850 2017-06-08_10.21.59 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe5;Right Plantar Toe5;,82,396,499,318
+VWI00851 2017-06-08_10.32.12 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe1;Left Dorsal Toe2;Left Medial Metatarsals;,276,663,438,461
+VWI00860 2017-06-09_10.37.58 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Plantar Toe1;Left Plantar Metatarsals;,181,496,257,681
+VWI00861 2017-06-09_10.38.00 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe1;Left Medial Metatarsals;,181,484,293,714
+VWI00875 2017-06-10_8.01.31 AM.jpeg,False,Venous Leg Ulcer (VLU),,Epidermal Layer,Right Lateral Calf;,307,532,194,343
+VWI00876 2017-06-10_9.05.58 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe3;Left Medial Metatarsals;Left Dorsal Toe1;Left Dorsal Toe2;,148,603,303,432
+VWI00880 2017-06-11_8.06.46 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Right Dorsal Metatarsals;,313,441,322,399
+VWI00881 2017-06-11_8.33.12 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Toe3;Left Medial Metatarsals;,219,852,89,529
+VWI00884 2017-06-11_11.18.51 AM.jpeg,True,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe1;,71,474,116,572
+VWI00887 2017-06-11_11.19.06 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Lateral Metatarsals;,240,375,608,418
+VWI00900 2017-06-12_8.42.51 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Ankle;,208,734,200,545
+VWI00904 2017-06-12_9.43.23 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Plantar Midfoot;Left Plantar Calcaneus;,103,748,433,418
+VWI00910 2017-06-13_8.47.25 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Medial Metatarsals;,239,425,416,571
+VWI00920 2017-06-14_8.53.51 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Right Medial Metatarsals;,389,464,288,469
+VWI00921 2017-06-14_8.54.28 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Medial Metatarsals;,440,729,9,632
+VWI00923 2017-06-14_9.00.49 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Midfoot;Left Dorsal Metatarsals;,1,1179,0,839
+VWI00924 2017-06-14_9.00.50 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Metatarsals;Left Dorsal Midfoot;,0,1275,0,901
+VWI00927 2017-06-14_9.28.02 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Posterior Ankle;,350,486,412,342
+VWI00929 2017-06-14_12.12.11 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Plantar Metatarsals;Left Plantar Midfoot;,73,564,231,724
+VWI00933 2017-06-15_5.13.46 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Right Plantar Metatarsals;,28,709,324,699
+VWI00941 2017-06-15_10.27.01 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Midfoot;,291,625,151,689
+VWI00944 2017-06-15_11.04.58 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Metatarsals;,184,487,514,477
+VWI00947 2017-06-15_11.31.14 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Medial Midfoot;,281,395,201,473
+VWI00955 2017-06-17_8.07.06 AM.jpeg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Left Medial Calf;,151,588,504,353
+VWI00957 2017-06-18_7.46.23 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Lateral Calcaneus;,99,807,217,752
+VWI00050 2015-12-01_8.29.06 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Lateral Midfoot;,152,1176,277,562
+VWI00053 2015-12-02_8.36.05 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Lateral Ankle;,152,602,47,1164
+VWI00056 2015-12-03_1.47.18 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Medial Calf;,348,226,272,552
+VWI00057 2015-12-03_7.43.56 AM.jpeg,True,Neuro-Ischemic Ulcers (NIU),,,Left Toe Nail1;,50,160,329,200
+VWI00069 2015-12-04_10.52.29 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Toe Nail1;Left Dorsal Toe2;Left Toe Nail3;Left Toe Nail4;Left Toe Nail5;,48,457,523,293
+VWI00073 2015-12-07_8.10.17 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Ankle;,55,411,396,483
+VWI00088 2016-10-11_8.24.14 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Lateral Midfoot;Right Lateral Metatarsals;Right Dorsal Toe5;,7,998,641,737
+VWI00096 2016-10-13_8.06.33 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Toe2;,450,394,692,458
+VWI00108 2016-10-14_10.18.27 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Metatarsals;Left Dorsal Toe4;,504,821,336,564
+VWI00115 2016-10-17_4.38.10 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Lateral Calcaneus;,2,1213,133,758
+VWI00116 2016-10-17_4.38.14 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Plantar Toe4;Right Plantar Calcaneus;,274,771,328,572
+VWI00121 2016-10-17_8.45.05 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Toe4;Left Dorsal Metatarsals;,333,800,602,472
+VWI00139 2016-10-23_9.29.28 AM.jpeg,False,Venous Leg Ulcer (VLU),,,Left Lateral Malleolus;,210,650,584,559
+VWI00156 2016-11-04_10.11.46 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Toe4;,588,364,564,640
+VWI00176 2016-11-23_10.32.33 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Lateral Midfoot;Right Lateral Metatarsals;,2,1065,322,1133
+VWI00179 2016-11-26_8.28.21 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Toe3;,491,311,339,645
+VWI00183 2016-11-28_10.12.12 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Toe Nail4;,296,205,572,269
+VWI00192 2016-12-03_8.28.04 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Toe2;Left Dorsal Toe3;,300,260,326,432
+VWI00193 2016-12-03_8.28.36 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Toe3;Left Dorsal Toe2;,236,308,570,450
+VWI00196 2016-12-05_8.39.46 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Plantar Toe4;,575,239,541,402
+VWI00198 2016-12-05_8.39.50 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Plantar Toe5;Left Medial Metatarsals;,602,360,440,464
+VWI00199 2016-12-08_2.12.40 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Toe Nail1;,619,549,107,419
+056_V5 16.10.20.jpg,True,Venous Leg Ulcer (VLU),,,Left Dorsal Metatarsals;,621,723,321,691
+TA019_22.06.20_V1.JPG,True,Venous Leg Ulcer (VLU),,,Right Dorsal Ankle;,538,838,259,1186
+VWI01000 2019-01-17_00.57.jpg,False,Surgical Site Infections (SSI),,,Right Dorsal Metatarsals;,160,370,576,301
+VWI01022 2019-01-25_04.34.jpg,False,Surgical Site Infections (SSI),,,Location on Body Unknown;Right Shin;,38,1089,183,806
+VWI01185 2019-05-14_05.33 21.jpg,False,Surgical Site Infections (SSI),,,Left Dorsal Metatarsals;,392,300,678,447
+VWI01527 2019-12-16_08.27.15.JPG,False,Surgical Site Infections (SSI),,,Right Medial Ankle;,806,710,354,451
+VWI00533 2017-05-09_8.43.15 AM.jpeg,False,Surgical Site Infections (SSI),,,Right Medial Thigh;,452,542,300,467
+VWI00806 2017-06-04_8.30.21 AM.jpeg,False,Surgical Site Infections (SSI),,,Right Shin;,142,448,524,390
+VWI00913 2017-06-13_9.41.01 AM.jpeg,False,Surgical Site Infections (SSI),,,Left Shin;,144,635,504,450
+TA005_20.07.20_V3.JPG,True,Venous Leg Ulcer (VLU),,,Right Dorsal Metatarsals;Right Dorsal Toe2;Right Dorsal Toe1;,124,1367,678,1028
+TA039_11.08.20_V4.JPG,True,Venous Leg Ulcer (VLU),,,Right Dorsal Metatarsals;Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe4;,0,1062,462,804
+TA042_30.06.20_V1.JPG,True,Venous Leg Ulcer (VLU),,,Left Dorsal Ankle;,225,1379,441,672
+TA054_18.08.20_V1.JPG,True,Venous Leg Ulcer (VLU),,,Left Posterior Calf;,668,695,543,270
+062_V5 09.10.20.jpg,True,Venous Leg Ulcer (VLU),,,Left Posterior Calcaneus;Left Medial Ankle;,691,360,289,828
+074_V2 04.11.20.jpg,True,Venous Leg Ulcer (VLU),,,Left Dorsal Metatarsals;Left Lateral Midfoot;Left Lateral Ankle;,455,863,282,1100
+074_V3 11.11.20.jpg,True,Venous Leg Ulcer (VLU),,,Left Dorsal Midfoot;Left Dorsal Metatarsals;Left Lateral Midfoot;Left Lateral Ankle;,383,820,333,993
+074_V5 01.12.20.jpg,True,Venous Leg Ulcer (VLU),,,Left Dorsal Midfoot;Left Lateral Midfoot;Left Lateral Ankle;,268,1162,292,904
+VWI00224 2016-12-20_9.06.55 AM.jpeg,False,Surgical Site Infections (SSI),,,Left Medial Thigh;,54,1483,100,777
+VWI00226 2016-12-20_9.21.59 AM.jpeg,False,Surgical Site Infections (SSI),,,Right Anterior Thigh;,222,671,355,916
+VWI00235 2016-12-24_12.24.17 PM.jpeg,False,Venous Leg Ulcer (VLU),,,Right Lateral Midfoot;Right Lateral Ankle;,0,924,124,1258
+VWI00248 2016-12-30_11.03.25 AM.jpeg,False,Venous Leg Ulcer (VLU),,,Left Plantar Toe4;Left Medial Ankle;,511,392,633,456
+VWI00249 2017-01-06_10.38.37 AM.jpeg,False,Venous Leg Ulcer (VLU),,,Right Dorsal Ankle;,17,731,497,564
+VWI00250 2017-01-06_10.38.38 AM.jpeg,False,Venous Leg Ulcer (VLU),,,Left Dorsal Ankle;,76,334,806,356
+VWI00265 2017-01-21_12.31.21 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Plantar Calcaneus;,605,805,200,678
+VWI00281 2017-02-17_1.35.04 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Plantar Toe1;,424,294,269,388
+VWI00284 2017-02-21_5.17.10 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Midfoot;,191,505,679,448
+VWI00285 2017-02-21_7.47.28 AM.jpeg,False,Venous Leg Ulcer (VLU),,,Right Posterior Calf;,265,1186,14,753
+VWI00286 2017-02-23_2.38.06 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Ankle;,200,939,409,607
+VWI00288 2017-02-23_2.38.15 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Toe3;,224,463,530,735
+VWI00296 2017-03-17_9.46.46 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Shin;,283,594,558,730
+VWI00310 2017-03-23_7.52.38 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Toe4;Right Medial Metatarsals;,0,1400,163,854
+VWI00328 2017-03-27_8.36.23 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Plantar Midfoot;,466,546,352,575
+VWI00331 2017-03-31_8.38.33 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Medial Calcaneus;,139,880,376,974
+VWI00332 2017-03-31_8.38.39 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Medial Metatarsals;,124,756,138,1300
+VWI00343 2017-04-02_9.48.10 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe4;,109,555,358,681
+VWI00344 2017-04-02_10.58.57 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Lateral Metatarsals;,300,420,642,500
+VWI00346 2017-04-03_7.58.01 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Toe2;,351,246,503,386
+VWI00354 2017-04-04_8.30.40 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Plantar Calcaneus;,227,445,387,492
+VWI00360 2017-04-05_7.44.19 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Medial Midfoot;,430,293,472,497
+VWI00364 2017-04-05_9.31.39 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Metatarsals;Right Dorsal Midfoot;,514,423,1,899
+VWI00365 2017-04-05_9.31.41 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Midfoot;Right Dorsal Metatarsals;,435,584,6,954
+VWI00370 2017-04-06_8.41.48 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Lateral Metatarsals;,298,237,363,373
+VWI00372 2017-04-06_10.35.19 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Plantar Metatarsals;,346,229,466,381
+VWI00373 2017-04-06_11.15.36 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Plantar Toe4;,295,352,63,540
+VWI00374 2017-04-06_11.15.43 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Toe4;,335,318,607,511
+VWI00379 2017-04-08_10.35.20 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Medial Metatarsals;,248,518,337,640
+VWI00381 2017-04-08_10.36.31 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Plantar Toe1;,370,269,370,443
+VWI00383 2017-04-09_11.38.39 AM.jpeg,False,Surgical Site Infections (SSI),,,Left Anterior Thigh;,135,1067,137,590
+VWI00385 2017-04-09_11.41.53 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Plantar Toe2;,418,404,129,433
+VWI00386 2017-04-10_8.35.23 AM.jpeg,False,Surgical Site Infections (SSI),,,Right Medial Calf;,224,495,155,976
+VWI00387 2017-04-11_7.46.55 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Toe1;,331,390,250,672
+VWI00388 2017-04-11_7.47.51 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Posterior Calcaneus;,409,365,162,844
+VWI00390 2017-04-11_8.42.12 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Metatarsals;,373,601,96,608
+VWI00394 2017-04-12_8.51.57 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Midfoot;,331,598,146,578
+VWI00397 2017-04-13_10.38.39 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Plantar Calcaneus;Right Plantar Midfoot;,192,548,141,838
+VWI00400 2017-04-14_8.14.16 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Left Dorsal Toe1;,314,309,339,463
+083_301020.jpg,True,Venous Leg Ulcer (VLU),,,Right Dorsal Metatarsals;,779,1011,415,933
+087_031220.jpg,False,Venous Leg Ulcer (VLU),,,Left Lateral Calf;,744,1179,545,876
+040-3395C-2019-8-28-4.jpg,False,Venous Leg Ulcer (VLU),,,Left Medial Calf;,547,1642,525,1933
+041-2532J-2019-8-28-3.jpg,True,Venous Leg Ulcer (VLU),,,Left Dorsal Midfoot;Left Dorsal Ankle;,291,1963,1398,1218
+044-2221G-2019-09-26-6.jpg,False,Venous Leg Ulcer (VLU),,,Right Lateral Ankle;,230,1640,666,1526
+046-4728D-2019-09-25-3.jpg,True,Venous Leg Ulcer (VLU),,,Left Lateral Ankle;Left Dorsal Ankle;,20,1883,367,1840
+062_110820.jpg,False,Venous Leg Ulcer (VLU),,,Right Dorsal Midfoot;Right Dorsal Ankle;,1776,1717,854,1476
+062_040820.jpg,True,Venous Leg Ulcer (VLU),,,Right Dorsal Ankle;Right Dorsal Midfoot;,1069,1476,1416,1827
+062_280720.jpg,True,Venous Leg Ulcer (VLU),,,Right Dorsal Midfoot;Right Dorsal Ankle;,926,1643,1166,2000
+066_170920.jpg,False,Venous Leg Ulcer (VLU),,,Right Medial Ankle;,881,1581,876,2586
+VWI10180 2020-04-13-08-04-55.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Medial Metatarsals;,48,630,407,870
+VWI10182 2020-04-14-07-44-27.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Midfoot;Left Dorsal Metatarsals;Left Medial Metatarsals;Left Medial Midfoot;Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Toe4;Left Dorsal Toe5;,110,790,60,1248
+VWI10188 2020-04-18-09-26-27.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe1;Right Medial Metatarsals;Right Medial Midfoot;,138,897,158,1305
+VWI10189 2020-04-20-07-27-02.jpg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Right Lateral Ankle;,262,819,489,748
+VWI10200 2020-04-23-07-46-54.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe3;,408,755,440,751
+VWI10203 2020-04-24-08-08-05.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Lateral Metatarsals;Left Lateral Midfoot;,307,1030,141,580
+VWI10207 2020-04-27-17-57-13.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Posterior Calcaneus;,302,881,226,738
+VWI10208 2020-04-28-07-44-36.jpg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Left Medial Ankle;,286,878,657,618
+VWI10209 2020-04-28-08-04-02.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe2;Left Dorsal Toe1;Left Medial Metatarsals;,286,968,307,663
+VWI10210 2020-04-28-08-13-00.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Lateral Ankle;,312,504,686,554
+VWI10213 2020-05-02-08-16-58.jpg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Right Medial Ankle;,470,720,262,617
+VWI10214 2020-05-02-08-32-08.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;Right Lateral Metatarsals;,188,620,429,1019
+VWI10215 2020-05-02-08-32-08 2.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;Right Plantar Metatarsals;,172,683,373,872
+VWI10217 2020-05-04-07-51-19.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;,305,639,362,921
+VWI10218 2020-05-04-07-53-47.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Plantar Calcaneus;,149,1195,765,690
+VWI10220 2020-05-05-07-52-21.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe4;Left Dorsal Toe5;,159,806,515,624
+VWI10222 2020-05-05-08-15-16.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe2;,123,897,617,535
+VWI10223 2020-05-05-08-15-50.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe1;Left Dorsal Toe3;,168,473,719,441
+VWI10224 2020-05-05-08-25-09.jpg,False,Venous Leg Ulcer (VLU),,Epidermal Layer,Left Shin;,562,570,357,439
+VWI10225 2020-05-05-08-25-09 2.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Posterior Calcaneus;,182,624,636,478
+VWI10227 2020-05-05-15-44-41.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Midfoot;Left Dorsal Metatarsals;Left Dorsal Toe2;,216,757,208,943
+VWI10228 2020-05-06-08-14-14.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe3;,362,635,520,603
+VWI10232 2020-05-08-08-15-45.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Midfoot;Right Dorsal Toe2;,301,743,462,729
+VWI10240 2020-05-11-07-51-13.jpg,False,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Left Dorsal Toe1;,515,583,400,636
+VWI10241 2020-05-11-07-51-13 2.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Plantar Metatarsals;,382,610,679,547
+VWI10245 2020-05-12-07-41-12.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe5;,213,739,195,781
+VWI10246 2020-05-12-07-44-07.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Plantar Calcaneus;,100,959,210,862
+VWI10247 2020-05-12-08-12-54.jpg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Left Medial Calf;Left Medial Thigh;,510,486,314,1195
+VWI10248 2020-05-12-08-12-54 2.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Plantar Calcaneus;,213,598,600,574
+VWI10255 2020-05-14-08-10-31.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe5;Right Dorsal Toe4;Right Medial Metatarsals;Right Medial Midfoot;,109,592,270,843
+VWI10257 2020-05-14-08-13-39.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;,169,769,312,1052
+VWI10258 2020-05-14-08-26-05.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;,209,526,82,891
+VWI10260 2020-05-14-12-35-07.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Medial Metatarsals;Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe1;Right Dorsal Toe4;,11,1059,77,1503
+VWI10264 2020-05-15-11-59-43.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe5;,120,508,511,609
+VWI10266 2020-05-16-07-36-32.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe1;Right Medial Metatarsals;,271,644,215,774
+VWI10267 2020-05-16-07-36-33.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe1;Right Dorsal Metatarsals;,411,562,722,783
+VWI10270 2020-05-17-08-19-20 2.jpg,False,Venous Leg Ulcer (VLU),,Epidermal Layer,Right Shin;,247,656,229,1029
+VWI10272 2020-05-17-08-25-57.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe4;,223,778,458,777
+VWI10273 2020-05-18-07-53-17.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;,154,936,496,870
+VWI10274 2020-05-18-07-56-10.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Plantar Toe1;,238,541,655,467
+VWI10276 2020-05-18-07-56-11 2.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Plantar Toe1;Right Plantar Metatarsals;,339,487,224,847
+VWI10277 2020-05-18-11-33-47.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe2;Left Dorsal Toe3;Left Dorsal Toe4;Left Dorsal Toe5;,234,913,581,633
+VWI10280 2020-05-19-07-32-27.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Plantar Toe1;Left Plantar Toe2;Left Plantar Toe3;Left Plantar Toe5;,687,320,88,444
+VWI10283 2020-05-19-08-05-59.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;Right Lateral Midfoot;Right Lateral Metatarsals;,225,608,359,774
+VWI10286 2020-05-20-07-55-02 2.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe1;Right Dorsal Midfoot;Right Lateral Midfoot;,332,482,206,999
+VWI10287 2020-05-20-08-12-33.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Plantar Metatarsals;,419,551,354,570
+VWI10289 2020-05-21-07-54-36.jpg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Right Lateral Calf;,290,494,710,452
+VWI10292 2020-05-22-09-03-18.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe4;Right Dorsal Toe3;Right Dorsal Toe5;,195,635,707,415
+VWI10295 2020-05-22-09-03-45.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Medial Metatarsals;Right Medial Midfoot;,3,878,186,1351
+VWI10296 2020-05-23-07-43-57.jpg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Left Shin;Left Medial Calf;,308,506,286,1100
+VWI10297 2020-05-23-07-50-14.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe1;Right Dorsal Toe2;Right Dorsal Metatarsals;,180,470,472,675
+VWI10298 2020-05-24-08-27-29.jpg,False,Venous Leg Ulcer (VLU),,Epidermal Layer,Right Medial Ankle;,320,583,635,588
+VWI10300 2020-05-25-07-50-43.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe4;,483,499,363,456
+VWI10305 2020-05-26-08-06-36.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Metatarsals;Right Dorsal Midfoot;,287,409,451,689
+VWI10307 2020-05-27-07-49-58.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;Right Lateral Midfoot;Right Lateral Metatarsals;,281,454,554,792
+VWI10308 2020-05-27-09-02-06.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe1;Left Dorsal Toe2;Left Medial Metatarsals;Left Dorsal Metatarsals;,429,552,300,940
+002-4228Z-2018-10-02-8.jpg,True,Venous Leg Ulcer (VLU),,,Left Lateral Calf;,122,1658,504,2593
+002-4228Z-2018-10-09-9a.jpg,True,Venous Leg Ulcer (VLU),,,Left Dorsal Metatarsals;Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Toe3;Left Dorsal Toe4;Left Dorsal Toe5;,305,1895,1206,2058
+002-4228Z-2018-10-09-9c.jpg,False,Venous Leg Ulcer (VLU),,,Left Lateral Ankle;,352,1792,1220,1976
+002-4228Z-2018-10-16-10b.jpg,True,Venous Leg Ulcer (VLU),,,Left Dorsal Metatarsals;Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Toe4;Left Dorsal Toe5;Left Dorsal Toe3;Left Dorsal Midfoot;,787,961,371,2064
+002-4228Z-2018-10-23-11b.jpg,True,Venous Leg Ulcer (VLU),,,Left Dorsal Metatarsals;Left Dorsal Midfoot;Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Toe4;Left Dorsal Toe5;Left Dorsal Toe3;,214,1443,383,2766
+002-4228Z-2018-11-05-13b.jpg,True,Venous Leg Ulcer (VLU),,,Left Dorsal Metatarsals;Left Dorsal Midfoot;Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Toe3;Left Dorsal Toe4;Left Dorsal Toe5;,404,965,437,2011
+003-8708A-2018-09-11-5.jpg,True,Venous Leg Ulcer (VLU),,,Left Posterior Calcaneus;Left Medial Calcaneus;,454,1749,1400,2835
+003-8708A-2018-10-02-8.jpg,True,Venous Leg Ulcer (VLU),,,Left Medial Calcaneus;Left Posterior Calcaneus;,550,1152,681,1763
+003-8708A-2018-10-09-9b.jpg,False,Venous Leg Ulcer (VLU),,,Left Medial Ankle;Left Posterior Ankle;,200,1851,843,2318
+003-8708A-2018-10-16-10b.jpg,True,Venous Leg Ulcer (VLU),,,Left Medial Ankle;Left Posterior Calcaneus;,624,1237,640,2374
+003-8708A-2018-10-24-11c.jpg,True,Venous Leg Ulcer (VLU),,,Left Posterior Calcaneus;Left Lateral Ankle;,89,1187,1008,2237
+003-8708A-2018-10-31-12b.jpg,True,Venous Leg Ulcer (VLU),,,Left Posterior Calcaneus;,305,1263,895,2280
+003-8708A-2018-11-07-13a.jpg,True,Venous Leg Ulcer (VLU),,,Left Lateral Ankle;Left Posterior Calcaneus;,142,1853,410,1729
+005-7874E-2018-09-28-7.jpg,False,Venous Leg Ulcer (VLU),,,Right Medial Calf;,249,2007,992,1915
+005-7874E-2018-10-05-8.jpg,False,Venous Leg Ulcer (VLU),,,Right Shin;,1066,1048,610,1760
+005-7874E-2018-10-26-11.jpg,True,Venous Leg Ulcer (VLU),,,Right Shin;,586,1270,700,1748
+017-5936A-2019-01-30-12.jpg,True,Venous Leg Ulcer (VLU),,,Left Medial Calf;,150,1297,44,1710
+VWI10013 2020-02-06-08-37-43.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Plantar Midfoot;Left Dorsal Midfoot;,422,896,76,1066
+VWI10026 2020-02-11-08-34-39.jpg,False,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Left Dorsal Toe3;Left Dorsal Toe2;,30,1070,178,990
+VWI11809 2021-04-02-10-43-32.jpg,False,Neuro-Ischemic Ulcers (NIU),,,Right Posterior Calcaneus;,144,823,239,564
+VWI11810 2021-04-04-09-05-05.jpg,False,Neuro-Ischemic Ulcers (NIU),,,Left Plantar Metatarsals;,153,454,315,816
+VWI11951 2021-05-04-07-42-51.jpg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Toe2;Right Dorsal Toe4;,109,922,530,1043
+VWI00008 2015-11-20_10.20.28 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Metatarsals;Right Plantar Metatarsals;Right Medial Metatarsals;Right Lateral Metatarsals;,49,836,221,762
+VWI00042 2015-11-30_5.48.28 PM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Medial Metatarsals;Right Lateral Metatarsals;Right Dorsal Metatarsals;Right Plantar Metatarsals;,46,1002,422,589
+VWI00043 2015-11-30_8.18.09 AM.jpeg,False,Neuro-Ischemic Ulcers (NIU),,,Right Medial Metatarsals;Right Lateral Metatarsals;Right Plantar Metatarsals;Right Dorsal Metatarsals;,40,882,162,886
+018 V2_06.12.19.JPG,False,Venous Leg Ulcer (VLU),,,Left Shin;,812,786,8,1087
+001 V4_29.10.19.JPG,True,Venous Leg Ulcer (VLU),,,Right Lateral Ankle;,721,1064,171,1133
+003_V5 11.11.19.JPG,True,Venous Leg Ulcer (VLU),,,Right Dorsal Metatarsals;Right Dorsal Toe2;,964,720,619,559
+007 V2_14.10.19.JPG,True,Venous Leg Ulcer (VLU),,,Left Lateral Ankle;,504,968,880,889
+011 V1_24.10.19.JPG,False,Venous Leg Ulcer (VLU),,,Right Posterior Calcaneus;,1228,590,401,648
+011 V2_31.10.19.JPG,True,Venous Leg Ulcer (VLU),,,Right Posterior Calcaneus;,478,922,939,773
+025-7542E-2019-04-04-11.jpg,False,Venous Leg Ulcer (VLU),,,Right Dorsal Midfoot;,869,1450,962,1191
+025-7542E-2019-04-11-12.jpg,True,Venous Leg Ulcer (VLU),,,Right Dorsal Midfoot;,782,1334,778,1078
+026-3416I-2019-04-05-11.jpg,True,Venous Leg Ulcer (VLU),,,Left Dorsal Midfoot;,765,1379,819,1586
+027-2304E-2019-02-07-3a.jpg,True,Venous Leg Ulcer (VLU),,,Right Posterior Calf;Right Lateral Calf;,363,1543,493,1671
+027-2304E-2019-02-14-4a.jpg,False,Venous Leg Ulcer (VLU),,,Right Lateral Calf;,679,1563,652,1488
+027-2304E-2019-02-21-5a.jpg,True,Venous Leg Ulcer (VLU),,,Right Posterior Calf;,694,1242,731,1252
+027-2304E-2019-03-14-8a.jpg,True,Venous Leg Ulcer (VLU),,,Right Lateral Calf;,1158,984,1084,1000
+029-4544H-2019-04-12-12.jpg,True,Venous Leg Ulcer (VLU),,,Right Medial Ankle;,629,1431,1182,1613
+032-2358Z-2019-04-24-10.jpg,True,Venous Leg Ulcer (VLU),,,Right Medial Calf;,302,1405,686,2002
+033-9090G-2019-04-15-6.jpg,True,Venous Leg Ulcer (VLU),,,Left Medial Ankle;,202,1605,965,1404
+033-9090G-2019-04-22-7.jpg,False,Venous Leg Ulcer (VLU),,,Left Medial Ankle;,174,958,254,911
+VWI10042 2020-02-17-08-44-22.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Midfoot;Left Dorsal Metatarsals;Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Toe4;Left Dorsal Toe3;Left Dorsal Toe5;,34,837,343,815
+VWI10043 2020-02-17-08-57-42.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe2;Right Toe Nail2;,341,547,299,650
+VWI10044 2020-02-17-10-53-07.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Metatarsals;Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe1;Right Dorsal Toe5;,48,618,173,614
+VWI10046 2020-02-17-12-24-17.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe3;,294,824,571,602
+VWI10047 2020-02-17-18-39-34.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe2;Right Dorsal Toe3;,518,578,354,542
+VWI10051 2020-02-18-16-23-26.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Midfoot;Right Dorsal Metatarsals;Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;Right Dorsal Toe2;Right Dorsal Toe1;,167,824,577,886
+VWI10052 2020-02-20-08-15-48.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Midfoot;Right Dorsal Metatarsals;Right Dorsal Toe2;Right Dorsal Toe4;Right Dorsal Toe5;Right Dorsal Toe1;Right Dorsal Toe3;,330,667,490,678
+VWI10054 2020-02-20-17-41-13.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Midfoot;Right Dorsal Metatarsals;Right Dorsal Toe3;Right Dorsal Toe5;Right Dorsal Toe4;Right Dorsal Toe2;Right Dorsal Toe1;Right Dorsal Ankle;,157,753,409,763
+VWI10057 2020-02-21-08-19-50.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe1;Left Dorsal Toe2;,332,676,449,760
+VWI10058 2020-02-21-14-19-47.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Metatarsals;Right Dorsal Midfoot;Right Lateral Ankle;Right Dorsal Toe1;Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;,217,2120,133,2736
+VWI10061 2020-02-24-08-21-41.jpg,False,Venous Leg Ulcer (VLU),,Deep,Right Dorsal Toe1;Right Medial Metatarsals;,250,529,501,786
+VWI10063 2020-02-24-11-21-58.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Midfoot;Right Dorsal Metatarsals;Right Dorsal Toe1;Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;,100,987,327,942
+VWI10064 2020-02-24-13-18-45.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe1;Left Dorsal Toe2;,343,728,653,586
+VWI10066 2020-02-25-10-37-16.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Metatarsals;Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Toe3;,285,589,573,703
+VWI10067 2020-02-25-11-48-58.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe4;Left Dorsal Toe3;Left Dorsal Toe5;,220,807,515,803
+VWI10069 2020-02-27-08-26-20.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Metatarsals;Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Toe3;Left Dorsal Toe4;Left Dorsal Toe5;,171,763,432,867
+VWI10073 2020-02-28-11-59-24.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Metatarsals;Right Medial Metatarsals;Right Dorsal Toe1;Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;,349,955,149,825
+VWI10075 2020-02-29-13-52-31.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe1;,232,819,622,683
+VWI10076 2020-03-01-09-29-40.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Metatarsals;Left Medial Metatarsals;Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Toe3;,179,748,299,1023
+VWI10077 2020-03-02-08-07-39.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Metatarsals;Right Dorsal Toe3;Right Dorsal Toe2;Right Dorsal Toe1;Right Dorsal Toe4;Right Dorsal Toe5;,32,1410,290,1143
+VWI10078 2020-03-02-15-27-04.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Metatarsals;Right Dorsal Toe1;Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;,202,717,516,729
+VWI10079 2020-03-03-07-45-08.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe3;Right Dorsal Toe2;Right Dorsal Toe1;,99,1079,750,524
+VWI10082 2020-03-06-08-02-39.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Metatarsals;Right Dorsal Toe1;Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe4;Right Dorsal Toe5;,410,709,317,550
+VWI10083 2020-03-06-13-33-57.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe1;Right Dorsal Toe2;,242,822,523,756
+VWI10085 2020-03-09-07-47-07.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe1;Left Medial Metatarsals;,113,844,536,575
+VWI10086 2020-03-09-07-47-36.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Midfoot;Left Dorsal Metatarsals;Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Toe3;Left Dorsal Toe4;Left Dorsal Toe5;,185,887,464,578
+VWI10087 2020-03-09-08-05-03.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Plantar Midfoot;Right Plantar Metatarsals;,90,720,470,976
+VWI10090 2020-03-09-11-01-51.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe4;Right Dorsal Toe3;Right Dorsal Toe2;,159,1016,512,665
+VWI10092 2020-03-10-08-02-48.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Toe3;Left Dorsal Toe5;Left Dorsal Toe4;Left Plantar Metatarsals;,156,564,283,710
+VWI10093 2020-03-10-08-02-59.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe2;,353,846,857,678
+VWI10094 2020-03-11-07-52-28.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe3;Left Dorsal Toe4;Left Dorsal Toe5;Left Lateral Metatarsals;,267,743,239,1209
+VWI10095 2020-03-11-16-53-47.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe4;Left Dorsal Toe5;,536,658,288,792
+VWI10096 2020-03-12-08-28-16.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Medial Metatarsals;Left Dorsal Toe1;Left Dorsal Toe2;Left Dorsal Toe3;,293,1079,308,773
+VWI10097 2020-03-12-10-46-45.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe1;Right Dorsal Toe2;Right Medial Metatarsals;,163,880,240,1152
+VWI10099 2020-03-12-11-38-55.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe4;,29,819,515,557
+VWI10101 2020-03-13-10-49-44.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe4;Right Dorsal Toe5;,168,452,311,607
+VWI10102 2020-03-13-13-11-41.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe1;Left Toe Nail1;,710,1559,1990,782
+VWI10103 2020-03-13-13-23-58.jpg,True,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Plantar Toe4;,484,1861,1179,1253
+VWI10104 2020-03-15-14-29-18.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Medial Metatarsals;Left Dorsal Toe1;Left Dorsal Toe2;,229,686,430,865
+VWI10106 2020-03-16-08-06-17.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Medial Metatarsals;Right Dorsal Toe2;Right Dorsal Toe1;,450,599,617,831
+VWI10107 2020-03-16-08-07-27.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Medial Metatarsals;Left Dorsal Toe1;Left Dorsal Toe2;,163,683,441,919
+VWI10108 2020-03-16-10-25-18.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe1;,452,708,674,623
+VWI10110 2020-03-16-11-41-00.jpg,True,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe4;,398,885,317,668
+VWI10112 2020-03-17-08-23-06.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Medial Calcaneus;Right Plantar Calcaneus;,269,631,638,420
+VWI10113 2020-03-17-09-04-00.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe2;Right Dorsal Toe3;,233,660,607,565
+VWI10114 2020-03-17-09-05-02.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe1;Right Dorsal Metatarsals;,255,629,316,1085
+VWI10115 2020-03-17-09-59-35.jpg,True,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Toe1;Right Dorsal Toe4;Right Dorsal Toe2;Right Dorsal Toe3;Right Dorsal Toe5;,273,2666,1509,1636
+VWI10117 2020-03-19-10-03-03.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Lateral Ankle;Right Dorsal Toe2;Right Dorsal Toe3;,727,2998,1321,1059
+VWI10118 2020-03-19-10-56-09.jpg,False,Surgical Site Infections (SSI),,Deep,Right Shin;,369,757,469,741
+VWI10120 2020-03-20-08-29-38.jpg,False,Venous Leg Ulcer (VLU),,Deep,Right Posterior Calf;,83,1462,209,620
+VWI10121 2020-03-20-09-59-50.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Midfoot;,444,827,286,594
+VWI10123 2020-03-20-16-47-30.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe1;Right Dorsal Toe2;,127,666,715,368
+VWI10126 2020-03-23-07-49-15.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe2;Left Dorsal Toe3;Left Dorsal Toe4;Left Dorsal Toe5;,36,640,578,661
+VWI10130 2020-03-23-08-15-12.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Posterior Calcaneus;,139,1223,566,914
+VWI10134 2020-03-24-08-05-30.jpg,True,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Metatarsals;,959,2080,316,2397
+VWI10135 2020-03-24-08-28-46.jpg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Right Shin;,368,454,363,682
+VWI10137 2020-03-24-08-44-28.jpg,True,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Metatarsals;,293,2446,1466,1627
+VWI10138 2020-03-24-11-09-21.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe1;Right Medial Metatarsals;,70,648,491,823
+VWI10142 2020-03-25-08-17-29.jpg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Toe1;Right Medial Metatarsals;,95,783,296,1153
+VWI10143 2020-03-25-10-40-31.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe1;,281,878,566,642
+VWI10145 2020-03-26-11-02-37.jpg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Left Shin;,179,1208,199,541
+VWI10147 2020-03-27-08-38-54.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Medial Metatarsals;Right Dorsal Toe1;,275,691,334,1077
+VWI10148 2020-03-27-08-44-30.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Medial Metatarsals;Left Medial Midfoot;Left Dorsal Toe1;,157,1283,234,627
+VWI10149 2020-03-27-17-59-56.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Dorsal Metatarsals;,92,503,225,633
+VWI10151 2020-03-30-07-51-10.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Metatarsals;,304,561,569,607
+VWI10152 2020-03-30-08-01-57.jpg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Right Medial Calf;,155,579,94,1222
+VWI10153 2020-03-30-09-43-00.jpg,True,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Medial Calcaneus;,857,2532,1265,1581
+VWI10154 2020-03-30-14-12-39.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Medial Metatarsals;Right Dorsal Toe1;,193,534,318,768
+VWI10156 2020-04-02-08-00-01.jpg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Right Posterior Calf;,297,700,262,1274
+VWI10158 2020-04-02-08-22-26.jpg,False,Neuro-Ischemic Ulcers (NIU),,,Right Dorsal Metatarsals;,217,780,658,673
+VWI10159 2020-04-02-10-21-42.jpg,True,Venous Leg Ulcer (VLU),,Dermal Layer,Left Medial Ankle;,445,2111,1587,2293
+VWI10166 2020-04-04-07-57-37.jpg,False,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe2;Left Dorsal Toe3;,89,814,50,725
+VWI10167 2020-04-05-07-39-59.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe1;,304,658,457,949
+VWI10168 2020-04-07-08-04-56.jpg,False,Neuro-Ischemic Ulcers (NIU),,,Right Medial Metatarsals;Right Medial Midfoot;Right Dorsal Toe1;,110,855,524,910
+VWI10170 2020-04-08-08-52-13.jpg,False,Venous Leg Ulcer (VLU),,Dermal Layer,Left Dorsal Ankle;,205,650,527,513
+VWI10171 2020-04-08-08-52-54.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe4;Right Dorsal Toe5;Right Lateral Metatarsals;,191,646,471,1019
+VWI10173 2020-04-09-08-31-46.jpg,False,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Metatarsals;,164,901,555,795
+VWI10001 2020-02-02-08-04-50.jpg,,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Plantar Midfoot;,358,506,448,530
+VWI10002 2020-02-02-08-04-51.jpg,,Venous Leg Ulcer (VLU),,Dermal Layer,Left Shin;,554,380,218,668
+VWI10008 2020-02-04-08-12-33.jpg,,Neuro-Ischemic Ulcers (NIU),Suture,Deep,Left Plantar Metatarsals;Left Dorsal Metatarsals;,203,960,262,978
+VWI10009 2020-02-04-08-20-19.jpg,,Venous Leg Ulcer (VLU),,Dermal Layer,Right Medial Calf;,430,642,837,344
+VWI10010 2020-02-04-08-20-51.jpg,,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe3;,372,312,444,406
+VWI10011 2020-02-04-12-10-25.jpg,,Neuro-Ischemic Ulcers (NIU),,Deep,Right Plantar Toe2;Right Plantar Toe3;Right Dorsal Toe2;Right Dorsal Toe3;,400,600,517,472
+VWI10012 2020-02-04-17-39-50.jpg,,Neuro-Ischemic Ulcers (NIU),Suture,Deep,Right Plantar Metatarsals;Right Dorsal Metatarsals;,262,816,713,556
+VWI10016 2020-02-07-09-02-51.jpg,,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe5;,71,1227,102,876
+VWI10018 2020-02-07-11-37-11.jpg,,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe2;Right Dorsal Toe3;,268,678,656,618
+VWI10020 2020-02-07-13-11-28.jpg,,Surgical Site Infections (SSI),,Deep,Left Anterior Thigh;Left Posterior Thigh;,120,780,35,568
+VWI10021 2020-02-07-15-21-16.jpg,,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Right Medial Calcaneus;,445,864,185,832
+VWI10023 2020-02-10-07-52-43.jpg,,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Right Plantar Toe5;Right Dorsal Toe5;,287,192,643,214
+VWI10024 2020-02-10-11-38-31.jpg,,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Metatarsals;Right Plantar Metatarsals;,91,693,300,1023
+VWI10025 2020-02-10-13-59-59.jpg,,Neuro-Ischemic Ulcers (NIU),,Deep,Left Plantar Midfoot;Left Dorsal Midfoot;,248,1166,58,1032
+VWI10027 2020-02-11-10-35-16.jpg,,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe2;Right Dorsal Toe3;Right Plantar Toe2;Right Plantar Toe3;,586,492,188,448
+VWI10028 2020-02-11-11-38-52.jpg,,Venous Leg Ulcer (VLU),,Epidermal Layer,Left Shin;,146,996,387,800
+VWI10030 2020-02-11-15-37-51.jpg,,Neuro-Ischemic Ulcers (NIU),,Deep,Left Plantar Metatarsals;Left Dorsal Metatarsals;,305,778,230,1132
+VWI10031 2020-02-12-15-47-43.jpg,,Neuro-Ischemic Ulcers (NIU),,Epidermal Layer,Left Dorsal Ankle;,332,286,489,288
+VWI10032 2020-02-12-17-47-46.jpg,,Neuro-Ischemic Ulcers (NIU),,Deep,Right Plantar Midfoot;Right Dorsal Midfoot;,55,912,268,894
+VWI10034 2020-02-13-08-21-39.jpg,,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe3;Left Dorsal Toe4;Left Dorsal Toe5;Left Plantar Toe3;Left Plantar Toe4;Left Plantar Toe5;,422,928,149,718
+VWI10035 2020-02-13-08-24-33.jpg,,Neuro-Ischemic Ulcers (NIU),,Deep,Right Medial Calcaneus;Right Medial Ankle;,56,852,411,656
+VWI10036 2020-02-13-08-24-33 2.jpg,,Neuro-Ischemic Ulcers (NIU),,Deep,Right Dorsal Toe4;Right Dorsal Toe5;Right Plantar Toe4;Right Plantar Toe5;,208,542,821,410
+VWI10038 2020-02-13-16-07-52.jpg,,Neuro-Ischemic Ulcers (NIU),,Deep,Left Dorsal Toe3;,262,462,580,538
+VWI10039 2020-02-14-08-35-54.jpg,,Neuro-Ischemic Ulcers (NIU),,Dermal Layer,Left Dorsal Toe4;Left Dorsal Toe5;,532,596,545,380
+VWI10040 2020-02-14-12-25-06.jpg,,Neuro-Ischemic Ulcers (NIU),,Deep,Right Plantar Metatarsals;Right Dorsal Metatarsals;,193,907,367,1047
+001 V5_12.11.19.JPG,True,Venous Leg Ulcer (VLU),,Dermal Layer,Right Lateral Calf;,946,880,0,1189
+003 V1_23.09.19.JPG,False,Venous Leg Ulcer (VLU),,Dermal Layer,Right Dorsal Metatarsals;,866,1035,0,1240
+003 V2_03.10.19.JPG,True,Venous Leg Ulcer (VLU),,Dermal Layer,Right Plantar Metatarsals;Right Dorsal Metatarsals;Right Dorsal Midfoot;,710,1098,4,1368
+003 V3_24.10.19.JPG,True,Venous Leg Ulcer (VLU),,Dermal Layer,Right Dorsal Metatarsals;,861,746,0,956
+010 V5_06.12.19.JPG,True,Venous Leg Ulcer (VLU),,Dermal Layer,Left Medial Calf;,846,916,57,1216
+011_V3 11.11.19.JPG,True,Venous Leg Ulcer (VLU),,Epidermal Layer,Left Posterior Calf;,796,720,303,698
+011_V4 25.11.19.JPG,False,Venous Leg Ulcer (VLU),,Epidermal Layer,Left Posterior Calf;,848,820,277,868
+014 V1_13.11.19.JPG,True,Venous Leg Ulcer (VLU),,Epidermal Layer,Left Lateral Calf;,1114,558,421,782
+016_ V4 18.12.19.JPG,True,Venous Leg Ulcer (VLU),,Epidermal Layer,Right Shin;,879,457,332,555
+017 V2_06.12.19.JPG,True,Venous Leg Ulcer (VLU),,Epidermal Layer,Right Medial Ankle;,1224,248,660,464
+018 V4_06.01.2020.JPG,True,Venous Leg Ulcer (VLU),,,Left Shin;,821,713,186,1014
+019 V4_30.12.19.JPG,True,Venous Leg Ulcer (VLU),,Dermal Layer,Right Lateral Ankle;,988,548,554,740
+024 V5_13.04.20.JPG,True,Venous Leg Ulcer (VLU),,Epidermal Layer,Left Lateral Ankle;,522,904,463,672
+026 V4_03.02.2020.JPG,True,Venous Leg Ulcer (VLU),,Epidermal Layer,Left Medial Calf;,1222,562,428,655
+027 V5_06.02.2020 HEALED.JPG,True,Venous Leg Ulcer (VLU),,Epidermal Layer,Left Shin;,1048,672,88,1190
+WA028_22.07.20_V4.JPG,False,Venous Leg Ulcer (VLU),,Epidermal Layer,Left Medial Ankle;,640,1003,919,783
+WA028_29.07.20_V5.JPG,True,Venous Leg Ulcer (VLU),,Epidermal Layer,Left Medial Ankle;,565,980,297,795
