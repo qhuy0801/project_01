@@ -1,9 +1,9 @@
 # Paths
 ANNOTATION_PATH = "../data/annotations/merged_wound_details_july_2022.csv"
-ANNOTATION_PROCESSED_PATH = "../wound-data/processed/annotations/wound_details.csv"
+ANNOTATION_PROCESSED_PATH = "../resources/processed/annotations/wound_details.csv"
 UNPROCESSED_IMAGES_DIR = "../data/images/"
-PROCESSED_IMAGES_DIR = "../wound-data/processed/roi/"
-PROCESSED_SEGMENT_DIR = "../wound-data/processed/segment/"
+PROCESSED_IMAGES_DIR = "../resources/processed/roi/"
+PROCESSED_SEGMENT_DIR = "../resources/processed/segment/"
 
 # Annotations
 FILE_NAME = "ImageDetail.ImageFilename"
