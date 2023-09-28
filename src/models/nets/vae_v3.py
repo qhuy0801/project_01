@@ -41,11 +41,13 @@ class VAE_v3(VAE):
 
         # Convert array dimensions to tuples
         self.encoder_dim = [
-            (self.encoder_dim[i], self.encoder_dim[i+1]) for i in range(len(self.encoder_dim) - 1)
+            (self.encoder_dim[i], self.encoder_dim[i + 1])
+            for i in range(len(self.encoder_dim) - 1)
         ]
 
         self.decoder_dim = [
-            (self.decoder_dim[i], self.decoder_dim[i + 1]) for i in range(len(self.decoder_dim) - 1)
+            (self.decoder_dim[i], self.decoder_dim[i + 1])
+            for i in range(len(self.decoder_dim) - 1)
         ]
 
         # Build encoder
@@ -79,7 +81,7 @@ class VAE_v3(VAE):
                         kernel_size=self.kernel_size,
                         stride=self.stride,
                         padding=self.padding,
-                        output_padding=1
+                        output_padding=1,
                     ),
                     nn.BatchNorm2d(out_c),
                     nn.LeakyReLU(),
@@ -103,7 +105,7 @@ class VAE_v3(VAE):
                     kernel_size=self.kernel_size,
                     padding=self.padding,
                 ),
-                nn.Tanh()
+                nn.Tanh(),
             )
         )
         self.decoder = nn.Sequential(*layers)
@@ -119,7 +121,9 @@ class VAE_v3(VAE):
             )
         self.compressed_conv_size = compressed_conv_size
         self.compressed_size = (
-                self.compressed_conv_size * self.compressed_conv_size * self.encoder_dim[-1][-1]
+            self.compressed_conv_size
+            * self.compressed_conv_size
+            * self.encoder_dim[-1][-1]
         )
 
         # Compressed fully-connected layers (mu and sigma)
@@ -133,6 +137,25 @@ class VAE_v3(VAE):
         layers = None
         gc.collect()
 
+    def forward(self, x):
+        """
+        Modified forward function
+        :param x:
+        :return:
+        """
+        output, mu, sigma = super().forward(x)
+        return (
+            nn.functional.interpolate(
+                output,
+                size=(self.input_size, self.input_size),
+                mode="bilinear",
+                align_corners=False,
+            ),
+            output,
+            mu,
+            sigma,
+        )
+
     def decode(self, x):
         """
         Decode from latent space into pixel space
@@ -141,8 +164,9 @@ class VAE_v3(VAE):
         """
         x = self.decoder_input(x)
         x = x.view(
-            -1, self.decoder_dim[0][0], self.compressed_conv_size, self.compressed_conv_size
+            -1,
+            self.decoder_dim[0][0],
+            self.compressed_conv_size,
+            self.compressed_conv_size,
         )
         return self.decoder(x)
-
-

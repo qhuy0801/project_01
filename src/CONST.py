@@ -82,6 +82,7 @@ class VAE_SETTING_v3:
 
     # Initialisation
     INPUT_SIZE: int = 128
+    ADDITIONAL_INPUT_SIZE: int = 256
     ENCODER_DIM: [int] = [3, 4]
     DECODER_DIM: [int] = [4, 4, 3]
     LATENT_DIM: int = 512

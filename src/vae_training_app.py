@@ -1,7 +1,7 @@
 import gc
 
 import bitsandbytes as bnb
-from torchsummary import summary
+from torchinfo import summary
 
 import CONST
 from entities import WoundDataset
@@ -17,16 +17,15 @@ if __name__ == '__main__':
         latent_dim=CONST.VAE_SETTING_v3.LATENT_DIM,
     )
 
-    print(summary(model, (3, 128, 128)))
-
     # # Initialise dataset
-    # dataset = WoundDataset(
-    #     image_dir=CONST.PROCESSED_IMAGES_DIR,
-    #     segment_dir=CONST.PROCESSED_SEGMENT_DIR,
-    #     annotation_path=CONST.ANNOTATION_PROCESSED_PATH,
-    #     target_tensor_size=CONST.VAE_SETTING.INPUT_SIZE,
-    # )
-    # #
+    dataset = WoundDataset(
+        image_dir=CONST.PROCESSED_IMAGES_DIR,
+        segment_dir=CONST.PROCESSED_SEGMENT_DIR,
+        annotation_path=CONST.ANNOTATION_PROCESSED_PATH,
+        target_tensor_size=CONST.VAE_SETTING_v3.INPUT_SIZE,
+        additional_target_tensor_size=CONST.VAE_SETTING_v3.ADDITIONAL_INPUT_SIZE,
+    )
+
     # # # Create the training application
     # vae_trainer = VAETrainer(
     #     train_dataset=dataset,

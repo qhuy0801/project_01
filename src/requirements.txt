@@ -16,4 +16,4 @@ reloadium==1.2.1
 pandas==2.0.3
 onnx
 onnxruntime
-torchsummary==1.5.1
+torchinfo==1.8.0

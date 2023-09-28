@@ -25,7 +25,9 @@ class VAETrainer:
         num_samples: int = 1,
         epochs: int = 5000,
         max_lr: float = 1e-4,
-        lr_decay: float = 0.999,
+        min_lr: float = 5e-6,
+        lr_decay: float = .999,
+        lr_threshold: float = 1e-4,
         run_name: str = "vae",
         output_dir: str = "./output/",
     ) -> None:
@@ -58,11 +60,12 @@ class VAETrainer:
 
         # Dependencies
         self.optimiser = bnb.optim.AdamW(self.model.parameters(), lr=max_lr)
-        self.lr_scheduler = torch.optim.lr_scheduler.StepLR(
+        self.lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer=self.optimiser,
-            step_size=len(self.train_data),
-            gamma=lr_decay,
-            last_epoch=-1,
+            mode="min",
+            factor=lr_decay,
+            threshold=lr_threshold,
+            min_lr=min_lr,
         )
 
         # If there is back-up
@@ -111,10 +114,10 @@ class VAETrainer:
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
         for epoch in range(self.epochs):
             epoch_kl_loss, epoch_mse_loss = self.__one_epoch(epoch)
-            self.__step_epoch()
+            self.__step_epoch(epoch_kl_loss, epoch_mse_loss)
 
             # Logs
-            self.log.add_scalar("Epoch_loss/KL+BCE", epoch_kl_loss, self.current_step)
+            self.log.add_scalar("Epoch_loss/KL+MSE", epoch_kl_loss, self.current_step)
             self.log.add_scalar(
                 "Epoch_loss/MSE_loss", epoch_mse_loss, self.current_step
             )
@@ -161,44 +164,27 @@ class VAETrainer:
         :return: combination loss (KL + BCE), reconstruction loss (MSE)
         """
         # Store the epoch loss
-        __epoch_loss = 0.0
+        __epoch_kl_loss = 0.0
         __epoch_mse_loss = 0.0
 
         # Iterate the dataloader
         for _, batch in enumerate(tqdm(self.train_data, desc=f"Epoch {epoch:5d}")):
-            images, segment = batch
+            images, additional_images, segment = batch
             images = images.to(self.device)
+            additional_images = additional_images.to(self.device)
 
             # Forwarding
-            pred_images, mu, sigma = self.model(images)
+            pred_images, pred_additional_images, mu, sigma = self.model(images)
 
             # Losses
             # KL
             kl = 0.5 * torch.sum(-1 - sigma + mu.pow(2) + sigma.exp())
 
-            # BCE
-            bce = functional.binary_cross_entropy(
-                pred_images, images, size_average=False
-            )
-
             # Reconstruction loss (MSE loss)
-            mse = functional.mse_loss(pred_images, images)
+            mse = functional.mse_loss(pred_additional_images, additional_images)
 
             # Total loss
-            loss = kl + bce
-
-            # Logs
-            self.log.add_scalar("Batch_loss/KL_loss", kl.item(), self.current_step)
-            self.log.add_scalar("Batch_loss/MSE_loss", mse.item(), self.current_step)
-            self.log.add_scalar("Batch_loss/BCE_loss", bce.item(), self.current_step)
-            self.log.add_scalar("Batch_loss/KL+BCE", loss, self.current_step)
-            if self.lr_scheduler is not None:
-                self.log.add_scalar(
-                    "Learning_rate",
-                    self.lr_scheduler.get_last_lr()[0],
-                    self.current_step,
-                )
-            self.log.flush()
+            loss = kl + mse
 
             # Backward
             self.__backward(loss)
@@ -207,10 +193,10 @@ class VAETrainer:
             self.current_step += 1
 
             # Store the loss
-            __epoch_loss += loss
+            __epoch_kl_loss += loss
             __epoch_mse_loss += mse
 
-        return __epoch_loss.mean().item(), __epoch_mse_loss.mean().item()
+        return __epoch_kl_loss.mean().item(), __epoch_mse_loss.mean().item()
 
     def __backward(self, loss):
         """
@@ -229,13 +215,13 @@ class VAETrainer:
         """
         return None
 
-    def __step_epoch(self):
+    def __step_epoch(self, epoch_kl_loss, epoch_mse_loss):
         """
         Take step after one epoch
         :return:
         """
         if self.lr_scheduler is not None:
-            self.lr_scheduler.step()
+            self.lr_scheduler.step(epoch_mse_loss)
 
     @torch.no_grad()
     def reconstruct_sample(self):
@@ -246,11 +232,6 @@ class VAETrainer:
         sample_image, _ = next(iter(self.sample_loader))
         sample_image = sample_image.to(self.device)
         return sample_image, self.reconstruct(sample_image)
-
-    @torch.no_grad()
-    def random_sample(self, sample_num):
-        sample = torch.randn(sample_num, self.model.latent_dim).to(self.device)
-        return self.model.decode(sample)
 
     @torch.no_grad()
     def reconstruct(self, x):
