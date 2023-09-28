@@ -118,13 +118,13 @@ class VAETrainer_v2:
             self.__step_epoch(epoch_kl_loss, epoch_mse_loss)
 
             # Logs
-            self.log.add_scalar("Epoch/KL+MSE", epoch_kl_loss, self.current_step)
-            self.log.add_scalar("Epoch/MSE_loss", epoch_mse_loss, self.current_step)
+            self.log.add_scalar("Epoch/KL+MSE", epoch_kl_loss, epoch)
+            self.log.add_scalar("Epoch/MSE_loss", epoch_mse_loss, epoch)
             if self.lr_scheduler is not None:
                 self.log.add_scalar(
                     "Epoch/Learning_rate",
                     self.optimiser.param_groups[0]["lr"],
-                    self.current_step,
+                    epoch,
                 )
             self.log.flush()
 
