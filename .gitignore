@@ -10,3 +10,4 @@
 
 # Ignore training output and logs
 /output/
+/resources/output/
