@@ -46,11 +46,11 @@ if __name__ == '__main__':
     #
     # # Remove learning rate scheduler
     # vae_trainer.lr_scheduler = None
-    #
-    # # As we created extra instances, we will need to un-referent them before training
-    # model = None
-    # dataset = None
-    # gc.collect()
-    #
-    # # # Training trigger
-    # vae_trainer.fit()
+
+    # As we created extra instances, we will need to un-referent them before training
+    model = None
+    dataset = None
+    gc.collect()
+
+    # Training trigger
+    vae_trainer.fit()

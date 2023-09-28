@@ -26,7 +26,7 @@ class VAETrainer_v2:
         epochs: int = 5000,
         max_lr: float = 1e-4,
         min_lr: float = 5e-6,
-        lr_decay: float = .999,
+        lr_decay: float = 0.999,
         lr_threshold: float = 1e-4,
         run_name: str = "vae",
         output_dir: str = "./output/",
@@ -91,9 +91,10 @@ class VAETrainer_v2:
             summary(
                 self.model,
                 (
-                    self.model.dims[0][0],
-                    self.model.intput_size,
-                    self.model.intput_size,
+                    1,
+                    self.model.encoder_dims[0][0],
+                    self.model.input_size,
+                    self.model.input_size,
                 ),
                 verbose=0,
             )
