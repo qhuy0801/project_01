@@ -230,7 +230,7 @@ class VAETrainer_v2:
         Reconstruct a random image
         :return:
         """
-        sample_image, _ = next(iter(self.sample_loader))
+        sample_image, _, _ = next(iter(self.sample_loader))
         sample_image = sample_image.to(self.device)
         return sample_image, self.reconstruct(sample_image)
 
