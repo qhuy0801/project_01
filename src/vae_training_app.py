@@ -7,6 +7,7 @@ import CONST
 from entities import WoundDataset
 from models.nets.vae_v3 import VAE_v3
 from models.trainer.vae_trainer import VAETrainer
+from models.trainer.vae_trainer_v2 import VAETrainer_v2
 
 if __name__ == '__main__':
     # Initialise the model
@@ -26,19 +27,19 @@ if __name__ == '__main__':
         additional_target_tensor_size=CONST.VAE_SETTING_v3.ADDITIONAL_INPUT_SIZE,
     )
 
-    # # # Create the training application
-    # vae_trainer = VAETrainer(
-    #     train_dataset=dataset,
-    #     model=model,
-    #     batch_size=CONST.VAE_SETTING.BATCH_SIZE,
-    #     checkpoint_path=CONST.VAE_SETTING.CHECKPOINT_PATH,
-    #     num_workers=CONST.VAE_SETTING.NUM_WORKERS,
-    #     num_samples=CONST.VAE_SETTING.NUM_SAMPLES,
-    #     epochs=CONST.VAE_SETTING.EPOCHS,
-    #     max_lr=CONST.VAE_SETTING.MAX_LR,
-    #     output_dir=CONST.OUTPUT_DIR,
-    #     run_name=CONST.VAE_SETTING.RUN_NAME,
-    # )
+    # Create the training application
+    vae_trainer = VAETrainer_v2(
+        train_dataset=dataset,
+        model=model,
+        batch_size=CONST.VAE_SETTING_v3.BATCH_SIZE,
+        checkpoint_path=CONST.VAE_SETTING_v3.CHECKPOINT_PATH,
+        num_workers=CONST.VAE_SETTING_v3.NUM_WORKERS,
+        num_samples=CONST.VAE_SETTING_v3.NUM_SAMPLES,
+        epochs=CONST.VAE_SETTING_v3.EPOCHS,
+        max_lr=CONST.VAE_SETTING_v3.MAX_LR,
+        output_dir=CONST.OUTPUT_DIR,
+        run_name=CONST.VAE_SETTING_v3.RUN_NAME,
+    )
     #
     # # Re-train: get new optimiser and remove learning rate scheduler
     # # vae_trainer.optimiser = bnb.optim.AdamW(params=vae_trainer.model.parameters(), lr=CONST.VAE_SETTING.MAX_LR)

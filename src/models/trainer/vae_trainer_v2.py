@@ -14,7 +14,7 @@ from models.nets.vae import VAE
 from utils import save_checkpoint, de_normalise, load_checkpoint
 
 
-class VAETrainer:
+class VAETrainer_v2:
     def __init__(
         self,
         train_dataset: Dataset,
