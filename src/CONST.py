@@ -88,10 +88,10 @@ class VAE_SETTING_v3:
     LATENT_DIM: int = 512
 
     # Training
-    BATCH_SIZE: int = 64
+    BATCH_SIZE: int = 256
     CHECKPOINT_PATH: str = None
-    NUM_WORKERS: int = 8
+    NUM_WORKERS: int = 2
     NUM_SAMPLES: int = 1
     EPOCHS = 10000
-    MAX_LR = 5e-6
+    MAX_LR = 1e-4
     DECAY_RATE = 1.

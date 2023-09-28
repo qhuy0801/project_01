@@ -27,7 +27,7 @@ class VAETrainer_v2:
         max_lr: float = 1e-4,
         min_lr: float = 5e-6,
         lr_decay: float = 0.999,
-        lr_threshold: float = 1e-4,
+        lr_threshold: float = 0.2,
         run_name: str = "vae",
         output_dir: str = "./output/",
     ) -> None:
