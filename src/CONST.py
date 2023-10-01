@@ -108,7 +108,7 @@ class AE_SETTING_v1:
     INPUT_SIZE: int = 256
 
     # Training
-    BATCH_SIZE: int = 32
+    BATCH_SIZE: int = 64
     CHECKPOINT_PATH: str = None
     NUM_WORKERS: int = 8
     NUM_SAMPLES: int = 1

@@ -29,7 +29,7 @@ class AETrainer_v1:
         min_lr: float = 5e-6,
         lr_decay: float = 0.95,
         lr_threshold: float = 0.2,
-        lr_reducing_patience: int = 30,
+        lr_reducing_patience: int = 50,
         run_name: str = "ae",
         output_dir: str = "./output/",
     ) -> None:
