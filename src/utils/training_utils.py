@@ -8,6 +8,15 @@ MEAN = [0.485, 0.456, 0.406]
 STD = [0.229, 0.224, 0.225]
 
 
+def arr_to_tuples(dims_arr: [int]):
+    """
+    # Convert dimensions array to tuples:
+    For example: [3, 4, 4, 4, 4] to [(3, 4), (4, 4), (4, 4), (4, 4)]
+    :return:
+    """
+    return [(dims_arr[i], dims_arr[i+1]) for i in range(len(dims_arr) - 1)]
+
+
 def resize_segmentation(_segmentation_matrix, _size):
     """
     Resize the segmentation matrix to fit the images
