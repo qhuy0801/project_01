@@ -5,6 +5,7 @@ from .training_utils import (
     get_conv_output_size,
     get_segmentation,
     resize_segmentation,
+    arr_to_tuples,
 )
 
 from .io_ultis import (
