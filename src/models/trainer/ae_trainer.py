@@ -105,7 +105,9 @@ class AETrainer_v1:
         with open(
             f"{os.path.join(self.run_dir, self.run_time)}/model.txt", "w"
         ) as file:
+            file.write(f"\nImage size: {self.train_dataset.target_tensor_size}")
             file.write(model_stats)
+            file.close()
 
         # Step count
         self.current_step = 0
@@ -113,7 +115,7 @@ class AETrainer_v1:
         # Best loss for checkpoints
         self.best_mse_loss = 2000.0
 
-    def fit(self, sample_after: int = 200):
+    def fit(self, sample_after: int = 100):
         self.model.train()
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
         for epoch in range(self.epochs):

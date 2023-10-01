@@ -9,8 +9,12 @@ from utils import arr_to_tuples
 class Autoencoder_v1(nn.Module):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.encoder = Encoder()
-        self.decoder = Decoder()
+        self.encoder = Encoder(
+            compressed_dims=[32, 32]
+        )
+        self.decoder = Decoder(
+            decompressed_dims=[32, 512]
+        )
 
     def encode(self, x):
         return self.encoder(x)

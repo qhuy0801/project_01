@@ -20,7 +20,7 @@ if __name__ == '__main__':
         image_dir=CONST.PROCESSED_IMAGES_DIR,
         segment_dir=CONST.PROCESSED_SEGMENT_DIR,
         annotation_path=CONST.ANNOTATION_PROCESSED_PATH,
-        target_tensor_size=CONST.VAE_SETTING_v3.INPUT_SIZE,
+        target_tensor_size=CONST.AE_SETTING_v1.INPUT_SIZE,
     )
 
     # Create the training application
@@ -37,14 +37,7 @@ if __name__ == '__main__':
         run_name=CONST.AE_SETTING_v1.RUN_NAME,
         lr_decay=CONST.AE_SETTING_v1.LR_DECAY,
     )
-    #
-    # # Re-train: get new optimiser and remove learning rate scheduler
-    # # vae_trainer.optimiser = bnb.optim.AdamW(params=vae_trainer.model.parameters(), lr=CONST.VAE_SETTING.MAX_LR)
-    #
-    # # Remove learning rate scheduler
-    # vae_trainer.lr_scheduler = None
 
-    # As we created extra instances, we will need to un-referent them before training
     model = None
     dataset = None
     gc.collect()
