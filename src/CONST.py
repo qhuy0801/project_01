@@ -112,5 +112,6 @@ class AE_SETTING_v1:
     CHECKPOINT_PATH: str = None
     NUM_WORKERS: int = 8
     NUM_SAMPLES: int = 1
-    EPOCHS = 10000
-    MAX_LR = 1e-4
+    EPOCHS = 5000
+    MAX_LR: int = 5e-4
+    LR_DECAY: int = 0.95

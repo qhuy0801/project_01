@@ -35,6 +35,7 @@ if __name__ == '__main__':
         max_lr=CONST.AE_SETTING_v1.MAX_LR,
         output_dir=CONST.OUTPUT_DIR,
         run_name=CONST.AE_SETTING_v1.RUN_NAME,
+        lr_decay=CONST.AE_SETTING_v1.LR_DECAY,
     )
     #
     # # Re-train: get new optimiser and remove learning rate scheduler

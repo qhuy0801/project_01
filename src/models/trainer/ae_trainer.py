@@ -113,7 +113,7 @@ class AETrainer_v1:
         # Best loss for checkpoints
         self.best_mse_loss = 2000.0
 
-    def fit(self):
+    def fit(self, sample_after: int = 200):
         self.model.train()
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
         for epoch in range(self.epochs):
@@ -146,7 +146,8 @@ class AETrainer_v1:
                     os.path.join(self.run_dir, self.run_time),
                 )
 
-                # Log a reconstructed image
+            # Log a reconstructed image
+            if epoch % sample_after == 0:
                 sample, reconstructed_sample = self.reconstruct_sample()
                 self.log.add_images(
                     tag=f"Samples/Random/Epoch:{epoch}",
