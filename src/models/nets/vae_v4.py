@@ -2,7 +2,26 @@ import gc
 
 from torch import nn
 
+from models.nets.vae import VAE
 from utils import arr_to_tuples
+
+
+class Autoencoder_v1(nn.Module):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.encoder = Encoder()
+        self.decoder = Decoder()
+
+    def encode(self, x):
+        return self.encoder(x)
+
+    def decode(self, x):
+        return self.decoder(x)
+
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
 
 
 class Decoder(nn.Module):
