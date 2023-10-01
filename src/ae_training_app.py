@@ -13,9 +13,7 @@ from models.trainer.vae_trainer_v2 import VAETrainer_v2
 
 if __name__ == '__main__':
     # Initialise the model
-    model = Autoencoder_v1(
-        input_size=CONST.AE_SETTING_v1.INPUT_SIZE,
-    )
+    model = Autoencoder_v1()
 
     # # Initialise dataset
     dataset = WoundDataset(
