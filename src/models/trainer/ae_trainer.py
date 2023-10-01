@@ -27,8 +27,9 @@ class AETrainer_v1:
         epochs: int = 5000,
         max_lr: float = 1e-4,
         min_lr: float = 5e-6,
-        lr_decay: float = 0.999,
+        lr_decay: float = 0.95,
         lr_threshold: float = 0.2,
+        lr_reducing_patience: int = 30,
         run_name: str = "ae",
         output_dir: str = "./output/",
     ) -> None:
@@ -67,6 +68,7 @@ class AETrainer_v1:
             factor=lr_decay,
             threshold=lr_threshold,
             min_lr=min_lr,
+            patience=lr_reducing_patience,
         )
 
         # If there is back-up
@@ -93,7 +95,7 @@ class AETrainer_v1:
                 self.model,
                 (
                     1,
-                    self.model.input_dim,
+                    self.model.encoder.input_dim,
                     self.train_dataset.target_tensor_size,
                     self.train_dataset.target_tensor_size,
                 ),
@@ -225,7 +227,7 @@ class AETrainer_v1:
         Reconstruct a random image
         :return:
         """
-        sample_image, _, _ = next(iter(self.sample_loader))
+        sample_image, _ = next(iter(self.sample_loader))
         sample_image = sample_image.to(self.device)
         return sample_image, self.reconstruct(sample_image)
 
