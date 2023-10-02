@@ -118,7 +118,7 @@ class AETrainer_v1:
     def fit(self, sample_after: int = 100):
         self.model.train()
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
-        for epoch in tqdm(range(self.epochs), desc=f"Total progress"):
+        for epoch in tqdm(range(self.epochs), desc=f"Total progress", position=1):
             epoch_mse_loss = self.__one_epoch(epoch)
             self.__step_epoch(epoch_mse_loss)
 
