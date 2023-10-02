@@ -6,15 +6,63 @@ from models.nets.vae import VAE
 from utils import arr_to_tuples
 
 
+class VAE_v4(VAE):
+    def __init__(self, input_size: int, fc_dims: int = 512, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.encoder = Encoder(compressed_dims=[32, 32])
+        self.decoder = Decoder(decompressed_dims=[32, 512])
+        self.latent_size = (
+            input_size // 2 ** len(self.encoder.down_sampling_dims),
+            self.encoder.compressed_dims[-1][-1],
+            self.encoder.compressed_dims[-1][-1],
+        )
+        __flatten_size = self.latent_size[0] * self.latent_size[1] * self.latent_size[2]
+
+        self.fc_mu = nn.Linear(in_features=__flatten_size, out_features=fc_dims)
+        self.fc_sigma = nn.Linear(in_features=__flatten_size, out_features=fc_dims)
+        self.decoder_input = nn.Linear(in_features=fc_dims, out_features=__flatten_size)
+
+    def decode(self, x):
+        x = self.decoder_input(x)
+        x = x.view(
+            -1,
+            self.decoder.decompressed_dims[0][0],
+            self.decoder.decompressed_dims[0][0],
+        )
+        return self.decoder(x)
+
+
+class Multi_headed_VAE_v1(VAE_v4):
+    def __init__(self, input_size: int, fc_dims: int = 512, *args, **kwargs) -> None:
+        super().__init__(input_size, fc_dims, *args, **kwargs)
+        self.additional_decoder_1 = Decoder(decompressed_dims=[32, 512])
+
+    def additional_decode(self, x):
+        x = self.decoder_input(x)
+        x = x.view(
+            -1,
+            self.additional_decoder_1.decompressed_dims[0][0],
+            self.additional_decoder_1.decompressed_dims[0][0],
+        )
+        return self.additional_decoder_1(x)
+
+    def additional_forward(self, x):
+        mu, sigma = self.encode(x)
+        x = self.reparameterise(mu, sigma)
+        return self.decode(x), self.additional_decode(x), mu, sigma
+
+    def forward(self, x):
+        mu, sigma = self.encode(x)
+        x = self.reparameterise(mu, sigma)
+        x = self.decode(x) + self.additional_decode(x)
+        return x, mu, sigma
+
+
 class Autoencoder_v1(nn.Module):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.encoder = Encoder(
-            compressed_dims=[32, 32]
-        )
-        self.decoder = Decoder(
-            decompressed_dims=[32, 512]
-        )
+        self.encoder = Encoder(compressed_dims=[32, 32])
+        self.decoder = Decoder(decompressed_dims=[32, 512])
 
     def encode(self, x):
         return self.encoder(x)
@@ -39,6 +87,7 @@ class Decoder(nn.Module):
         decompressed_dims: [int] = None,
         up_sampling_dims: [int] = None,
         output_dim: int = None,
+        output_activation: str = "sigmoid",
         *args,
         **kwargs
     ) -> None:
@@ -91,7 +140,7 @@ class Decoder(nn.Module):
                         output_padding=1,
                     ),
                     nn.BatchNorm2d(out_c),
-                    nn.SiLU()
+                    nn.SiLU(),
                 )
             )
         self.up_sampler = nn.Sequential(*up_sampling_layers)
@@ -108,7 +157,7 @@ class Decoder(nn.Module):
                         padding=1,
                     ),
                     nn.BatchNorm2d(out_c),
-                    nn.SiLU()
+                    nn.SiLU(),
                 )
             )
         output_layers.append(
@@ -121,7 +170,7 @@ class Decoder(nn.Module):
                     padding=1,
                 ),
                 nn.BatchNorm2d(self.output_dim[-1][-1]),
-                nn.Sigmoid()
+                nn.Tanh() if output_activation == "tanh" else nn.Sigmoid(),
             )
         )
         self.to_output = nn.Sequential(*output_layers)
