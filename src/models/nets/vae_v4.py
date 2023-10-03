@@ -9,12 +9,13 @@ from utils import arr_to_tuples
 class VAE_v4(VAE):
     def __init__(self, input_size: int, fc_dims: int = 512, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        self.input_size = input_size
         self.encoder = Encoder(compressed_dims=[32, 32])
         self.decoder = Decoder(decompressed_dims=[32, 512])
         self.latent_size = (
+            self.encoder.compressed_dims[-1][-1],
             input_size // 2 ** len(self.encoder.down_sampling_dims),
-            self.encoder.compressed_dims[-1][-1],
-            self.encoder.compressed_dims[-1][-1],
+            input_size // 2 ** len(self.encoder.down_sampling_dims),
         )
         __flatten_size = self.latent_size[0] * self.latent_size[1] * self.latent_size[2]
 
@@ -26,8 +27,9 @@ class VAE_v4(VAE):
         x = self.decoder_input(x)
         x = x.view(
             -1,
-            self.decoder.decompressed_dims[0][0],
-            self.decoder.decompressed_dims[0][0],
+            self.latent_size[0],
+            self.latent_size[1],
+            self.latent_size[2],
         )
         return self.decoder(x)
 

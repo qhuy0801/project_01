@@ -27,7 +27,7 @@ class VAETrainer_v2:
         max_lr: float = 1e-4,
         min_lr: float = 5e-6,
         lr_decay: float = 0.999,
-        lr_threshold: float = 0.2,
+        lr_threshold: float = 0.4,
         run_name: str = "vae",
         output_dir: str = "./output/",
     ) -> None:
@@ -92,7 +92,7 @@ class VAETrainer_v2:
                 self.model,
                 (
                     1,
-                    self.model.encoder_dim[0][0],
+                    self.model.encoder.input_dim,
                     self.model.input_size,
                     self.model.input_size,
                 ),
@@ -110,10 +110,10 @@ class VAETrainer_v2:
         # Best loss for checkpoints
         self.best_mse_loss = 2000.0
 
-    def fit(self):
+    def fit(self, sample_after: int = 100):
         self.model.train()
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
-        for epoch in range(self.epochs):
+        for epoch in tqdm(range(self.epochs), desc="Total progress", position=1):
             epoch_kl_loss, epoch_mse_loss = self.__one_epoch(epoch)
             self.__step_epoch(epoch_kl_loss, epoch_mse_loss)
 
@@ -145,6 +145,7 @@ class VAETrainer_v2:
                 )
 
                 # Log a reconstructed image
+            if epoch % sample_after == 0:
                 sample, reconstructed_sample = self.reconstruct_sample()
                 self.log.add_images(
                     tag=f"Samples/Random/Epoch:{epoch}",
@@ -173,20 +174,21 @@ class VAETrainer_v2:
         __epoch_mse_loss = 0.0
 
         # Iterate the dataloader
-        for _, batch in enumerate(tqdm(self.train_data, desc=f"Epoch {epoch:5d}")):
-            images, additional_images, segment = batch
+        for batch in self.train_data:
+
+            # Unpack
+            images, segment = batch
             images = images.to(self.device)
-            additional_images = additional_images.to(self.device)
 
             # Forwarding
-            pred_images, pred_additional_images, mu, sigma = self.model(images)
+            pred_images, mu, sigma = self.model(images)
 
             # Losses
             # KL
             kl = 0.5 * torch.sum(-1 - sigma + mu.pow(2) + sigma.exp())
 
             # Reconstruction loss (MSE loss)
-            mse = functional.mse_loss(pred_additional_images, additional_images)
+            mse = functional.mse_loss(pred_images, images)
 
             # Total loss
             loss = kl + mse
@@ -234,7 +236,7 @@ class VAETrainer_v2:
         Reconstruct a random image
         :return:
         """
-        sample_image, _, _ = next(iter(self.sample_loader))
+        sample_image, _ = next(iter(self.sample_loader))
         sample_image = sample_image.to(self.device)
         return sample_image, self.reconstruct(sample_image)
 

@@ -73,6 +73,7 @@ class VAE_SETTING:
     MAX_LR = 5e-6
     DECAY_RATE = 1.
 
+
 class VAE_SETTING_v3:
     """
     Setting for VAE_v3
@@ -115,3 +116,23 @@ class AE_SETTING_v1:
     EPOCHS = 5000
     MAX_LR: int = 5e-4
     LR_DECAY: int = 0.95
+
+
+class VAE_SETTING_v4:
+    """
+    Setting for VAE_v4
+    """
+    # Identifier
+    RUN_NAME = "vae_v4"
+
+    # Initialisation
+    INPUT_SIZE: int = 256
+
+    # Training
+    BATCH_SIZE: int = 32
+    CHECKPOINT_PATH: str = None
+    NUM_WORKERS: int = 1
+    NUM_SAMPLES: int = 1
+    EPOCHS = 5000
+    MAX_LR = 1e-4
+    DECAY_RATE = 1.
