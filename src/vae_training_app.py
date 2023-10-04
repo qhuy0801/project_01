@@ -29,6 +29,8 @@ if __name__ == '__main__':
         num_samples=CONST.VAE_SETTING_v4.NUM_SAMPLES,
         epochs=CONST.VAE_SETTING_v4.EPOCHS,
         max_lr=CONST.VAE_SETTING_v4.MAX_LR,
+        min_lr=CONST.VAE_SETTING_v4.MIN_LR,
+        patience_lr=CONST.VAE_SETTING_v4.PATIENCE_LR,
         output_dir=CONST.OUTPUT_DIR,
         run_name=CONST.VAE_SETTING_v4.RUN_NAME,
     )

@@ -27,7 +27,8 @@ class VAETrainer:
         max_lr: float = 1e-4,
         min_lr: float = 5e-6,
         lr_decay: float = 0.999,
-        lr_threshold: float = 0.4,
+        lr_threshold: float = 0.3,
+        patience_lr: int = 30,
         run_name: str = "vae",
         output_dir: str = "./output/",
     ) -> None:
@@ -66,6 +67,7 @@ class VAETrainer:
             factor=lr_decay,
             threshold=lr_threshold,
             min_lr=min_lr,
+            patience=patience_lr,
         )
 
         # If there is back-up
@@ -103,6 +105,7 @@ class VAETrainer:
             f"{os.path.join(self.run_dir, self.run_time)}/model.txt", "w"
         ) as file:
             file.write(model_stats)
+            file.write(f"Input_size: {self.model.input_size}")
 
         # Step count
         self.current_step = 0
@@ -110,18 +113,26 @@ class VAETrainer:
         # Best loss for checkpoints
         self.best_mse_loss = 2000.0
 
-    def fit(self):
+    def fit(self, sample_every: int = 50):
+        # Put the model in training mode
         self.model.train()
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
-        for epoch in range(self.epochs):
+
+        for epoch in tqdm(
+            range(self.epochs), desc="Total progress", position=0, leave=False
+        ):
             epoch_kl_loss, epoch_mse_loss = self.__one_epoch(epoch)
             self.__step_epoch(epoch_mse_loss)
 
             # Logs
-            self.log.add_scalar("Epoch_loss/KL+BCE", epoch_kl_loss, self.current_step)
-            self.log.add_scalar(
-                "Epoch_loss/MSE_loss", epoch_mse_loss, self.current_step
-            )
+            self.log.add_scalar("Epoch_loss/KL+BCE", epoch_kl_loss, epoch)
+            self.log.add_scalar("Epoch_loss/MSE_loss", epoch_mse_loss, epoch)
+            if self.lr_scheduler is not None:
+                self.log.add_scalar(
+                    "Learning_rate",
+                    self.optimiser.param_groups[0]["lr"],
+                    epoch,
+                )
             self.log.flush()
 
             # Checkpoint
@@ -141,6 +152,7 @@ class VAETrainer:
                 )
 
                 # Log a reconstructed image
+            if epoch % sample_every == 0:
                 sample, reconstructed_sample = self.reconstruct_sample()
                 self.log.add_images(
                     tag=f"Samples/Random/Epoch:{epoch}",
@@ -151,9 +163,10 @@ class VAETrainer:
                         ),
                         dim=0,
                     ),
-                    global_step=self.current_step,
+                    global_step=epoch,
                     dataformats="NCHW",
                 )
+                self.log.flush()
 
         print("Training completed!")
         return None
@@ -169,7 +182,7 @@ class VAETrainer:
         __epoch_mse_loss = 0.0
 
         # Iterate the dataloader
-        for _, batch in enumerate(tqdm(self.train_data, desc=f"Epoch {epoch:5d}")):
+        for batch in self.train_data:
             images, segment = batch
             images = images.to(self.device)
 
@@ -181,28 +194,13 @@ class VAETrainer:
             kl = 0.5 * torch.sum(-1 - sigma + mu.pow(2) + sigma.exp())
 
             # BCE
-            bce = functional.binary_cross_entropy(
-                pred_images, images, size_average=False
-            )
+            bce = functional.mse_loss(pred_images, images)
 
             # Reconstruction loss (MSE loss)
             mse = functional.mse_loss(pred_images, images)
 
             # Total loss
             loss = kl + bce
-
-            # Logs
-            self.log.add_scalar("Batch_loss/KL_loss", kl.item(), self.current_step)
-            self.log.add_scalar("Batch_loss/MSE_loss", mse.item(), self.current_step)
-            self.log.add_scalar("Batch_loss/BCE_loss", bce.item(), self.current_step)
-            self.log.add_scalar("Batch_loss/KL+BCE", loss, self.current_step)
-            if self.lr_scheduler is not None:
-                self.log.add_scalar(
-                    "Learning_rate",
-                    self.optimiser.param_groups[0]["lr"],
-                    self.current_step,
-                )
-            self.log.flush()
 
             # Backward
             self.__backward(loss)

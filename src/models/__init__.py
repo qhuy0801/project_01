@@ -10,6 +10,5 @@ from .embeddings.embedding import Embedding
 from .embeddings.embedding_v1 import Embedding_v1
 
 from .trainer.vae_trainer import VAETrainer
-from .trainer.vae_trainer_v2 import VAETrainer_v2
 
 from .trainer.ae_trainer import AETrainer_v1

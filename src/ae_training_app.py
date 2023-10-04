@@ -1,15 +1,11 @@
 import gc
 
-import bitsandbytes as bnb
-from torchinfo import summary
-
 import CONST
 from entities import WoundDataset
 from models.nets.vae_v3 import VAE_v3
 from models.nets.vae_v4 import Autoencoder_v1
 from models.trainer.ae_trainer import AETrainer_v1
 from models.trainer.vae_trainer import VAETrainer
-from models.trainer.vae_trainer_v2 import VAETrainer_v2
 
 if __name__ == '__main__':
     # Initialise the model
