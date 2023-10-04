@@ -113,7 +113,9 @@ class VAETrainer_v2:
     def fit(self, sample_after: int = 100):
         self.model.train()
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
-        for epoch in tqdm(range(self.epochs), desc="Total progress", position=1):
+        for epoch in tqdm(
+            range(self.epochs), desc="Total progress", position=0, leave=False
+        ):
             epoch_kl_loss, epoch_mse_loss = self.__one_epoch(epoch)
             self.__step_epoch(epoch_kl_loss, epoch_mse_loss)
 
@@ -175,7 +177,6 @@ class VAETrainer_v2:
 
         # Iterate the dataloader
         for batch in self.train_data:
-
             # Unpack
             images, segment = batch
             images = images.to(self.device)
