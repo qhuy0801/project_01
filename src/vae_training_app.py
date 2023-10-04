@@ -1,14 +1,9 @@
 import gc
 
-import bitsandbytes as bnb
-from torchinfo import summary
-
 import CONST
 from entities import WoundDataset
-from models.nets.vae_v3 import VAE_v3
 from models.nets.vae_v4 import VAE_v4
 from models.trainer.vae_trainer import VAETrainer
-from models.trainer.vae_trainer_v2 import VAETrainer_v2
 
 if __name__ == '__main__':
     # Initialise the model
@@ -22,11 +17,10 @@ if __name__ == '__main__':
         segment_dir=CONST.PROCESSED_SEGMENT_DIR,
         annotation_path=CONST.ANNOTATION_PROCESSED_PATH,
         target_tensor_size=CONST.VAE_SETTING_v4.INPUT_SIZE,
-        additional_target_tensor_size=None,
     )
 
     # Create the training application
-    vae_trainer = VAETrainer_v2(
+    vae_trainer = VAETrainer(
         train_dataset=dataset,
         model=model,
         batch_size=CONST.VAE_SETTING_v4.BATCH_SIZE,

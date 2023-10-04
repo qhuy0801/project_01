@@ -25,7 +25,9 @@ class VAETrainer:
         num_samples: int = 1,
         epochs: int = 5000,
         max_lr: float = 1e-4,
+        min_lr: float = 5e-6,
         lr_decay: float = 0.999,
+        lr_threshold: float = 0.4,
         run_name: str = "vae",
         output_dir: str = "./output/",
     ) -> None:
@@ -58,11 +60,12 @@ class VAETrainer:
 
         # Dependencies
         self.optimiser = bnb.optim.AdamW(self.model.parameters(), lr=max_lr)
-        self.lr_scheduler = torch.optim.lr_scheduler.StepLR(
+        self.lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer=self.optimiser,
-            step_size=len(self.train_data),
-            gamma=lr_decay,
-            last_epoch=-1,
+            mode="min",
+            factor=lr_decay,
+            threshold=lr_threshold,
+            min_lr=min_lr,
         )
 
         # If there is back-up
@@ -88,9 +91,9 @@ class VAETrainer:
             summary(
                 self.model,
                 (
-                    self.model.dims[0][0],
-                    self.model.intput_size,
-                    self.model.intput_size,
+                    self.model.encoder.input_dim,
+                    self.model.input_size,
+                    self.model.input_size,
                 ),
                 verbose=0,
             )

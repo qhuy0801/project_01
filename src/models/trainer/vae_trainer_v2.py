@@ -248,4 +248,5 @@ class VAETrainer_v2:
         :param x:
         :return:
         """
-        return self.model(x)[0]
+        x = self.model(x)
+        return x[0]

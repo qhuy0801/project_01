@@ -10,8 +10,10 @@ class VAE_v4(VAE):
     def __init__(self, input_size: int, fc_dims: int = 512, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.input_size = input_size
+
         self.encoder = Encoder(compressed_dims=[32, 32])
         self.decoder = Decoder(decompressed_dims=[32, 512])
+
         self.latent_size = (
             self.encoder.compressed_dims[-1][-1],
             input_size // 2 ** len(self.encoder.down_sampling_dims),
