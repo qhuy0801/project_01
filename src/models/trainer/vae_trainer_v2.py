@@ -176,7 +176,7 @@ class VAETrainer_v2:
         __epoch_mse_loss = 0.0
 
         # Iterate the dataloader
-        for batch in self.train_data:
+        for _, batch in enumerate(tqdm(self.train_data, desc=f"Epoch {epoch:5d}")):
             # Unpack
             images, segment = batch
             images = images.to(self.device)
