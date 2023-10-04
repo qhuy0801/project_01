@@ -91,6 +91,7 @@ class VAETrainer:
             summary(
                 self.model,
                 (
+                    1,
                     self.model.encoder.input_dim,
                     self.model.input_size,
                     self.model.input_size,
@@ -114,7 +115,7 @@ class VAETrainer:
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
         for epoch in range(self.epochs):
             epoch_kl_loss, epoch_mse_loss = self.__one_epoch(epoch)
-            self.__step_epoch()
+            self.__step_epoch(epoch_mse_loss)
 
             # Logs
             self.log.add_scalar("Epoch_loss/KL+BCE", epoch_kl_loss, self.current_step)
@@ -198,7 +199,7 @@ class VAETrainer:
             if self.lr_scheduler is not None:
                 self.log.add_scalar(
                     "Learning_rate",
-                    self.lr_scheduler.get_last_lr()[0],
+                    self.optimiser.param_groups[0]["lr"],
                     self.current_step,
                 )
             self.log.flush()
@@ -232,13 +233,13 @@ class VAETrainer:
         """
         return None
 
-    def __step_epoch(self):
+    def __step_epoch(self, epoch_loss):
         """
         Take step after one epoch
         :return:
         """
         if self.lr_scheduler is not None:
-            self.lr_scheduler.step()
+            self.lr_scheduler.step(epoch_loss)
 
     @torch.no_grad()
     def reconstruct_sample(self):
