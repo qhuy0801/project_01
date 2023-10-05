@@ -7,7 +7,7 @@ from utils import arr_to_tuples
 
 
 class VAE_v4(VAE):
-    def __init__(self, input_size: int, fc_dims: int = 512, *args, **kwargs) -> None:
+    def __init__(self, input_size: int, fc_dims: int = 256, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.input_size = input_size
 
@@ -37,7 +37,7 @@ class VAE_v4(VAE):
 
 
 class Multi_headed_VAE_v1(VAE_v4):
-    def __init__(self, input_size: int, fc_dims: int = 512, *args, **kwargs) -> None:
+    def __init__(self, input_size: int, fc_dims: int = 256, *args, **kwargs) -> None:
         super().__init__(input_size, fc_dims, *args, **kwargs)
         self.additional_decoder_1 = Decoder(decompressed_dims=[32, 512])
 
