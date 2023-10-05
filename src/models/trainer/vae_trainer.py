@@ -194,7 +194,7 @@ class VAETrainer:
             kl = 0.5 * torch.sum(-1 - sigma + mu.pow(2) + sigma.exp())
 
             # BCE
-            bce = functional.mse_loss(pred_images, images)
+            bce = functional.binary_cross_entropy(pred_images, images)
 
             # Reconstruction loss (MSE loss)
             mse = functional.mse_loss(pred_images, images)
