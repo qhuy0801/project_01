@@ -27,7 +27,7 @@ class VAETrainer:
         max_lr: float = 1e-4,
         min_lr: float = 5e-6,
         lr_decay: float = 0.999,
-        lr_threshold: float = 0.4,
+        lr_threshold: float = 0.2,
         patience_lr: int = 30,
         run_name: str = "vae",
         output_dir: str = "./output/",
@@ -113,7 +113,7 @@ class VAETrainer:
         # Best loss for checkpoints
         self.best_mse_loss = 2000.0
 
-    def fit(self):
+    def fit(self, sample_after: int = 50):
         self.model.train()
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
         for epoch in range(self.epochs):
@@ -121,7 +121,7 @@ class VAETrainer:
             self.__step_epoch(epoch_mse_loss)
 
             # Logs
-            self.log.add_scalar("Epoch_loss/KL+BCE", epoch_kl_loss, self.current_step)
+            self.log.add_scalar("Epoch_loss/KL+MSE", epoch_kl_loss, epoch)
             self.log.add_scalar(
                 "Epoch_loss/MSE_loss", epoch_mse_loss, self.current_step
             )
@@ -143,6 +143,7 @@ class VAETrainer:
                     os.path.join(self.run_dir, self.run_time),
                 )
 
+            if epoch % sample_after == 0:
                 # Log a reconstructed image
                 sample, reconstructed_sample = self.reconstruct_sample()
                 self.log.add_images(
@@ -172,7 +173,7 @@ class VAETrainer:
         __epoch_mse_loss = 0.0
 
         # Iterate the dataloader
-        for _, batch in enumerate(tqdm(self.train_data, desc=f"Epoch {epoch:5d}")):
+        for _, batch in enumerate(tqdm(self.train_data, desc=f"Epoch {epoch:5d}/{self.epochs}", position=0, leave=False)):
             images, segment = batch
             images = images.to(self.device)
 
@@ -183,27 +184,11 @@ class VAETrainer:
             # KL
             kl = 0.5 * torch.sum(-1 - sigma + mu.pow(2) + sigma.exp())
 
-            # BCE
-            bce = functional.binary_cross_entropy(pred_images, images)
-
             # Reconstruction loss (MSE loss)
             mse = functional.mse_loss(pred_images, images)
 
             # Total loss
-            loss = kl + bce
-
-            # Logs
-            self.log.add_scalar("Batch_loss/KL_loss", kl.item(), self.current_step)
-            self.log.add_scalar("Batch_loss/MSE_loss", mse.item(), self.current_step)
-            self.log.add_scalar("Batch_loss/BCE_loss", bce.item(), self.current_step)
-            self.log.add_scalar("Batch_loss/KL+BCE", loss, self.current_step)
-            if self.lr_scheduler is not None:
-                self.log.add_scalar(
-                    "Learning_rate",
-                    self.optimiser.param_groups[0]["lr"],
-                    self.current_step,
-                )
-            self.log.flush()
+            loss = kl + mse
 
             # Backward
             self.__backward(loss)
