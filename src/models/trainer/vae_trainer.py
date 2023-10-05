@@ -28,6 +28,7 @@ class VAETrainer:
         min_lr: float = 5e-6,
         lr_decay: float = 0.999,
         lr_threshold: float = 0.4,
+        patience_lr: int = 30,
         run_name: str = "vae",
         output_dir: str = "./output/",
     ) -> None:
@@ -66,6 +67,7 @@ class VAETrainer:
             factor=lr_decay,
             threshold=lr_threshold,
             min_lr=min_lr,
+            patience=patience_lr
         )
 
         # If there is back-up
@@ -103,6 +105,7 @@ class VAETrainer:
             f"{os.path.join(self.run_dir, self.run_time)}/model.txt", "w"
         ) as file:
             file.write(model_stats)
+            file.write(f"Input_size: {self.model.input_size}")
 
         # Step count
         self.current_step = 0

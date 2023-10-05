@@ -131,7 +131,7 @@ class VAE_SETTING_v4:
     # Training
     BATCH_SIZE: int = 32
     CHECKPOINT_PATH: str = None
-    NUM_WORKERS: int = 2
+    NUM_WORKERS: int = 8
     NUM_SAMPLES: int = 1
     EPOCHS: int = 5000
     MAX_LR: float = 1e-4
