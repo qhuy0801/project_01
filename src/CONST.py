@@ -138,4 +138,4 @@ class VAE_SETTING_v4:
     MIN_LR: float = 0.
     LR_THRESHOLD: float = 0.2
     PATIENCE_LR: int = 30
-    DECAY_RATE: float = .985
+    DECAY_RATE: float = .98

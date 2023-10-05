@@ -45,8 +45,9 @@ class Multi_headed_VAE_v1(VAE_v4):
         x = self.decoder_input(x)
         x = x.view(
             -1,
-            self.additional_decoder_1.decompressed_dims[0][0],
-            self.additional_decoder_1.decompressed_dims[0][0],
+            self.latent_size[0],
+            self.latent_size[1],
+            self.latent_size[2],
         )
         return self.additional_decoder_1(x)
 

@@ -27,8 +27,7 @@ class VAETrainer:
         max_lr: float = 1e-4,
         min_lr: float = 5e-6,
         lr_decay: float = 0.999,
-        lr_threshold: float = 0.3,
-        patience_lr: int = 30,
+        lr_threshold: float = 0.4,
         run_name: str = "vae",
         output_dir: str = "./output/",
     ) -> None:
@@ -67,7 +66,6 @@ class VAETrainer:
             factor=lr_decay,
             threshold=lr_threshold,
             min_lr=min_lr,
-            patience=patience_lr,
         )
 
         # If there is back-up
@@ -105,7 +103,6 @@ class VAETrainer:
             f"{os.path.join(self.run_dir, self.run_time)}/model.txt", "w"
         ) as file:
             file.write(model_stats)
-            file.write(f"Input_size: {self.model.input_size}")
 
         # Step count
         self.current_step = 0
@@ -113,26 +110,18 @@ class VAETrainer:
         # Best loss for checkpoints
         self.best_mse_loss = 2000.0
 
-    def fit(self, sample_every: int = 50):
-        # Put the model in training mode
+    def fit(self):
         self.model.train()
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
-
-        for epoch in tqdm(
-            range(self.epochs), desc="Total progress", position=0, leave=False
-        ):
+        for epoch in range(self.epochs):
             epoch_kl_loss, epoch_mse_loss = self.__one_epoch(epoch)
             self.__step_epoch(epoch_mse_loss)
 
             # Logs
-            self.log.add_scalar("Epoch_loss/KL+BCE", epoch_kl_loss, epoch)
-            self.log.add_scalar("Epoch_loss/MSE_loss", epoch_mse_loss, epoch)
-            if self.lr_scheduler is not None:
-                self.log.add_scalar(
-                    "Learning_rate",
-                    self.optimiser.param_groups[0]["lr"],
-                    epoch,
-                )
+            self.log.add_scalar("Epoch_loss/KL+BCE", epoch_kl_loss, self.current_step)
+            self.log.add_scalar(
+                "Epoch_loss/MSE_loss", epoch_mse_loss, self.current_step
+            )
             self.log.flush()
 
             # Checkpoint
@@ -152,7 +141,6 @@ class VAETrainer:
                 )
 
                 # Log a reconstructed image
-            if epoch % sample_every == 0:
                 sample, reconstructed_sample = self.reconstruct_sample()
                 self.log.add_images(
                     tag=f"Samples/Random/Epoch:{epoch}",
@@ -163,10 +151,9 @@ class VAETrainer:
                         ),
                         dim=0,
                     ),
-                    global_step=epoch,
+                    global_step=self.current_step,
                     dataformats="NCHW",
                 )
-                self.log.flush()
 
         print("Training completed!")
         return None
@@ -182,7 +169,7 @@ class VAETrainer:
         __epoch_mse_loss = 0.0
 
         # Iterate the dataloader
-        for batch in self.train_data:
+        for _, batch in enumerate(tqdm(self.train_data, desc=f"Epoch {epoch:5d}")):
             images, segment = batch
             images = images.to(self.device)
 
@@ -201,6 +188,19 @@ class VAETrainer:
 
             # Total loss
             loss = kl + bce
+
+            # Logs
+            self.log.add_scalar("Batch_loss/KL_loss", kl.item(), self.current_step)
+            self.log.add_scalar("Batch_loss/MSE_loss", mse.item(), self.current_step)
+            self.log.add_scalar("Batch_loss/BCE_loss", bce.item(), self.current_step)
+            self.log.add_scalar("Batch_loss/KL+BCE", loss, self.current_step)
+            if self.lr_scheduler is not None:
+                self.log.add_scalar(
+                    "Learning_rate",
+                    self.optimiser.param_groups[0]["lr"],
+                    self.current_step,
+                )
+            self.log.flush()
 
             # Backward
             self.__backward(loss)
