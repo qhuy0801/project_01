@@ -67,7 +67,7 @@ class VAETrainer:
             factor=lr_decay,
             threshold=lr_threshold,
             min_lr=min_lr,
-            patience=patience_lr
+            patience=patience_lr,
         )
 
         # If there is back-up
@@ -105,7 +105,7 @@ class VAETrainer:
             f"{os.path.join(self.run_dir, self.run_time)}/model.txt", "w"
         ) as file:
             file.write(model_stats)
-            file.write(f"Input_size: {self.model.input_size}")
+            file.write(f"\nInput_size: {self.model.input_size}")
 
         # Step count
         self.current_step = 0
@@ -122,8 +122,9 @@ class VAETrainer:
 
             # Logs
             self.log.add_scalar("Epoch_loss/KL+MSE", epoch_kl_loss, epoch)
+            self.log.add_scalar("Epoch_loss/MSE_loss", epoch_mse_loss, epoch)
             self.log.add_scalar(
-                "Epoch_loss/MSE_loss", epoch_mse_loss, self.current_step
+                "Learning_rate", self.optimiser.param_groups[0]["lr"], epoch
             )
             self.log.flush()
 
@@ -173,7 +174,14 @@ class VAETrainer:
         __epoch_mse_loss = 0.0
 
         # Iterate the dataloader
-        for _, batch in enumerate(tqdm(self.train_data, desc=f"Epoch {epoch:5d}/{self.epochs}", position=0, leave=False)):
+        for _, batch in enumerate(
+            tqdm(
+                self.train_data,
+                desc=f"Epoch {epoch:5d}/{self.epochs}",
+                position=0,
+                leave=False,
+            )
+        ):
             images, segment = batch
             images = images.to(self.device)
 

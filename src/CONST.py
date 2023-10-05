@@ -129,7 +129,7 @@ class VAE_SETTING_v4:
     INPUT_SIZE: int = 256
 
     # Training
-    BATCH_SIZE: int = 64
+    BATCH_SIZE: int = 32
     CHECKPOINT_PATH: str = None
     NUM_WORKERS: int = 8
     NUM_SAMPLES: int = 1
@@ -137,5 +137,5 @@ class VAE_SETTING_v4:
     MAX_LR: float = 5e-4
     MIN_LR: float = 1e-7
     LR_THRESHOLD: float = 0.2
-    PATIENCE_LR: int = 30
+    PATIENCE_LR: int = 15
     DECAY_RATE: float = .98
