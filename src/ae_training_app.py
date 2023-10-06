@@ -29,9 +29,12 @@ if __name__ == '__main__':
         num_samples=CONST.AE_SETTING_v1.NUM_SAMPLES,
         epochs=CONST.AE_SETTING_v1.EPOCHS,
         max_lr=CONST.AE_SETTING_v1.MAX_LR,
-        output_dir=CONST.OUTPUT_DIR,
+        output_dir=CONST.AE_SETTING_v1.OUTPUT_DIR,
         run_name=CONST.AE_SETTING_v1.RUN_NAME,
         lr_decay=CONST.AE_SETTING_v1.LR_DECAY,
+        min_lr=CONST.AE_SETTING_v1.MIN_LR,
+        lr_threshold=CONST.AE_SETTING_v1.LR_THRESHOLD,
+        lr_reducing_patience=CONST.AE_SETTING_v1.PATIENCE_LR,
     )
 
     model = None

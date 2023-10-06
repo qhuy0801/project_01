@@ -129,7 +129,7 @@ class Decoder(nn.Module):
                         padding=1,
                     ),
                     nn.BatchNorm2d(out_c),
-                    nn.SiLU(),
+                    nn.LeakyReLU(),
                 )
             )
         self.decompressor = nn.Sequential(*decompress_layer)
@@ -147,7 +147,7 @@ class Decoder(nn.Module):
                         output_padding=1,
                     ),
                     nn.BatchNorm2d(out_c),
-                    nn.SiLU(),
+                    nn.LeakyReLU(),
                 )
             )
         self.up_sampler = nn.Sequential(*up_sampling_layers)
@@ -164,7 +164,7 @@ class Decoder(nn.Module):
                         padding=1,
                     ),
                     nn.BatchNorm2d(out_c),
-                    nn.SiLU(),
+                    nn.LeakyReLU(),
                 )
             )
         output_layers.append(
@@ -176,7 +176,6 @@ class Decoder(nn.Module):
                     stride=1,
                     padding=1,
                 ),
-                nn.BatchNorm2d(self.output_dim[-1][-1]),
                 nn.Tanh() if output_activation == "tanh" else nn.Sigmoid(),
             )
         )
@@ -248,7 +247,7 @@ class Encoder(nn.Module):
                         padding=1,
                     ),
                     nn.BatchNorm2d(out_c),
-                    nn.SiLU(),
+                    nn.LeakyReLU(),
                 )
             )
         self.feature_extractor = nn.Sequential(*feature_extract_layers)
@@ -266,7 +265,7 @@ class Encoder(nn.Module):
                         padding=1,
                     ),
                     nn.BatchNorm2d(out_c),
-                    nn.SiLU(),
+                    nn.LeakyReLU(),
                 )
             )
         self.down_sampler = nn.Sequential(*down_sampling_layers)
@@ -284,7 +283,7 @@ class Encoder(nn.Module):
                         padding=1,
                     ),
                     nn.BatchNorm2d(out_c),
-                    nn.SiLU(),
+                    nn.LeakyReLU(),
                 )
             )
         self.compressor = nn.Sequential(*compressed_layers)
