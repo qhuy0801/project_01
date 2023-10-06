@@ -39,7 +39,9 @@ class VAE_v4(VAE):
 class Multi_headed_VAE_v1(VAE_v4):
     def __init__(self, input_size: int, fc_dims: int = 128, *args, **kwargs) -> None:
         super().__init__(input_size, fc_dims, *args, **kwargs)
-        self.additional_decoder_1 = Decoder(decompressed_dims=[32, 512])
+        self.additional_decoder_1 = Decoder(
+            decompressed_dims=[32, 512], output_activation="tanh"
+        )
 
     def additional_decode(self, x):
         x = self.decoder_input(x)
