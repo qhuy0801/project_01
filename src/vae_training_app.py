@@ -32,7 +32,7 @@ if __name__ == '__main__':
         min_lr=CONST.VAE_SETTING_v4.MIN_LR,
         lr_threshold=CONST.VAE_SETTING_v4.LR_THRESHOLD,
         patience_lr=CONST.VAE_SETTING_v4.PATIENCE_LR,
-        output_dir=CONST.OUTPUT_DIR,
+        output_dir=CONST.VAE_SETTING_v4.OUTPUT_DIR,
         run_name=CONST.VAE_SETTING_v4.RUN_NAME,
     )
 

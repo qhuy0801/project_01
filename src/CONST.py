@@ -124,6 +124,7 @@ class VAE_SETTING_v4:
     """
     # Identifier
     RUN_NAME = "vae_v4"
+    OUTPUT_DIR = "../../drive/MyDrive/data/output/"
 
     # Initialisation
     INPUT_SIZE: int = 256
