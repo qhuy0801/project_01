@@ -176,6 +176,7 @@ class Decoder(nn.Module):
                     stride=1,
                     padding=1,
                 ),
+                nn.BatchNorm2d(self.output_dim[-1][-1]),
                 nn.Tanh() if output_activation == "tanh" else nn.Sigmoid(),
             )
         )

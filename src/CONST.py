@@ -107,10 +107,10 @@ class AE_SETTING_v1:
     OUTPUT_DIR = "../../drive/MyDrive/data/output/"
 
     # Initialisation
-    INPUT_SIZE: int = 256
+    INPUT_SIZE: int = 128
 
     # Training
-    BATCH_SIZE: int = 32
+    BATCH_SIZE: int = 64
     CHECKPOINT_PATH: str = None
     NUM_WORKERS: int = 8
     NUM_SAMPLES: int = 1
@@ -123,7 +123,6 @@ class AE_SETTING_v1:
     DECAY_RATE: float = .98
 
 
-
 class VAE_SETTING_v4:
     """
     Setting for VAE_v4
@@ -133,10 +132,10 @@ class VAE_SETTING_v4:
     OUTPUT_DIR = "../../drive/MyDrive/data/output/"
 
     # Initialisation
-    INPUT_SIZE: int = 256
+    INPUT_SIZE: int = 128
 
     # Training
-    BATCH_SIZE: int = 32
+    BATCH_SIZE: int = 64
     CHECKPOINT_PATH: str = None
     NUM_WORKERS: int = 8
     NUM_SAMPLES: int = 1

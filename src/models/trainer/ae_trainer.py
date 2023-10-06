@@ -118,7 +118,7 @@ class AETrainer_v1:
     def fit(self, sample_after: int = 100):
         self.model.train()
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
-        for epoch in tqdm(range(self.epochs), desc=f"Total progress", position=1):
+        for epoch in range(self.epochs):
             epoch_mse_loss = self.__one_epoch(epoch)
             self.__step_epoch(epoch_mse_loss)
 
@@ -179,7 +179,7 @@ class AETrainer_v1:
 
         # Iterate the dataloader
         for _, batch in enumerate(
-            tqdm(self.train_data, desc=f"Epoch {epoch:5d}", position=0, leave=False)
+            tqdm(self.train_data, desc=f"Epoch {epoch:5d}/{self.epochs}", position=0, leave=False)
         ):
             images, _ = batch
             images = images.to(self.device)
