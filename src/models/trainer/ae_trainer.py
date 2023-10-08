@@ -149,14 +149,14 @@ class AETrainer_v1:
                 )
 
             # Log a reconstructed image
-            if epoch % sample_after == 0:
+            # if epoch % sample_after == 0:
                 sample, reconstructed_sample = self.reconstruct_sample()
                 self.log.add_images(
                     tag=f"Samples/Random/Epoch:{epoch}",
                     img_tensor=torch.cat(
                         (
                             de_normalise(sample, self.device),
-                            de_normalise(reconstructed_sample, self.device),
+                            reconstructed_sample,
                         ),
                         dim=0,
                     ),
