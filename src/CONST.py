@@ -118,7 +118,7 @@ class AE_SETTING_v1:
     MAX_LR: int = 5e-4
     LR_DECAY: int = 0.98
     MIN_LR: float = 1e-7
-    LR_THRESHOLD: float = 0.2
+    LR_THRESHOLD: float = 0.3
     PATIENCE_LR: int = 15
     DECAY_RATE: float = .98
 
