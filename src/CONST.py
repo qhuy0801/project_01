@@ -129,7 +129,7 @@ class VAE_SETTING_v4:
     """
     # Identifier
     RUN_NAME = "vae_v4"
-    OUTPUT_DIR = "../../drive/MyDrive/data/output/"
+    OUTPUT_DIR = "../resources/output/"
 
     # Initialisation
     INPUT_SIZE: int = 128
@@ -142,6 +142,6 @@ class VAE_SETTING_v4:
     EPOCHS: int = 5000
     MAX_LR: float = 5e-4
     MIN_LR: float = 1e-7
-    LR_THRESHOLD: float = 0.2
+    LR_THRESHOLD: float = 0.3
     PATIENCE_LR: int = 15
     DECAY_RATE: float = .98
