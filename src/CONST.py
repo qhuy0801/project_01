@@ -104,7 +104,7 @@ class AE_SETTING_v1:
     """
     # Identifier
     RUN_NAME = "ae_v1"
-    OUTPUT_DIR = "../../drive/MyDrive/data/output/"
+    OUTPUT_DIR = "../resources/output/"
 
     # Initialisation
     INPUT_SIZE: int = 128
