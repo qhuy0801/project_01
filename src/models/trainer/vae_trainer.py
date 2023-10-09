@@ -156,7 +156,7 @@ class VAETrainer:
                         ),
                         dim=0,
                     ),
-                    global_step=self.current_step,
+                    global_step=epoch,
                     dataformats="NCHW",
                 )
 
@@ -200,9 +200,6 @@ class VAETrainer:
 
             # Backward
             self.__backward(loss)
-
-            # Step count
-            self.current_step += 1
 
             # Store the loss
             __epoch_loss += loss

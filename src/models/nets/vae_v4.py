@@ -1,12 +1,12 @@
 import gc
 
+import torch
 from torch import nn
 
-from models.nets.vae import VAE
 from utils import arr_to_tuples
 
 
-class VAE_v4(VAE):
+class VAE_v4():
     def __init__(self, input_size: int, fc_dims: int = 128, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.input_size = input_size
@@ -25,15 +25,27 @@ class VAE_v4(VAE):
         self.fc_sigma = nn.Linear(in_features=__flatten_size, out_features=fc_dims)
         self.decoder_input = nn.Linear(in_features=fc_dims, out_features=__flatten_size)
 
+    def encode(self, x):
+        x = self.encoder(x)
+        x = torch.flatten(x, start_dim=1)
+        return self.fc_mu(x), self.fc_sigma(x)
+
+    def reparameterise(self, mu, sigma):
+        std = torch.exp(sigma * .5)
+        eps = torch.randn_like(std)
+        return mu + std * eps
+
     def decode(self, x):
         x = self.decoder_input(x)
         x = x.view(
-            -1,
-            self.latent_size[0],
-            self.latent_size[1],
-            self.latent_size[2],
+            -1, self.latent_size[0], self.latent_size[1], self.latent_size[2]
         )
         return self.decoder(x)
+
+    def forward(self, x):
+        mu, sigma = self.encode(x)
+        x = self.reparameterise(mu, sigma)
+        return self.decode(x), mu, sigma
 
 
 class Multi_headed_VAE_v1(VAE_v4):
