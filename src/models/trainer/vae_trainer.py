@@ -121,10 +121,10 @@ class VAETrainer:
             self.__step_epoch(epoch_mse_loss)
 
             # Logs
-            self.log.add_scalar("Epoch_loss/KL+MSE", epoch_kl_loss, epoch)
-            self.log.add_scalar("Epoch_loss/MSE_loss", epoch_mse_loss, epoch)
+            self.log.add_scalar("Epoch/KL+MSE loss", epoch_kl_loss, epoch)
+            self.log.add_scalar("Epoch/MSE_loss", epoch_mse_loss, epoch)
             self.log.add_scalar(
-                "Learning_rate", self.optimiser.param_groups[0]["lr"], epoch
+                "Epoch/Learning_rate", self.optimiser.param_groups[0]["lr"], epoch
             )
             self.log.flush()
 
@@ -144,7 +144,7 @@ class VAETrainer:
                     os.path.join(self.run_dir, self.run_time),
                 )
 
-            if epoch % sample_after == 0:
+            # if epoch % sample_after == 0:
                 # Log a reconstructed image
                 sample, reconstructed_sample = self.reconstruct_sample()
                 self.log.add_images(
@@ -182,7 +182,7 @@ class VAETrainer:
                 leave=False,
             )
         ):
-            images, segment = batch
+            images, _ = batch
             images = images.to(self.device)
 
             # Forwarding
@@ -190,13 +190,13 @@ class VAETrainer:
 
             # Losses
             # KL
-            kl = 0.5 * torch.sum(-1 - sigma + mu.pow(2) + sigma.exp())
+            # kl = 0.5 * torch.sum(-1 - sigma + mu.pow(2) + sigma.exp())
 
             # Reconstruction loss (MSE loss)
             mse = functional.mse_loss(pred_images, images)
 
             # Total loss
-            loss = kl + mse
+            loss = mse
 
             # Backward
             self.__backward(loss)

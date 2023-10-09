@@ -109,9 +109,6 @@ class AETrainer_v1:
             file.write(model_stats)
             file.close()
 
-        # Step count
-        self.current_step = 0
-
         # Best loss for checkpoints
         self.best_mse_loss = 2000.0
 
@@ -160,7 +157,7 @@ class AETrainer_v1:
                         ),
                         dim=0,
                     ),
-                    global_step=self.current_step,
+                    global_step=epoch,
                     dataformats="NCHW",
                 )
 
@@ -192,9 +189,6 @@ class AETrainer_v1:
 
             # Backward
             self.__backward(mse)
-
-            # Step count
-            self.current_step += 1
 
             # Store the loss
             __epoch_mse_loss += mse

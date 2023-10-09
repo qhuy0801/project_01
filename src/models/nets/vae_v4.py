@@ -6,7 +6,7 @@ from torch import nn
 from utils import arr_to_tuples
 
 
-class VAE_v4():
+class VAE_v4(nn.Module):
     def __init__(self, input_size: int, fc_dims: int = 128, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.input_size = input_size
