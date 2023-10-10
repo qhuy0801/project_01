@@ -111,7 +111,7 @@ class Multi_headed_AE(Autoencoder_v1):
 
     def additional_forward(self, x):
         x = self.encode(x)
-        x = x.detach()
+        x = x.detach().clone()
         x = self.additional_decode(x)
         return x
 
