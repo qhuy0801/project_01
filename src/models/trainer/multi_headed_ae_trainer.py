@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import itertools
 import os
 
@@ -65,10 +65,10 @@ class MultiheadAETrainer:
 
         # Dependencies
         # Main AE
-        main_vae_params = itertools.chain(
-            self.model.encoder,
-            self.model.decoder,
-        )
+        main_vae_params = []
+        main_vae_params.extend(self.model.encoder.parameters())
+        main_vae_params.extend(self.model.decoder.parameters())
+
         self.optimiser = bnb.optim.AdamW(main_vae_params, lr=max_lr)
         self.lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer=self.optimiser,
@@ -81,7 +81,7 @@ class MultiheadAETrainer:
 
         # Additional decoder
         self.optimiser_additional = bnb.optim.AdamW(
-            self.model.additional_decoder, lr=max_lr_additional
+            self.model.additional_decoder.parameters(), lr=max_lr_additional
         )
         self.lr_scheduler_additional = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer=self.optimiser_additional,
