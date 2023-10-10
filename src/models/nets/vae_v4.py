@@ -90,9 +90,34 @@ class Autoencoder_v1(nn.Module):
         return self.decoder(x)
 
     def forward(self, x):
-        x = self.encoder(x)
-        x = self.decoder(x)
+        x = self.encode(x)
+        x = self.decode(x)
         return x
+
+
+class Multi_headed_AE(Autoencoder_v1):
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.additional_decoder = Decoder(decompressed_dims=[32, 512], output_activation="tanh")
+
+    def additional_decode(self, x):
+        return self.additional_decoder(x)
+
+    def original_forward(self, x):
+        x = self.encode(x)
+        x = self.decode(x)
+        return x
+
+    def additional_forward(self, x):
+        x = self.encode(x)
+        x = self.additional_decode(x)
+        return x
+
+    def forward(self, x):
+        x = self.encode(x)
+        x = self.additional_decode(x) + self.decode(x)
+        return torch.clamp(x, min=0, max=1)
 
 
 class Decoder(nn.Module):

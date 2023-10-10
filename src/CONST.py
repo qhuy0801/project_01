@@ -145,3 +145,33 @@ class VAE_SETTING_v4:
     LR_THRESHOLD: float = 0.3
     PATIENCE_LR: int = 15
     DECAY_RATE: float = .98
+
+class MULTI_HEADED_AE_SETTING:
+    """
+    Setting for Multi headed AE
+    """
+    # Identifier
+    RUN_NAME = "multi_headed_ae"
+    OUTPUT_DIR = "../resources/output/"
+
+    # Initialisation
+    INPUT_SIZE: int = 128
+
+    # Training
+    BATCH_SIZE: int = 64
+    CHECKPOINT_PATH: str = None
+    NUM_WORKERS: int = 8
+    NUM_SAMPLES: int = 1
+    EPOCHS: int = 5000
+    MAX_LR: float = 5e-4
+    MIN_LR: float = 1e-7
+    LR_THRESHOLD: float = 0.3
+    PATIENCE_LR: int = 15
+    DECAY_RATE: float = .98
+
+    # Additional decoder
+    ADDITIONAL_MAX_LR: float = 1e-4
+    ADDITIONAL_MIN_LR: float = 5e-8
+    ADDITIONAL_DECAY_RATE: float = 0.95
+    ADDITIONAL_LR_THRESHOLD: float = 0.1
+    ADDITIONAL_LR_PATIENCE: int = 30

@@ -171,7 +171,6 @@ class AETrainer_v1:
         :return: combination loss (KL + BCE), reconstruction loss (MSE)
         """
         # Store the epoch loss
-        __epoch_kl_loss = 0.0
         __epoch_mse_loss = 0.0
 
         # Iterate the dataloader
