@@ -170,7 +170,7 @@ class MultiheadAETrainer:
                     ),
                     dim=0,
                 )
-                self.log.add_scalar(
+                self.log.add_scalars(
                     "Checkpoint/MSE_loss",
                     {
                         "Original": functional.mse_loss(
