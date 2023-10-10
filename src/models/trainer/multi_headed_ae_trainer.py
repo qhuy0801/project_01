@@ -115,7 +115,7 @@ class MultiheadAETrainer:
             f"{os.path.join(self.run_dir, self.run_time)}/model.txt", "w"
         ) as file:
             file.write(model_stats)
-            file.write(f"\nInput_size: {self.model.input_size}")
+            file.write(f"\nInput_size: {self.train_dataset.target_tensor_size}")
 
         # Best loss for checkpoints
         self.best_mse_loss = 2000.0
