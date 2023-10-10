@@ -196,9 +196,7 @@ class MultiheadAETrainer:
             target_additional = self.__get_segment_residual(
                 images, pred_original, segments, 1
             )
-            with torch.no_grad:
-                additional_input = self.model.encode(images)
-            pred_additional = self.model.additional_decode(additional_input)
+            pred_additional = self.model.additional_forward(images)
             mse_additional = functional.mse_loss(pred_additional, target_additional)
             self.optimiser_additional.zero_grad()
             mse_additional.backward()
@@ -213,6 +211,7 @@ class MultiheadAETrainer:
         self, images, pred_images, segmentations, selected_class
     ):
         residual = images - pred_images
+        residual = residual.detach().clone()
         segmentations = torch.tensor(segmentations, dtype=torch.float32).to(self.device)
         segmentations = (segmentations == selected_class).float().unsqueeze(1)
         return residual * segmentations
