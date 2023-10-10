@@ -11,7 +11,7 @@ from torchinfo import summary
 from tqdm import tqdm
 
 from models.nets.vae_v4 import Multi_headed_AE
-from utils import de_normalise
+from utils import de_normalise, save_checkpoint
 
 
 class MultiheadAETrainer:
@@ -128,12 +128,12 @@ class MultiheadAETrainer:
             self.__step_epoch(epoch_mse_loss, epoch_additional_mse_loss)
 
             # Logs
-            self.log.add_scalar("Epoch/MSE_org_loss", epoch_mse_loss, epoch)
+            self.log.add_scalar("Epoch/MSE_original", epoch_mse_loss, epoch)
             self.log.add_scalar(
                 "Epoch/MSE_additional", epoch_additional_mse_loss, epoch
             )
             self.log.add_scalar(
-                "Epoch/LR_org",
+                "Epoch/LR_original",
                 self.optimiser.param_groups[0]["lr"],
                 epoch,
             )
@@ -144,6 +144,16 @@ class MultiheadAETrainer:
             )
             self.log.flush()
 
+            # Save checkpoint
+            if epoch_mse_loss < self.best_mse_loss:
+                self.best_mse_loss = epoch_mse_loss
+                save_checkpoint(
+                    {"model": self.model.state_dict()},
+                    self.run_name,
+                    os.path.join(self.run_dir, self.run_time),
+                )
+
+            # Log samples
             if epoch % sample_after == 0:
                 (
                     images,
@@ -159,6 +169,18 @@ class MultiheadAETrainer:
                         de_normalise(reconstructed_img, self.device),
                     ),
                     dim=0,
+                )
+                self.log.add_scalar(
+                    "Checkpoint/MSE_loss",
+                    {
+                        "Original": functional.mse_loss(
+                            images, reconstructed_img_org
+                        ).item(),
+                        "Combined": functional.mse_loss(
+                            images, reconstructed_img
+                        ).item(),
+                    },
+                    epoch,
                 )
                 self.log.add_images(
                     tag=f"Samples/Random/Epoch:{epoch}",
@@ -185,19 +207,25 @@ class MultiheadAETrainer:
             images = images.to(self.device)
 
             # Original AE branch
+            # Forward
             pred_original = self.model.original_forward(images)
+            # Loss
             mse_original = functional.mse_loss(pred_original, images)
+            # Backward
             self.optimiser.zero_grad()
             mse_original.backward()
             self.optimiser.step()
 
             # Additional decoder
-            # Target
+            # Target (residual between target image and predicted image - original branch)
             target_additional = self.__get_segment_residual(
                 images, pred_original, segments, 1
             )
+            # Forward
             pred_additional = self.model.additional_forward(images)
+            # Loss
             mse_additional = functional.mse_loss(pred_additional, target_additional)
+            # Backward
             self.optimiser_additional.zero_grad()
             mse_additional.backward()
             self.optimiser_additional.step()
