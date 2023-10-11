@@ -157,6 +157,9 @@ class MULTI_HEADED_AE_SETTING:
     # Initialisation
     INPUT_SIZE: int = 128
 
+    # Simple AE checkpoint
+    AE_CHECKPOINT = "../resources/checkpoint/ae_v1_0148.pt"
+
     # Training
     BATCH_SIZE: int = 64
     CHECKPOINT_PATH: str = None

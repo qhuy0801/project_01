@@ -1,3 +1,4 @@
+import gc
 from datetime import datetime
 import itertools
 import os
@@ -11,7 +12,7 @@ from torchinfo import summary
 from tqdm import tqdm
 
 from models.nets.vae_v4 import Multi_headed_AE
-from utils import de_normalise, save_checkpoint
+from utils import de_normalise, save_checkpoint, load_checkpoint
 
 
 class MultiheadAETrainer:
@@ -33,6 +34,7 @@ class MultiheadAETrainer:
         lr_decay_additional: float = 0.999,
         lr_threshold_additional: float = 0.2,
         patience_lr_additional: int = 30,
+        simple_ae_checkpoint: str = None,
         run_name: str = "multi_headed_ae",
         output_dir: str = "./output/",
     ) -> None:
@@ -68,7 +70,6 @@ class MultiheadAETrainer:
         main_vae_params = []
         main_vae_params.extend(self.model.encoder.parameters())
         main_vae_params.extend(self.model.decoder.parameters())
-
         self.optimiser = bnb.optim.AdamW(main_vae_params, lr=max_lr)
         self.lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer=self.optimiser,
@@ -91,6 +92,19 @@ class MultiheadAETrainer:
             min_lr=min_lr_additional,
             patience=patience_lr_additional,
         )
+
+        # In the case that there is a simple AE checkpoint provided (1 encoder - 1 decoder)
+        # We will load the weights the then only train the additional decoder
+        if simple_ae_checkpoint is not None:
+            checkpoint = load_checkpoint(simple_ae_checkpoint, str(self.device))
+            encoder_weights = {k: v for k, v in checkpoint['model'].items() if 'encoder' in k}
+            decoder_weights = {k: v for k, v in checkpoint['model'].items() if 'decoder' in k}
+            self.model.encoder.load_state_dict(encoder_weights)
+            self.model.decoder.load_state_dict(decoder_weights)
+
+            # Then we will only need the additional optimiser and lr scheduler
+            self.optimiser = None
+            self.lr_scheduler = None
 
         # Logger
         self.log = SummaryWriter(
@@ -120,6 +134,9 @@ class MultiheadAETrainer:
         # Best loss for checkpoints
         self.best_mse_loss = 2000.0
 
+        # Clear
+        gc.collect()
+
     def fit(self, sample_after: int = 100):
         self.model.train()
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
@@ -128,14 +145,15 @@ class MultiheadAETrainer:
             self.__step_epoch(epoch_mse_loss, epoch_additional_mse_loss)
 
             # Logs
-            self.log.add_scalar("Epoch/MSE_original", epoch_mse_loss, epoch)
-            self.log.add_scalar(
-                "Epoch/MSE_additional", epoch_additional_mse_loss, epoch
-            )
-            self.log.add_scalar(
+            if self.optimiser is not None:
+                self.log.add_scalar("Epoch/MSE_original", epoch_mse_loss, epoch)
+                self.log.add_scalar(
                 "Epoch/LR_original",
                 self.optimiser.param_groups[0]["lr"],
                 epoch,
+                )
+            self.log.add_scalar(
+                "Epoch/MSE_additional", epoch_additional_mse_loss, epoch
             )
             self.log.add_scalar(
                 "Epoch/LR_additional",
@@ -145,6 +163,8 @@ class MultiheadAETrainer:
             self.log.flush()
 
             # Save checkpoint
+            if self.optimiser is None:
+                epoch_mse_loss = epoch_additional_mse_loss
             if epoch_mse_loss < self.best_mse_loss:
                 self.best_mse_loss = epoch_mse_loss
                 save_checkpoint(
@@ -209,12 +229,14 @@ class MultiheadAETrainer:
             # Original AE branch
             # Forward
             pred_original = self.model.original_forward(images)
-            # Loss
-            mse_original = functional.mse_loss(pred_original, images)
-            # Backward
-            self.optimiser.zero_grad()
-            mse_original.backward()
-            self.optimiser.step()
+            # If the optimiser of basic branch is None -> retrain additional encoder only:
+            if self.optimiser is not None:
+                # Loss
+                mse_original = functional.mse_loss(pred_original, images)
+                # Backward
+                self.optimiser.zero_grad()
+                mse_original.backward()
+                self.optimiser.step()
 
             # Additional decoder
             # Target (residual between target image and predicted image - original branch)
@@ -231,9 +253,11 @@ class MultiheadAETrainer:
             self.optimiser_additional.step()
 
             # Store the loss
-            __epoch_mse_loss += mse_original
-            __epoch_additional_mse_loss += mse_additional
-        return __epoch_mse_loss.mean().item(), __epoch_additional_mse_loss.mean().item()
+            if self.optimiser is not None:
+                __epoch_mse_loss += mse_original
+                __epoch_additional_mse_loss += mse_additional
+                return __epoch_mse_loss.mean().item(), __epoch_additional_mse_loss.mean().item()
+            return None, __epoch_additional_mse_loss.mean().item()
 
     def __get_segment_residual(
         self, images, pred_images, segmentations, selected_class
@@ -245,8 +269,10 @@ class MultiheadAETrainer:
         return residual * segmentations
 
     def __step_epoch(self, epoch_loss, epoch_additional_loss):
-        self.lr_scheduler.step(epoch_loss)
-        self.lr_scheduler_additional.step(epoch_additional_loss)
+        if epoch_loss is not None:
+            self.lr_scheduler.step(epoch_loss)
+        if epoch_additional_loss is not None:
+            self.lr_scheduler_additional.step(epoch_additional_loss)
 
     @torch.no_grad()
     def __reconstruct(self):

@@ -32,7 +32,8 @@ if __name__ == '__main__':
         lr_threshold_additional=CONST.MULTI_HEADED_AE_SETTING.ADDITIONAL_LR_THRESHOLD,
         patience_lr_additional=CONST.MULTI_HEADED_AE_SETTING.ADDITIONAL_LR_PATIENCE,
         run_name=CONST.MULTI_HEADED_AE_SETTING.RUN_NAME,
-        output_dir=CONST.MULTI_HEADED_AE_SETTING.OUTPUT_DIR
+        output_dir=CONST.MULTI_HEADED_AE_SETTING.OUTPUT_DIR,
+        simple_ae_checkpoint=CONST.MULTI_HEADED_AE_SETTING.AE_CHECKPOINT,
     )
 
     model = None
