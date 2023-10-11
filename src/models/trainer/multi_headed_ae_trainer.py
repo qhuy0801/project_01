@@ -99,8 +99,8 @@ class MultiheadAETrainer:
             checkpoint = load_checkpoint(simple_ae_checkpoint, str(self.device))
             encoder_weights = {k: v for k, v in checkpoint['model'].items() if 'encoder' in k}
             decoder_weights = {k: v for k, v in checkpoint['model'].items() if 'decoder' in k}
-            self.model.encoder.load_state_dict(encoder_weights)
-            self.model.decoder.load_state_dict(decoder_weights)
+            self.model.encoder.load_state_dict(encoder_weights, strict=False)
+            self.model.decoder.load_state_dict(decoder_weights, strict=False)
 
             # Then we will only need the additional optimiser and lr scheduler
             self.optimiser = None
