@@ -97,10 +97,7 @@ class MultiheadAETrainer:
         # We will load the weights the then only train the additional decoder
         if simple_ae_checkpoint is not None:
             checkpoint = load_checkpoint(simple_ae_checkpoint, str(self.device))
-            encoder_weights = {k: v for k, v in checkpoint['model'].items() if 'encoder' in k}
-            decoder_weights = {k: v for k, v in checkpoint['model'].items() if 'decoder' in k}
-            self.model.encoder.load_state_dict(encoder_weights, strict=False)
-            self.model.decoder.load_state_dict(decoder_weights, strict=False)
+            self.model.load_state_dict(checkpoint["model"].state_dict(), strict=False)
 
             # Then we will only need the additional optimiser and lr scheduler
             self.optimiser = None
@@ -257,6 +254,7 @@ class MultiheadAETrainer:
                 __epoch_mse_loss += mse_original
                 __epoch_additional_mse_loss += mse_additional
                 return __epoch_mse_loss.mean().item(), __epoch_additional_mse_loss.mean().item()
+            __epoch_additional_mse_loss += mse_additional
             return None, __epoch_additional_mse_loss.mean().item()
 
     def __get_segment_residual(
