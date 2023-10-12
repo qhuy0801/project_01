@@ -11,7 +11,7 @@ from torch.utils.tensorboard import SummaryWriter
 from torchinfo import summary
 from tqdm import tqdm
 
-from models.nets.vae_v4 import Multi_headed_AE
+from models.nets.vae_v4 import Multi_headed_AE, Autoencoder_v1
 from utils import de_normalise, save_checkpoint, load_checkpoint
 
 
@@ -97,7 +97,7 @@ class MultiheadAETrainer:
         # We will load the weights the then only train the additional decoder
         if simple_ae_checkpoint is not None:
             checkpoint = load_checkpoint(simple_ae_checkpoint, str(self.device))
-            self.model.load_state_dict(checkpoint["model"].state_dict(), strict=False)
+            self.model.load_state_dict(checkpoint["model"], strict=False)
 
             # Then we will only need the additional optimiser and lr scheduler
             self.optimiser = None

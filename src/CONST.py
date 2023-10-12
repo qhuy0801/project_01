@@ -162,7 +162,6 @@ class MULTI_HEADED_AE_SETTING:
 
     # Training
     BATCH_SIZE: int = 64
-    CHECKPOINT_PATH: str = None
     NUM_WORKERS: int = 8
     NUM_SAMPLES: int = 1
     EPOCHS: int = 5000
@@ -173,8 +172,8 @@ class MULTI_HEADED_AE_SETTING:
     DECAY_RATE: float = .98
 
     # Additional decoder
-    ADDITIONAL_MAX_LR: float = 1e-4
-    ADDITIONAL_MIN_LR: float = 5e-8
+    ADDITIONAL_MAX_LR: float = 1e-5 # previous 1e-4
+    ADDITIONAL_MIN_LR: float = 1e-8 # previous 5e-8
     ADDITIONAL_DECAY_RATE: float = 0.95
     ADDITIONAL_LR_THRESHOLD: float = 0.1
     ADDITIONAL_LR_PATIENCE: int = 15
