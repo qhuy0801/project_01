@@ -27,4 +27,6 @@ from .data_utils import (
     num_duplicated_values,
     remove_image_extension,
     binary_rounding,
+    split_and_flatten,
+    split_string,
 )

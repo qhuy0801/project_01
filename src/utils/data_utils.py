@@ -1,6 +1,7 @@
 import math
 import warnings
 
+import re
 import cv2
 import pandas as pd
 from pandas import DataFrame
@@ -103,3 +104,22 @@ def binary_rounding(n):
     """
     exponent = math.ceil(math.log2(n))
     return 2 ** exponent
+
+
+def split_and_flatten(x):
+    """
+    Split a set of string
+    {'apple, grape', 'banana; orange'} > {'apple', 'grape', 'banana', 'orange'}
+    :param x: tuple
+    :return:
+    """
+    return {item.strip() for s in x for item in re.split(r'[;,]', s)}
+
+
+def split_string(x):
+    """
+    Split a string
+    :param x:
+    :return:
+    """
+    return [item.strip() for item in re.split(r'[;,]', x)]

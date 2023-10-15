@@ -5,6 +5,7 @@ import warnings
 import cv2
 import numpy as np
 import pandas as pd
+import torch
 from torch.utils.data import Dataset
 from torch.utils.data.dataset import T_co
 
@@ -17,20 +18,18 @@ class WoundDataset(Dataset):
         self,
         image_dir: str = CONST.PROCESSED_IMAGES_DIR,
         segment_dir: str = CONST.PROCESSED_SEGMENT_DIR,
-        annotation_path: str = CONST.ANNOTATION_PROCESSED_PATH,
+        embedding_dir: str = None,
         target_tensor_size: int = 512,
         additional_target_tensor_size: int = None,
     ) -> None:
         super().__init__()
         self.image_dir = image_dir
         self.segment_dir = segment_dir
-        self.annotation_path = annotation_path
         self.target_tensor_size = target_tensor_size
         self.additional_target_tensor_size = additional_target_tensor_size
+        self.embedding_dir = embedding_dir
 
         self.data = []
-
-        self.annotation = pd.read_csv(self.annotation_path)
 
         self.data = [
             *self.data,
@@ -50,6 +49,20 @@ class WoundDataset(Dataset):
         file_name = os.path.splitext(os.path.basename(file_path))[0]
         image = cv2.cvtColor(cv2.imread(file_path), cv2.COLOR_BGR2RGB)
         segment_path = glob.glob(f"{self.segment_dir}{file_name}*")[0]
+
+        if self.embedding_dir is not None:
+            __embeddings_path = glob.glob(f"{self.embedding_dir}{file_name}*")[0]
+            return (
+                forward_transform(
+                    image=image, target_size=self.target_tensor_size, to_tensor=True
+                ),
+                cv2.resize(
+                    np.load(segment_path),
+                    (self.target_tensor_size, self.target_tensor_size),
+                    interpolation=cv2.INTER_NEAREST,
+                ),
+                torch.load(__embeddings_path),
+            )
         if self.additional_target_tensor_size is not None:
             return (
                 forward_transform(

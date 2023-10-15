@@ -4,6 +4,7 @@ ANNOTATION_PROCESSED_PATH = "../resources/processed/annotations/wound_details.cs
 UNPROCESSED_IMAGES_DIR = "../data/images/"
 PROCESSED_IMAGES_DIR = "../resources/processed/roi/"
 PROCESSED_SEGMENT_DIR = "../resources/processed/segment/"
+PROCESSED_EMBEDDING_DIR = "../resources/processed/embeddings/"
 
 # Annotations
 FILE_NAME = "ImageDetail.ImageFilename"

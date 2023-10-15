@@ -81,11 +81,11 @@ class Embedding_v1(Embedding):
         """
         embeddings = []
         for semantic in semantics:
-            embedding = self.__single_semantic_embedding(semantic)
+            embedding = self.single_semantic_embedding(semantic)
             embeddings.append(embedding)
         return torch.cat(embeddings, dim=0)
 
-    def __single_semantic_embedding(self, semantic: List[List[str]]):
+    def single_semantic_embedding(self, semantic: List[List[str]]):
         """
         Get the requested semantic and returned embeddings based on it
         :param semantic:
