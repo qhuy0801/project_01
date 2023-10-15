@@ -77,7 +77,7 @@ class UNet(nn.Module):
         return self.out_conv(x)
 
 
-class UNet_Light(nn.Module):
+class UNet_v2(nn.Module):
     """
     A lighter version of U-Net with fewer layers
     """
@@ -96,17 +96,49 @@ class UNet_Light(nn.Module):
         self.out_channels = out_channels
         self.embedded_dim = embedded_dim
 
-        self.in_conv = DoubleConvolution(self.in_channels, 64)
-        self.down_sampling_1 = DownBlock(64, 128)
-        self.self_attention_1 = SelfAttention(128)
+        self.in_conv = DoubleConvolution(in_channels=self.in_channels, out_channels=64)
 
-        self.mid_conv = DoubleConvolution(128, 128)
-        self.mid_conv = DoubleConvolution(128, 128)
+        self.down_1 = DownBlock(
+            in_channels=64, out_channels=128, embedded_dim=self.embedded_dim
+        )
+        self.sa_1 = SelfAttention(embedded_dim=128)
+        self.down_2 = DownBlock(
+            in_channels=128, out_channels=256, embedded_dim=self.embedded_dim
+        )
+        self.sa_2 = SelfAttention(embedded_dim=256)
+        self.down_3 = DownBlock(
+            in_channels=256, out_channels=512, embedded_dim=self.embedded_dim
+        )
+        self.sa_3 = SelfAttention(embedded_dim=512)
+        self.down_4 = DownBlock(
+            in_channels=512, out_channels=512, embedded_dim=self.embedded_dim
+        )
+        self.sa_4 = SelfAttention(embedded_dim=512)
 
-        self.up_sampling_1 = UpBlock(128, 64)
-        self.self_attention_1 = SelfAttention(64)
+        self.mid_conv0 = DoubleConvolution(in_channels=512, out_channels=1024)
+        self.mid_conv1 = DoubleConvolution(in_channels=1024, out_channels=1024)
+        self.mid_conv2 = DoubleConvolution(in_channels=1024, out_channels=512)
 
-        self.out_conv = nn.Conv2d(64, self.out_channels, kernel_size=1)
+        self.up_3 = UpBlock(
+            in_channels=1024, out_channels=256, embedded_dim=self.embedded_dim
+        )
+        self.sa_up_3 = SelfAttention(embedded_dim=256)
+        self.up_2 = UpBlock(
+            in_channels=512, out_channels=128, embedded_dim=self.embedded_dim
+        )
+        self.sa_up_2 = SelfAttention(embedded_dim=128)
+        self.up_1 = UpBlock(
+            in_channels=256, out_channels=64, embedded_dim=self.embedded_dim
+        )
+        self.sa_up_1 = SelfAttention(embedded_dim=64)
+        self.up_0 = UpBlock(
+            in_channels=128, out_channels=64, embedded_dim=self.embedded_dim
+        )
+        self.sa_up_0 = SelfAttention(embedded_dim=64)
+
+        self.out_conv = nn.Conv2d(
+            in_channels=64, out_channels=self.out_channels, kernel_size=1
+        )
 
     def forward(self, x, embeddings):
         """
@@ -115,24 +147,32 @@ class UNet_Light(nn.Module):
         :param embeddings:
         :return:
         """
-        _x1 = self.in_conv(x)
-        _x2 = self.down_sampling_1(_x1, embeddings)
-        _x2 = self.self_attention_1(_x2)
-        _x3 = self.down_sampling_2(_x2, embeddings)
-        _x3 = self.self_attention_2(_x3)
-        _x4 = self.down_sampling_3(_x3, embeddings)
-        _x4 = self.self_attention_3(_x4)
+        x0 = self.in_conv(x)
 
-        _x4 = self.mid_conv(_x4)
-        _x4 = self.mid_conv(_x4)
+        x1 = self.down_1(x0, embeddings)
+        x1 = self.sa_1(x1)
+        x2 = self.down_2(x1, embeddings)
+        x2 = self.sa_2(x2)
+        x3 = self.down_3(x2, embeddings)
+        x3 = self.sa_3(x3)
+        x4 = self.down_4(x3, embeddings)
+        x4 = self.sa_4(x4)
 
-        x = self.up_sampling_1(_x4, _x3, embeddings)
-        x = self.self_attention_1(x)
-        x = self.up_sampling_2(x, _x2, embeddings)
-        x = self.self_attention_5(x)
-        x = self.up_sampling_3(x, _x1, embeddings)
-        x = self.self_attention_6(x)
-        return self.out_conv(x)
+        x4 = self.mid_conv0(x4)
+        x4 = self.mid_conv1(x4)
+        x4 = self.mid_conv2(x4)
+
+        x = self.up_3(x4, x3, embeddings)
+        x = self.sa_up_3(x)
+        x = self.up_2(x, x2, embeddings)
+        x = self.sa_up_2(x)
+        x = self.up_1(x, x1, embeddings)
+        x = self.sa_up_1(x)
+        x = self.up_0(x, x0, embeddings)
+        x = self.sa_up_0(x)
+
+        x = self.out_conv(x)
+        return x
 
 
 class UpBlock(nn.Module):
@@ -243,7 +283,6 @@ class DownBlock(nn.Module):
         embeddings = self.embedded_layer(embeddings)
         embeddings = embeddings[:, :, None, None]
         embeddings = embeddings.repeat(1, 1, x.shape[-2], x.shape[-1])
-        a = x + embeddings
         return x + embeddings
 
 
