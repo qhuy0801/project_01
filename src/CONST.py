@@ -189,5 +189,5 @@ class DIFFUSER_SETTINGS:
     OUTPUT_DIR = "../resources/output/"
 
     # Initialisation
-    INPUT_SIZE: int = 128
+    INPUT_SIZE: int = 64
 

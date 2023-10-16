@@ -10,14 +10,14 @@ from torchinfo import summary
 from tqdm import tqdm
 
 from models.nets.unet_v1 import UNet_v2
-from utils import linear_noise_schedule, save_checkpoint
+from utils import linear_noise_schedule, save_checkpoint, de_normalise
 
 
 class Diffuser:
     def __init__(
         self,
         dataset: Dataset,
-        batch_size: int = 2,
+        batch_size: int = 8,
         num_workers: int = 8,
         run_name: str = "DDPM_v1",
         output_dir: str = "./output/",
@@ -26,7 +26,7 @@ class Diffuser:
         noise_steps: int = 50,
         epochs: int = 2000,
         max_lr: float = 1e-4,
-        eps: float = 1e-6,
+        eps: float = 1e-8,
         embedding_dim: int = 256,
     ) -> None:
         super().__init__()
@@ -94,7 +94,7 @@ class Diffuser:
 
         # Log models and training stats
         self.model.eval()
-        model_stats = str(summary(self.model, [(1, 3, 128, 128), (1, 256)]))
+        model_stats = str(summary(self.model, [(1, 3, 64, 64), (1, 256)]))
         with open(
             f"{os.path.join(self.run_dir, self.run_time)}/model.txt", "w"
         ) as file:
@@ -276,7 +276,7 @@ class Diffuser:
         return torch.cat([position_a, position_b], dim=-1)
 
     @torch.inference_mode()
-    def sample(self, epoch):
+    def sample(self, epoch, progress_sample: {int} = {40, 30, 20, 10}):
         """
 
         :return:
@@ -287,6 +287,9 @@ class Diffuser:
 
         # Get random gaussian noise with the shape of image
         image = torch.randn((1, 3, 128, 128)).to(self.device)
+
+        # Get an array for displaying
+        display = [de_normalise(image, self.device)]
 
         # Put model in training mode
         self.model.eval()
@@ -333,8 +336,11 @@ class Diffuser:
                 + torch.sqrt(__beta) * iteration_noise
             )
 
-            # Clamp tensor and convert to unit8 for sampling
-        image = (image.clamp(-1, 1) + 1) / 2
-        image = (image * 255).type(torch.uint8)
+            # If timestep is in the selected tuple for sampling, add to image
+            if time_step in progress_sample:
+                display.append(de_normalise(image, self.device))
 
-        return image
+        # Concatenation for displaying
+        display = torch.cat(display, dim=0)
+
+        return display
