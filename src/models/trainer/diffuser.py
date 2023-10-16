@@ -78,7 +78,7 @@ class Diffuser:
 
         # Learning rate, decay, optimiser and scheduler
         self.epochs = epochs
-        self.optimiser = torch.optim.AdamW(self.model.parameters(), lr=max_lr, eps=eps)
+        self.optimiser = bnb.optim.AdamW(self.model.parameters(), lr=max_lr, eps=eps)
         self.scheduler = torch.optim.lr_scheduler.OneCycleLR(
             optimizer=self.optimiser,
             max_lr=max_lr,
@@ -175,7 +175,6 @@ class Diffuser:
                 self.dataloader,
                 desc=f"Epoch {epoch:5d}/{self.epochs}",
                 position=0,
-                leave=False,
             )
         ):
             # Preparing
