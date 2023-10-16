@@ -34,6 +34,7 @@ class WoundDataset(Dataset):
         self.data = [
             *self.data,
             *glob.glob(f"{self.image_dir}*.jpeg"),
+            *glob.glob(f"{self.image_dir}*.JPG"),
             *glob.glob(f"{self.image_dir}*.jpg"),
             *glob.glob(f"{self.image_dir}*.png"),
         ]

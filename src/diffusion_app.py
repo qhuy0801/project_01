@@ -20,6 +20,6 @@ if __name__ == '__main__':
         output_dir=CONST.DIFFUSER_SETTINGS.OUTPUT_DIR,
     )
 
-    diffuser.one_epoch(1)
+    diffuser.fit()
 
 

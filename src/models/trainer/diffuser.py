@@ -17,8 +17,8 @@ class Diffuser:
     def __init__(
         self,
         dataset: Dataset,
-        batch_size: int = 1,
-        num_workers: int = 4,
+        batch_size: int = 8,
+        num_workers: int = 8,
         run_name: str = "DDPM_v1",
         output_dir: str = "./output/",
         beta_start: float = 1e-4,
@@ -78,7 +78,7 @@ class Diffuser:
 
         # Learning rate, decay, optimiser and scheduler
         self.epochs = epochs
-        self.optimiser = bnb.optim.AdamW(self.model.parameters(), lr=max_lr, eps=eps)
+        self.optimiser = torch.optim.AdamW(self.model.parameters(), lr=max_lr, eps=eps)
         self.scheduler = torch.optim.lr_scheduler.OneCycleLR(
             optimizer=self.optimiser,
             max_lr=max_lr,
@@ -146,12 +146,12 @@ class Diffuser:
 
             # Log samples
             if epoch % sample_every == 0:
-                sample = self.sample()
+                sample = self.sample(epoch)
                 self.log.add_images(
                     tag=f"Samples/Random/Epoch:{epoch}",
                     img_tensor=sample,
                     global_step=epoch,
-                    dataformats="CHW",
+                    dataformats="NCHW",
                 )
 
             print(f"{self.epochs} training completed")
@@ -274,7 +274,7 @@ class Diffuser:
         )
         return torch.cat([position_a, position_b], dim=-1)
 
-    @torch.inference_mode
+    @torch.inference_mode()
     def sample(self, epoch):
         """
 
@@ -296,14 +296,14 @@ class Diffuser:
                 reversed(range(1, self.noise_steps)),
                 desc=f"Sampling {epoch:5d}/{self.epochs}",
                 position=1,
-                leave=True,
+                leave=False,
             )
         ):
             # Numeric timestep
             t = torch.tensor([time_step], dtype=torch.long).to(self.device)
 
             # Conditioning
-            time_step_embedding = self.step_embeddings(time_step)
+            time_step_embedding = self.step_embeddings(t)
             embedding = time_step_embedding + semantic
 
             # Forward
@@ -333,7 +333,7 @@ class Diffuser:
             )
 
             # Clamp tensor and convert to unit8 for sampling
-            image = (image.clamp(-1, 1) + 1) / 2
-            image = (image * 255).type(torch.uint8)
+        image = (image.clamp(-1, 1) + 1) / 2
+        image = (image * 255).type(torch.uint8)
 
         return image
