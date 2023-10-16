@@ -178,3 +178,16 @@ class MULTI_HEADED_AE_SETTING:
     ADDITIONAL_DECAY_RATE: float = 0.95
     ADDITIONAL_LR_THRESHOLD: float = 0.1
     ADDITIONAL_LR_PATIENCE: int = 15
+
+
+class DIFFUSER_SETTINGS:
+    """
+    Setting for DDPM v1
+    """
+    # Identifier
+    RUN_NAME = "ddpm_v1"
+    OUTPUT_DIR = "../resources/output/"
+
+    # Initialisation
+    INPUT_SIZE: int = 128
+

@@ -12,3 +12,4 @@ from .embeddings.embedding_v1 import Embedding_v1
 from .trainer.vae_trainer import VAETrainer
 from .trainer.ae_trainer import AETrainer_v1
 from .trainer.multi_headed_ae_trainer import MultiheadAETrainer
+from .trainer.diffuser import Diffuser
