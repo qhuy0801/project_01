@@ -1,30 +1,24 @@
 import os
 from datetime import datetime
 
-import pandas as pd
 import torch
 import bitsandbytes as bnb
-from pandas import DataFrame
 from torch.utils.data import Dataset, DataLoader
 from torch.utils.tensorboard import SummaryWriter
 import torch.nn.functional as functional
 from torchinfo import summary
 from tqdm import tqdm
 
-import CONST
-from entities import WoundDataset
-from models.embeddings.embedding_v1 import Embedding_v1
 from models.nets.unet_v1 import UNet_v2
-from utils import linear_noise_schedule
-from utils.data_utils import split_and_flatten
+from utils import linear_noise_schedule, save_checkpoint
 
 
 class Diffuser:
     def __init__(
         self,
         dataset: Dataset,
-        batch_size: int = 8,
-        num_workers: int = 8,
+        batch_size: int = 1,
+        num_workers: int = 4,
         run_name: str = "DDPM_v1",
         output_dir: str = "./output/",
         beta_start: float = 1e-4,
@@ -53,6 +47,14 @@ class Diffuser:
             shuffle=True,
         )
 
+        # Sample loader
+        random_sampler = torch.utils.data.RandomSampler(
+            data_source=self.dataset, replacement=True, num_samples=1
+        )
+        self.sample_loader = DataLoader(
+            dataset=self.dataset, batch_size=1, sampler=random_sampler
+        )
+
         # Model
         self.model = UNet_v2(in_channels=3, out_channels=3, embedded_dim=256).to(
             self.device
@@ -66,9 +68,9 @@ class Diffuser:
         # Training settings
         # Noise schedule (beta)
         self.noise_steps = noise_steps
-        self.beta = linear_noise_schedule(
-            beta_start, beta_end, self.noise_steps
-        ).to(self.device)
+        self.beta = linear_noise_schedule(beta_start, beta_end, self.noise_steps).to(
+            self.device
+        )
 
         # Alpha
         self.alpha = 1.0 - self.beta
@@ -84,25 +86,76 @@ class Diffuser:
             epochs=self.epochs,
         )
 
-        # Embedding dimmensions
+        # Embedding dimensions
         self.embedding_dim = embedding_dim
+
+        # Best loss for checkpoint
+        self.best_loss: float = 2000.0
 
         # Log models and training stats
         self.model.eval()
-        model_stats = str(
-            summary(self.model, [(1, 3, 128, 128), (1, 256)])
-        )
+        model_stats = str(summary(self.model, [(1, 3, 128, 128), (1, 256)]))
         with open(
-                f"{os.path.join(self.run_dir, self.run_time)}/model.txt", "w"
+            f"{os.path.join(self.run_dir, self.run_time)}/model.txt", "w"
         ) as file:
             file.write(model_stats)
-            file.write(f"\nTotal epochs: {self.epochs}"
-                       f"\nDenoising steps: {self.noise_steps}"
-                       f"\nMax learning rate: {max_lr}"
-                       f"\nBeta start: {beta_start}"
-                       f"\nBeta end: {beta_end}"
-                       f"\nEmbedding dimension: {self.embedding_dim}")
+            file.write(
+                f"\nTotal epochs: {self.epochs}"
+                f"\nDenoising steps: {self.noise_steps}"
+                f"\nMax learning rate: {max_lr}"
+                f"\nBeta start: {beta_start}"
+                f"\nBeta end: {beta_end}"
+                f"\nEmbedding dimension: {self.embedding_dim}"
+            )
             file.close()
+
+    def fit(self, sample_every: int = 10):
+        """
+        Training loop trigger
+        :param sample_every:
+        :return:
+        """
+
+        # Training mode
+        self.model.train()
+
+        print(f"Starting training {self.run_name} for {self.epochs} epochs...")
+
+        # Training loop
+        for epoch in range(self.epochs):
+            epoch_loss = self.one_epoch(epoch)
+
+            # Logs
+            self.log.add_scalar("Epoch/MSE_loss", epoch_loss, epoch)
+            if self.scheduler is not None:
+                self.log.add_scalar(
+                    "Epoch/Learning_rate",
+                    self.optimiser.param_groups[0]["lr"],
+                    epoch,
+                )
+            self.log.flush()
+
+            # Save checkpoint if new loss archived
+            if epoch_loss < self.best_loss:
+                self.best_loss = epoch_loss
+                save_checkpoint(
+                    {"model": self.model.state_dict()},
+                    self.run_name,
+                    os.path.join(self.run_dir, self.run_time),
+                )
+
+            # Log samples
+            if epoch % sample_every == 0:
+                sample = self.sample()
+                self.log.add_images(
+                    tag=f"Samples/Random/Epoch:{epoch}",
+                    img_tensor=sample,
+                    global_step=epoch,
+                    dataformats="CHW",
+                )
+
+            print(f"{self.epochs} training completed")
+        return None
 
     def one_epoch(self, epoch):
         """
@@ -113,9 +166,17 @@ class Diffuser:
         # Put model in training mode
         self.model.train()
 
+        # Store epoch loss
+        epoch_loss: float = 0.0
+
         # One batch iteration
         for _, batch in enumerate(
-                tqdm(self.dataloader, desc=f"Epoch {epoch:5d}/{self.epochs}", position=0, leave=False)
+            tqdm(
+                self.dataloader,
+                desc=f"Epoch {epoch:5d}/{self.epochs}",
+                position=0,
+                leave=False,
+            )
         ):
             # Preparing
             semantics, time_steps, noised_images, noises = self.prepare_batch(batch)
@@ -132,6 +193,11 @@ class Diffuser:
 
             # Take step
             self.step(loss)
+
+            # Store the loss
+            epoch_loss += loss
+
+        return epoch_loss.mean().item()
 
     def step(self, loss):
         """
@@ -207,3 +273,67 @@ class Diffuser:
             steps.repeat(1, self.embedding_dim // 2) * normalising_factor
         )
         return torch.cat([position_a, position_b], dim=-1)
+
+    @torch.inference_mode
+    def sample(self, epoch):
+        """
+
+        :return:
+        """
+        # Get a random embedding from dataset
+        _, _, semantic = next(iter(self.sample_loader))
+        semantic = semantic.to(self.device)
+
+        # Get random gaussian noise with the shape of image
+        image = torch.randn((1, 3, 128, 128)).to(self.device)
+
+        # Put model in training mode
+        self.model.eval()
+
+        # Iterate through steps
+        for _, time_step in enumerate(
+            tqdm(
+                reversed(range(1, self.noise_steps)),
+                desc=f"Sampling {epoch:5d}/{self.epochs}",
+                position=1,
+                leave=True,
+            )
+        ):
+            # Numeric timestep
+            t = torch.tensor([time_step], dtype=torch.long).to(self.device)
+
+            # Conditioning
+            time_step_embedding = self.step_embeddings(time_step)
+            embedding = time_step_embedding + semantic
+
+            # Forward
+            pred_noise = self.model(image, embedding)
+
+            # Denoise parameters
+            __alpha = self.alpha[t][:, None, None, None]
+            __alpha_cumulative = self.alpha_cumulative[t][:, None, None, None]
+            __beta = self.beta[t][:, None, None, None]
+
+            # Iteration noises
+            if time_step > 1:
+                iteration_noise = torch.randn_like(image)
+            else:
+                iteration_noise = torch.zeros_like(image)
+
+            # Denoising algorithms
+            image = (
+                1
+                / torch.sqrt(__alpha)
+                * (
+                    image
+                    - ((1 - __alpha) / (torch.sqrt(1 - __alpha_cumulative)))
+                    * pred_noise
+                )
+                + torch.sqrt(__beta) * iteration_noise
+            )
+
+            # Clamp tensor and convert to unit8 for sampling
+            image = (image.clamp(-1, 1) + 1) / 2
+            image = (image * 255).type(torch.uint8)
+
+        return image
