@@ -17,7 +17,7 @@ class Diffuser:
     def __init__(
         self,
         dataset: Dataset,
-        batch_size: int = 8,
+        batch_size: int = 2,
         num_workers: int = 8,
         run_name: str = "DDPM_v1",
         output_dir: str = "./output/",
@@ -106,6 +106,8 @@ class Diffuser:
                 f"\nBeta start: {beta_start}"
                 f"\nBeta end: {beta_end}"
                 f"\nEmbedding dimension: {self.embedding_dim}"
+                f"\nBatch size: {batch_size}"
+                f"\nNum workers: {num_workers}"
             )
             file.close()
 
@@ -154,7 +156,7 @@ class Diffuser:
                     dataformats="NCHW",
                 )
 
-            print(f"{self.epochs} training completed")
+        print(f"{self.epochs} training completed")
         return None
 
     def one_epoch(self, epoch):
