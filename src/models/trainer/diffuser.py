@@ -4,6 +4,7 @@ from datetime import datetime
 
 import torch
 import bitsandbytes as bnb
+import wandb
 from torch.utils.data import Dataset, DataLoader
 from torch.utils.tensorboard import SummaryWriter
 import torch.nn.functional as functional
@@ -71,11 +72,6 @@ class Diffuser:
             # Un-reference
             checkpoint = None
 
-        # Logger
-        self.log = SummaryWriter(
-            log_dir=f"{os.path.join(self.run_dir, self.run_time)}/logs/"
-        )
-
         # Training settings
         # Noise schedule (beta)
         self.noise_steps = noise_steps
@@ -103,6 +99,23 @@ class Diffuser:
         # Best loss for checkpoint
         self.best_loss: float = 2000.0
 
+        # Logger
+        wandb.init(
+            project=self.run_name,
+            name=self.run_time,
+            config={
+                "total_epochs": self.epochs,
+                "denoise_steps": self.noise_steps,
+                "max_lr": max_lr,
+                "beta_start": beta_start,
+                "beta_end": beta_end,
+                "embedding_dimensions": self.embedding_dim,
+                "batch_size": batch_size,
+                "num_workers": num_workers,
+                "additional_note": additional_note,
+            },
+        )
+
         # Log models and training stats
         self.model.eval()
         model_stats = str(summary(self.model, [(1, 3, 64, 64), (1, 256)]))
@@ -110,17 +123,6 @@ class Diffuser:
             f"{os.path.join(self.run_dir, self.run_time)}/model.txt", "w"
         ) as file:
             file.write(model_stats)
-            file.write(
-                f"\nTotal epochs: {self.epochs}"
-                f"\nDenoising steps: {self.noise_steps}"
-                f"\nMax learning rate: {max_lr}"
-                f"\nBeta start: {beta_start}"
-                f"\nBeta end: {beta_end}"
-                f"\nEmbedding dimension: {self.embedding_dim}"
-                f"\nBatch size: {batch_size}"
-                f"\nNum workers: {num_workers}"
-                f"\nAdditional note: {additional_note}"
-            )
             file.close()
 
         # Clear memory
@@ -143,14 +145,9 @@ class Diffuser:
             epoch_loss = self.one_epoch(epoch)
 
             # Logs
-            self.log.add_scalar("Epoch/MSE_loss", epoch_loss, epoch)
+            wandb.log({"train/mse_loss": epoch_loss})
             if self.scheduler is not None:
-                self.log.add_scalar(
-                    "Epoch/Learning_rate",
-                    self.optimiser.param_groups[0]["lr"],
-                    epoch,
-                )
-            self.log.flush()
+                wandb.log({"train/learning_rate": self.optimiser.param_groups[0]["lr"]})
 
             # Save checkpoint if new loss archived
             if epoch_loss < self.best_loss:
@@ -299,13 +296,17 @@ class Diffuser:
         """
         # Get a random embedding from dataset
         image_org, _, semantic = next(iter(self.sample_loader))
+        image_org = image_org.to(self.device)
         semantic = semantic.to(self.device)
 
         # Get random gaussian noise with the shape of image
         image = torch.randn((1, 3, 64, 64)).to(self.device)
 
         # Get an array for displaying
-        display = [de_normalise(image_org, self.device), de_normalise(image, self.device)]
+        display = [
+            de_normalise(image_org, self.device),
+            de_normalise(image, self.device),
+        ]
 
         # Put model in training mode
         self.model.eval()
