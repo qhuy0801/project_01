@@ -27,7 +27,7 @@ class Diffuser:
         beta_end: float = 0.02,
         noise_steps: int = 1000,
         epochs: int = 10000,
-        max_lr: float = 5e-3,
+        max_lr: float = 2e-4,
         eps: float = 1e-8,
         embedding_dim: int = 256,
         additional_note: str = "",
