@@ -299,6 +299,7 @@ class Diffuser:
         """
         # Get a random embedding from dataset
         image_org, _, semantic = next(iter(self.sample_loader))
+        image_org = image_org.to(self.device)
         semantic = semantic.to(self.device)
 
         # Get random gaussian noise with the shape of image
