@@ -2,7 +2,6 @@ import albumentations
 import cv2
 import numpy as np
 import torch
-import wandb
 from albumentations.pytorch import ToTensorV2
 
 MEAN = [0.485, 0.456, 0.406]
@@ -95,12 +94,3 @@ def to_uint8(image_tensor):
     :return:
     """
     return (image_tensor * 255).round().astype("uint8")
-
-
-def to_wandb_image(image_tensor):
-    """
-    Convert CHW tensor to wandb image class
-    :param image_tensor:
-    :return:
-    """
-    return wandb.Image(image_tensor.squeeze().permute(1,2,0).cpu().numpy())

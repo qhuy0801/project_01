@@ -6,7 +6,6 @@ from .training_utils import (
     get_segmentation,
     resize_segmentation,
     arr_to_tuples,
-    to_wandb_image,
 )
 
 from .io_ultis import (
