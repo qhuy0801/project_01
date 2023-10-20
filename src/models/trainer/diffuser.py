@@ -18,7 +18,7 @@ class Diffuser:
     def __init__(
         self,
         dataset: Dataset,
-        batch_size: int = 28,
+        batch_size: int = 29,
         num_workers: int = 8,
         run_name: str = "DDPM_v1",
         output_dir: str = "./output/",
@@ -192,7 +192,7 @@ class Diffuser:
                 self.dataloader,
                 desc=f"Epoch {epoch:5d}/{self.epochs}",
                 position=0,
-                leave=True,
+                leave=False,
             )
         ):
             # Preparing
