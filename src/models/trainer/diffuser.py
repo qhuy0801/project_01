@@ -192,7 +192,7 @@ class Diffuser:
                 self.dataloader,
                 desc=f"Epoch {epoch:5d}/{self.epochs}",
                 position=0,
-                leave=False,
+                leave=True,
             )
         ):
             # Preparing
@@ -316,7 +316,7 @@ class Diffuser:
             tqdm(
                 reversed(range(1, self.noise_steps)),
                 desc=f"Sampling {epoch:5d}/{self.epochs}",
-                position=1,
+                position=0,
                 leave=False,
             )
         ):
