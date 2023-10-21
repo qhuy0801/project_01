@@ -187,6 +187,7 @@ class DIFFUSER_SETTINGS:
     # Identifier
     RUN_NAME = "ddpm_v1"
     OUTPUT_DIR = "../resources/output/"
+    # OUTPUT_DIR = "../../drive/MyDrive/data/output/"
 
     # Initialisation
     INPUT_SIZE: int = 64
