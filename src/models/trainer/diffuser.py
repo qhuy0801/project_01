@@ -77,7 +77,7 @@ class Diffuser:
         )
 
         # Training settings
-        # Noise schedule (beta)
+        # Variance schedule (beta)
         self.noise_steps = noise_steps
         self.beta = linear_noise_schedule(beta_start, beta_end, self.noise_steps).to(
             self.device

@@ -58,7 +58,7 @@ def forward_transform(image, target_size, to_tensor: bool = True):
 
 def de_normalise(image_tensor, device):
     """
-    Revert transformation which include de-normalisation, convert from float32 to uint8
+    Revert transformation which include de-normalisation
     :param image_tensor: Tensor(NCHW)
     :return: Tensor(NCHW)
     """
