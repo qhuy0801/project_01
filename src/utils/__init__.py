@@ -1,5 +1,8 @@
 from .training_utils import (
-    linear_noise_schedule,
+    linear_schedule,
+    quadratic_schedule,
+    cosine_schedule,
+    sigmoid_schedule,
     forward_transform,
     de_normalise,
     get_conv_output_size,

@@ -14,7 +14,7 @@ def arr_to_tuples(dims_arr: [int]):
     For example: [3, 4, 4, 4, 4] to [(3, 4), (4, 4), (4, 4), (4, 4)]
     :return:
     """
-    return [(dims_arr[i], dims_arr[i+1]) for i in range(len(dims_arr) - 1)]
+    return [(dims_arr[i], dims_arr[i + 1]) for i in range(len(dims_arr) - 1)]
 
 
 def resize_segmentation(_segmentation_matrix, _size):
@@ -79,12 +79,53 @@ def get_conv_output_size(input_size, kernel_size, stride, padding):
     return ((input_size - kernel_size + 2 * padding) // stride) + 1
 
 
-def linear_noise_schedule(start, end, steps):
+def linear_schedule(start, end, steps):
     """
-    Linear noise schedule for diffusion model
+    Linear variance schedi
+    :param start:
+    :param end:
+    :param steps:
     :return:
     """
     return torch.linspace(start, end, steps)
+
+
+def quadratic_schedule(start, end, steps):
+    """
+    Quadratic variance schedule for diffusion model
+    :param start:
+    :param end:
+    :param steps:
+    :return:
+    """
+    return torch.linspace(start**0.5, end**0.5, steps) ** 2
+
+
+def sigmoid_schedule(start, end, steps, sigmoid_max: float = 10.0):
+    """
+    Sigmoid schedule with default ending value is 10
+    :param start:
+    :param end:
+    :param steps:
+    :param sigmoid_max:
+    :return:
+    """
+    arr = torch.linspace(sigmoid_max, -sigmoid_max, steps)
+    return torch.sigmoid(arr) * (end - start) + start
+
+
+def cosine_schedule(steps, s: float = 0.008):
+    """
+    Cosine variance schedule, original paper: https://arxiv.org/abs/2102.09672
+    :param steps:
+    :param s: set by 0.008 by default, similar to the original paper
+    :return:
+    """
+    x = torch.linspace(0, steps, steps + 1)
+    alphas_cumulative = torch.cos(((x / steps) + s) / (1 + s) * torch.pi * 0.5) ** 2
+    alphas_cumulative = alphas_cumulative / alphas_cumulative[0]
+    betas = 1 - (alphas_cumulative[1:] / alphas_cumulative[:-1])
+    return torch.clip(betas, 0.0001, 0.9999)
 
 
 def to_uint8(image_tensor):
