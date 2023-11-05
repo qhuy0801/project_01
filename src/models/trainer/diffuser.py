@@ -18,7 +18,7 @@ class Diffuser:
     def __init__(
         self,
         dataset: Dataset,
-        batch_size: int = 29,
+        batch_size: int = 24,
         num_workers: int = 8,
         run_name: str = "DDPM_v1",
         output_dir: str = "./output/",
@@ -30,6 +30,7 @@ class Diffuser:
         max_lr: float = 2e-4,
         eps: float = 1e-8,
         embedding_dim: int = 256,
+        attn_heads: int = 1,
         additional_note: str = "",
     ) -> None:
         super().__init__()
@@ -58,8 +59,14 @@ class Diffuser:
             dataset=self.dataset, batch_size=1, sampler=random_sampler
         )
 
+        # Embedding dimensions
+        self.embedding_dim = embedding_dim
+
+        # Number of attention head in self attention
+        self.attn_heads = attn_heads
+
         # Model
-        self.model = UNet_v2(in_channels=3, out_channels=3, embedded_dim=256).to(
+        self.model = UNet_v2(in_channels=3, out_channels=3, attn_heads=self.attn_heads, embedded_dim=self.embedding_dim).to(
             self.device
         )
 
@@ -97,9 +104,6 @@ class Diffuser:
             epochs=self.epochs,
         )
 
-        # Embedding dimensions
-        self.embedding_dim = embedding_dim
-
         # Best loss for checkpoint
         self.best_loss: float = 2000.0
 
@@ -117,6 +121,7 @@ class Diffuser:
                 f"\nBeta start: {beta_start}"
                 f"\nBeta end: {beta_end}"
                 f"\nEmbedding dimension: {self.embedding_dim}"
+                f"\nNumber of attention heads: {self.attn_heads}"
                 f"\nBatch size: {batch_size}"
                 f"\nNum workers: {num_workers}"
                 f"\nAdditional note: {additional_note}"
