@@ -45,5 +45,9 @@ def train():
 
 
 if __name__ == '__main__':
+    # Login wandb
+    wandb_key = "a8b5a7676a58d9b5b1e686fd9d349bc25f18d07c"
+    wand_logged = wandb.login(key=wandb_key)
+
     # Start the sweep agent
     wandb.agent("s4cs0c7m", function=train, count=10)
