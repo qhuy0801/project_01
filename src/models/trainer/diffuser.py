@@ -5,11 +5,13 @@ from datetime import datetime
 
 import torch
 import bitsandbytes as bnb
+import wandb
 from torch.utils.data import Dataset, DataLoader
 from torch.utils.tensorboard import SummaryWriter
 import torch.nn.functional as functional
 from torchinfo import summary
 from tqdm import tqdm
+from wandb.sdk.wandb_run import Run
 
 from models.nets.unet_v2 import UNet_v2
 from utils import (
@@ -41,6 +43,7 @@ class Diffuser:
         eps: float = 1e-8,
         embedding_dim: int = 256,
         attn_heads: int = 1,
+        wandb_run: Run = None,
         additional_note: str = "",
     ) -> None:
         super().__init__()
@@ -147,6 +150,9 @@ class Diffuser:
             )
             file.close()
 
+        # Log wandb
+        self.wandb_run = wandb_run
+
         # Clear memory
         gc.collect()
 
@@ -169,6 +175,10 @@ class Diffuser:
             # Logs
             self.log.add_scalar("Epoch/MSE_loss", epoch_loss, epoch)
             self.log.flush()
+
+            # WandB log
+            if self.wandb_run is not None:
+                wandb.log({"train_mse_loss": epoch_loss})
 
             # Save checkpoint if new loss archived
             if epoch_loss < self.best_loss:
