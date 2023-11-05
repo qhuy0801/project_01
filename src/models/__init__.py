@@ -6,6 +6,9 @@ from .nets.vae_v4 import Autoencoder_v1, Multi_headed_VAE_v1, Multi_headed_AE
 
 from .nets.attention import SelfAttention
 
+from .nets.unet_v1 import UNet_v1
+from .nets.unet_v2 import UNet_v2
+
 from .embeddings.embedding import Embedding
 from .embeddings.embedding_v1 import Embedding_v1
 

@@ -10,7 +10,7 @@ import torch.nn.functional as functional
 from torchinfo import summary
 from tqdm import tqdm
 
-from models.nets.unet_v1 import UNet_v2
+from models.nets.unet_v2 import UNet_v2
 from utils import linear_noise_schedule, save_checkpoint, de_normalise, load_checkpoint
 
 
