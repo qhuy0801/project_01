@@ -2,6 +2,7 @@ import CONST
 from entities import WoundDataset
 from models.trainer.diffuser import Diffuser
 
+
 if __name__ == '__main__':
     # The data
     dataset = WoundDataset(
@@ -13,13 +14,12 @@ if __name__ == '__main__':
 
     diffuser = Diffuser(
         dataset=dataset,
-        batch_size=24,
+        batch_size=8,
         num_workers=2,
         run_name=CONST.DIFFUSER_SETTINGS.RUN_NAME,
         output_dir=CONST.DIFFUSER_SETTINGS.OUTPUT_DIR,
         attn_heads=2,
+        variance_schedule_type="cosine",
     )
 
     diffuser.fit()
-
-

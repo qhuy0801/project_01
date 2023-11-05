@@ -11,7 +11,15 @@ from torchinfo import summary
 from tqdm import tqdm
 
 from models.nets.unet_v2 import UNet_v2
-from utils import linear_noise_schedule, save_checkpoint, de_normalise, load_checkpoint
+from utils import (
+    linear_schedule,
+    save_checkpoint,
+    de_normalise,
+    load_checkpoint,
+    quadratic_schedule,
+    sigmoid_schedule,
+    cosine_schedule,
+)
 
 
 class Diffuser:
@@ -23,6 +31,7 @@ class Diffuser:
         run_name: str = "DDPM_v1",
         output_dir: str = "./output/",
         model_checkpoint: str = None,
+        variance_schedule_type: str = "linear",
         beta_start: float = 1e-4,
         beta_end: float = 0.02,
         noise_steps: int = 1000,
@@ -66,9 +75,12 @@ class Diffuser:
         self.attn_heads = attn_heads
 
         # Model
-        self.model = UNet_v2(in_channels=3, out_channels=3, attn_heads=self.attn_heads, embedded_dim=self.embedding_dim).to(
-            self.device
-        )
+        self.model = UNet_v2(
+            in_channels=3,
+            out_channels=3,
+            attn_heads=self.attn_heads,
+            embedded_dim=self.embedding_dim,
+        ).to(self.device)
 
         # If there is checkpoint for resuming training
         if model_checkpoint is not None:
@@ -86,9 +98,20 @@ class Diffuser:
         # Training settings
         # Variance schedule (beta)
         self.noise_steps = noise_steps
-        self.beta = linear_noise_schedule(beta_start, beta_end, self.noise_steps).to(
-            self.device
-        )
+        if variance_schedule_type == "quadratic":
+            self.beta = quadratic_schedule(beta_start, beta_end, self.noise_steps).to(
+                self.device
+            )
+        elif variance_schedule_type == "sigmoid":
+            self.beta = sigmoid_schedule(beta_start, beta_end, self.noise_steps).to(
+                self.device
+            )
+        elif variance_schedule_type == "cosine":
+            self.beta = cosine_schedule(self.noise_steps).to(self.device)
+        else:
+            self.beta = linear_schedule(beta_start, beta_end, self.noise_steps).to(
+                self.device
+            )
 
         # Alpha
         self.alpha = 1.0 - self.beta
@@ -118,6 +141,7 @@ class Diffuser:
                 f"\nTotal epochs: {self.epochs}"
                 f"\nDenoising steps: {self.noise_steps}"
                 f"\nMax learning rate: {max_lr}"
+                f"\nVariance schedule type: {variance_schedule_type}"
                 f"\nBeta start: {beta_start}"
                 f"\nBeta end: {beta_end}"
                 f"\nEmbedding dimension: {self.embedding_dim}"
@@ -311,7 +335,10 @@ class Diffuser:
         image = torch.randn((1, 3, 64, 64)).to(self.device)
 
         # Get an array for displaying
-        display = [de_normalise(image_org, self.device), de_normalise(image, self.device)]
+        display = [
+            de_normalise(image_org, self.device),
+            de_normalise(image, self.device),
+        ]
 
         # Put model in training mode
         self.model.eval()
