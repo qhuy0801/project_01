@@ -31,7 +31,7 @@ def train():
         dataset=dataset,
         batch_size=8,
         num_workers=2,
-        epochs=1000,
+        epochs=500,
         run_name=CONST.DIFFUSER_SETTINGS.RUN_NAME,
         output_dir=CONST.DIFFUSER_SETTINGS.OUTPUT_DIR,
         max_lr=config.learning_rate,
@@ -50,4 +50,4 @@ if __name__ == '__main__':
     wand_logged = wandb.login(key=wandb_key)
 
     # Start the sweep agent
-    wandb.agent("s4cs0c7m", function=train, count=10)
+    wandb.agent(sweep_id="2i9tp395", project="DDPM_hyper_tuning", function=train, count=10)
