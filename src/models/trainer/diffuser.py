@@ -120,12 +120,6 @@ class Diffuser:
         # Learning rate, decay, optimiser and scheduler
         self.epochs = epochs
         self.optimiser = bnb.optim.AdamW(self.model.parameters(), lr=max_lr, eps=eps)
-        self.scheduler = torch.optim.lr_scheduler.OneCycleLR(
-            optimizer=self.optimiser,
-            max_lr=max_lr,
-            steps_per_epoch=len(self.dataloader),
-            epochs=self.epochs,
-        )
 
         # Best loss for checkpoint
         self.best_loss: float = 2000.0
@@ -173,12 +167,6 @@ class Diffuser:
 
             # Logs
             self.log.add_scalar("Epoch/MSE_loss", epoch_loss, epoch)
-            if self.scheduler is not None:
-                self.log.add_scalar(
-                    "Epoch/Learning_rate",
-                    self.optimiser.param_groups[0]["lr"],
-                    epoch,
-                )
             self.log.flush()
 
             # Save checkpoint if new loss archived
@@ -254,7 +242,6 @@ class Diffuser:
         self.optimiser.zero_grad()
         loss.backward()
         self.optimiser.step()
-        self.scheduler.step()
 
     def prepare_batch(self, batch):
         """
