@@ -1,4 +1,5 @@
 import gc
+import math
 import os
 from datetime import datetime
 
@@ -308,11 +309,16 @@ class Diffuser:
         return torch.cat([position_a, position_b], dim=-1)
 
     @torch.inference_mode()
-    def sample(self, epoch, progress_sample: {int} = {750, 500, 250}):
+    def sample(self, epoch, progress_sample: {float} = {0.75, 0.5, 0.25}):
         """
-
+        The sampling process, we will also sample the generation progress
+        :param epoch:
+        :param progress_sample:
         :return:
         """
+        # Convert progress sample to step to print output
+        progress_sample = {math.ceil(x * self.noise_steps) for x in progress_sample}
+
         # Get a random embedding from dataset
         image_org, _, semantic = next(iter(self.sample_loader))
         image_org = image_org.to(self.device)
