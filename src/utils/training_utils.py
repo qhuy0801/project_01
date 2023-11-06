@@ -110,7 +110,7 @@ def sigmoid_schedule(start, end, steps, sigmoid_max: float = 10.0):
     :param sigmoid_max:
     :return:
     """
-    arr = torch.linspace(sigmoid_max, -sigmoid_max, steps)
+    arr = torch.linspace(-sigmoid_max, sigmoid_max, steps)
     return torch.sigmoid(arr) * (end - start) + start
 
 
