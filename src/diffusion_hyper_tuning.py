@@ -50,4 +50,4 @@ if __name__ == '__main__':
     wand_logged = wandb.login(key=wandb_key)
 
     # Start the sweep agent
-    wandb.agent(sweep_id="2i9tp395", project="DDPM_hyper_tuning", function=train, count=10)
+    wandb.agent(sweep_id="pzs0rlck", project="DDPM_hyper_tuning", function=train, count=12)
