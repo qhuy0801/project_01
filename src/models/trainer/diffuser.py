@@ -162,7 +162,7 @@ class Diffuser:
         # Clear memory
         gc.collect()
 
-    def fit(self, sample_every: int = 1000):
+    def fit(self, sample_every: int = 100):
         """
         Training loop trigger
         :param sample_every:
