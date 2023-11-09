@@ -31,7 +31,7 @@ if __name__ == "__main__":
     )
     diffuser = Diffuser(
         dataset=dataset,
-        batch_size=28,
+        batch_size=29,
         num_workers=2,
         epochs=10000,
         run_name=CONST.DIFFUSER_SETTINGS.RUN_NAME,
