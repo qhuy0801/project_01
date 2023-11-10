@@ -191,7 +191,8 @@ class Diffuser:
             # WandB log
             if self.wandb_run is not None:
                 wandb.log({"train_mse_loss": epoch_loss})
-                wandb.log({"learning_rate": self.optimiser.param_groups[0]["lr"]})
+                if self.scheduler is not None:
+                    wandb.log({"learning_rate": self.optimiser.param_groups[0]["lr"]})
 
             # Save checkpoint if new loss archived
             if epoch_loss < self.best_loss:
@@ -266,7 +267,8 @@ class Diffuser:
         self.optimiser.zero_grad()
         loss.backward()
         self.optimiser.step()
-        self.scheduler.step()
+        if self.scheduler is not None:
+            self.scheduler.step()
 
     def prepare_batch(self, batch):
         """

@@ -41,6 +41,8 @@ def train():
         wandb_run=run,
     )
 
+    diffuser.scheduler = None
+
     diffuser.fit()
 
 
