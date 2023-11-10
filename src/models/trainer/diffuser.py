@@ -111,18 +111,14 @@ class Diffuser:
                 self.device
             )
         elif variance_schedule_type == "cosine":
-            self.beta = cosine_schedule(self.noise_steps)[0].to(self.device)
+            self.beta = cosine_schedule(self.noise_steps).to(self.device)
         else:
             self.beta = linear_schedule(beta_start, beta_end, self.noise_steps).to(
                 self.device
             )
 
         # Alpha
-        self.alpha = (
-            cosine_schedule(self.noise_steps)[1].to(self.device)
-            if variance_schedule_type == "cosine"
-            else (1.0 - self.beta)
-        )
+        self.alpha = 1.0 - self.beta
         self.alpha_cumulative = torch.cumprod(self.alpha, dim=0)
 
         # Learning rate, decay, optimiser and scheduler

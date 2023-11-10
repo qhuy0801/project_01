@@ -121,11 +121,11 @@ def cosine_schedule(steps, s: float = 0.008):
     :param s: set by 0.008 by default, similar to the original paper
     :return:
     """
-    steps_arr = torch.linspace(0, steps, steps + 1)
-    f_t = torch.cos(((steps_arr / steps) + s) / (1 + s) * torch.pi * 0.5) ** 2
-    alphas = f_t / f_t[0]
-    betas = 1 - (alphas[1:] / alphas[:-1])
-    return torch.clip(betas, 0.0001, 0.9999), alphas[1:]
+    x = torch.linspace(0, steps, steps + 1)
+    alphas_cumulative = torch.cos(((x / steps) + s) / (1 + s) * torch.pi * 0.5) ** 2
+    alphas_cumulative = alphas_cumulative / alphas_cumulative[0]
+    betas = 1 - (alphas_cumulative[1:] / alphas_cumulative[:-1])
+    return torch.clip(betas, 0.0001, 0.9999)
 
 
 def to_uint8(image_tensor):
