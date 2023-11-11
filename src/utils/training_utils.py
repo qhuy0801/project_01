@@ -125,7 +125,7 @@ def cosine_schedule(steps, s: float = 0.008):
     alphas_cumulative = torch.cos(((x / steps) + s) / (1 + s) * torch.pi * 0.5) ** 2
     alphas_cumulative = alphas_cumulative / alphas_cumulative[0]
     betas = 1 - (alphas_cumulative[1:] / alphas_cumulative[:-1])
-    return torch.clip(betas, 0.0001, 0.9999)
+    return torch.clamp(betas, 0.001, 0.999)
 
 
 def to_uint8(image_tensor):
