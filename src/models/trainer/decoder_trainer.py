@@ -59,7 +59,7 @@ class DecoderTrainer:
             middle_channels=middle_channels,
             kernel_size=3,
             middle_activation="LeakyReLU",
-            output_activation="Tanh",
+            output_activation="Sigmoid",
         ).to(self.device)
 
         # Number of epochs
@@ -99,7 +99,7 @@ class DecoderTrainer:
         # Best epoch loss
         self.best_loss: float = 2000.0
 
-    def fit(self, sample_every: int = 100):
+    def fit(self, sample_every: int = 20):
         # Training mode
         self.model.train()
 
@@ -202,9 +202,10 @@ class DecoderTrainer:
             de_normalise(
                 functional.interpolate(
                     img_s, size=(256, 256), mode="bilinear", align_corners=False
-                )
+                ),
+                self.device,
             ),
-            de_normalise(img_l),
+            de_normalise(img_l, self.device),
         ]
 
         # Put model in training mode
@@ -214,7 +215,7 @@ class DecoderTrainer:
         pred_img_l = self.model(img_s)
 
         # Append the result to display
-        display.append(de_normalise(pred_img_l))
+        display.append(de_normalise(pred_img_l, self.device))
 
         # Concatenation for displaying
         display = torch.cat(display, dim=0)

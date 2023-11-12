@@ -12,7 +12,8 @@ if __name__ == "__main__":
     )
 
     decoder_trainer = DecoderTrainer(
-        dataset=dataset
+        dataset=dataset,
+        max_lr=1e-4,
     )
 
     # Trigger the training

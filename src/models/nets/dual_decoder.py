@@ -44,6 +44,14 @@ class DualDecoder(nn.Module):
                 output_padding=1,
             ),
             get_activation(self.middle_activation),
+            nn.Conv2d(
+                in_channels=self.middle_channels,
+                out_channels=self.middle_channels,
+                kernel_size=self.kernel_size,
+                stride=1,
+                padding=1,
+            ),
+            get_activation(self.middle_activation),
             nn.BatchNorm2d(self.middle_channels),
             nn.ConvTranspose2d(
                 in_channels=self.middle_channels,
@@ -52,6 +60,14 @@ class DualDecoder(nn.Module):
                 stride=2,
                 padding=1,
                 output_padding=1,
+            ),
+            get_activation(self.middle_activation),
+            nn.Conv2d(
+                in_channels=self.middle_channels,
+                out_channels=self.middle_channels,
+                kernel_size=self.kernel_size,
+                stride=1,
+                padding=1,
             ),
             get_activation(self.middle_activation),
             nn.BatchNorm2d(self.middle_channels),
@@ -68,7 +84,7 @@ class DualDecoder(nn.Module):
             nn.Tanh() if self.output_activation == "Tanh" else nn.Sigmoid(),
         )
 
-    def forward(self,x):
+    def forward(self, x):
         x = self.feature_extraction(x)
         x = self.up_sampler(x)
         x = self.to_output(x)
