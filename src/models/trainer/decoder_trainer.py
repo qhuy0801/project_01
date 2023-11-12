@@ -10,7 +10,7 @@ from torchinfo import summary
 from tqdm import tqdm
 
 from models.nets.dual_decoder import DualDecoder
-from utils import save_checkpoint
+from utils import save_checkpoint, de_normalise
 
 
 class DecoderTrainer:
@@ -163,6 +163,7 @@ class DecoderTrainer:
         ):
             # Unpack the batch
             img_s, img_l, _ = batch
+            img_s, img_l = img_s.to(self.device), img_l.to(self.device)
 
             # Forwarding
             pred_img_l = self.model(img_s)
@@ -198,10 +199,12 @@ class DecoderTrainer:
 
         # Display
         display = [
-            functional.interpolate(
-                img_s, size=(256, 256), mode="bilinear", align_corners=False
+            de_normalise(
+                functional.interpolate(
+                    img_s, size=(256, 256), mode="bilinear", align_corners=False
+                )
             ),
-            img_l,
+            de_normalise(img_l),
         ]
 
         # Put model in training mode
@@ -211,11 +214,9 @@ class DecoderTrainer:
         pred_img_l = self.model(img_s)
 
         # Append the result to display
-        display.append(pred_img_l)
+        display.append(de_normalise(pred_img_l))
 
         # Concatenation for displaying
         display = torch.cat(display, dim=0)
 
         return display
-
-

@@ -9,7 +9,6 @@ if __name__ == "__main__":
         segment_dir=CONST.PROCESSED_SEGMENT_DIR,
         target_tensor_size=CONST.DIFFUSER_SETTINGS.INPUT_SIZE,
         additional_target_tensor_size=256,
-        embedding_dir=CONST.PROCESSED_EMBEDDING_DIR,
     )
 
     decoder_trainer = DecoderTrainer(
