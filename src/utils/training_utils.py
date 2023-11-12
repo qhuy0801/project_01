@@ -135,3 +135,18 @@ def to_uint8(image_tensor):
     :return:
     """
     return (image_tensor * 255).round().astype("uint8")
+
+def get_activation(activation_str: str):
+    """
+    Get the linear activation functions
+    :param activation_str:
+    :return:
+    """
+    if activation_str == "SiLU":
+        return torch.nn.SiLU()
+    elif activation_str == "GeLU":
+        return torch.nn.GELU()
+    elif activation_str == "ReLU":
+        return torch.nn.ReLU()
+    else:
+        return torch.nn.LeakyReLU()
