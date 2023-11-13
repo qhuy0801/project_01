@@ -124,7 +124,8 @@ class DoubleConvolution(nn.Module):
     """
 
     # Default setting: kernel_size of convolutional layers
-    kernel_size = 3
+    kernel_size: int = 3
+    padding: int = 1
 
     def __init__(
         self,
@@ -154,7 +155,7 @@ class DoubleConvolution(nn.Module):
                 in_channels,
                 additional_channels,
                 kernel_size=self.kernel_size,
-                padding=1,
+                padding=self.padding,
                 bias=bias,
             ),
             nn.GroupNorm(1, additional_channels),
@@ -163,7 +164,7 @@ class DoubleConvolution(nn.Module):
                 additional_channels,
                 out_channels,
                 kernel_size=self.kernel_size,
-                padding=1,
+                padding=self.padding,
                 bias=bias,
             ),
             nn.GroupNorm(1, out_channels),
