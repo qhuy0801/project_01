@@ -10,8 +10,9 @@ class DualDecoder(nn.Module):
         out_channels: int = 3,
         middle_channels: int = 256,
         kernel_size: int = 3,
-        middle_activation: str = "LeakyReLU",
-        output_activation: str = "Tanh",
+        pooling_kernel_size: int = 2,
+        middle_activation: str = "ReLU",
+        output_activation: str = "Sigmoid",
         *args,
         **kwargs
     ) -> None:
@@ -23,66 +24,53 @@ class DualDecoder(nn.Module):
         self.kernel_size = kernel_size
         self.middle_activation = middle_activation
         self.output_activation = output_activation
+        self.pooling_kernel_size = pooling_kernel_size
 
-        self.feature_extraction = nn.Sequential(
-            nn.Conv2d(
-                in_channels=self.in_channels,
-                out_channels=self.middle_channels,
-                kernel_size=self.kernel_size,
-                stride=1,
-                padding=1,
+        self.encoder_3 = (
+            nn.Sequential(
+                nn.Conv2d(
+                    in_channels=self.in_channels,
+                    out_channels=64,
+                    kernel_size=self.kernel_size,
+                    padding=1,
+                ),
+                get_activation(self.middle_activation),
+                nn.Conv2d(
+                    in_channels=64,
+                    out_channels=64,
+                    kernel_size=self.kernel_size,
+                    padding=1,
+                ),
+                get_activation(self.middle_activation),
+                nn.MaxPool2d(
+                    kernel_size=self.pooling_kernel_size,
+                )
             )
         )
 
-        self.up_sampler = nn.Sequential(
-            nn.ConvTranspose2d(
-                in_channels=self.middle_channels,
-                out_channels=self.middle_channels,
-                kernel_size=self.kernel_size,
-                stride=2,
-                padding=1,
-                output_padding=1,
-            ),
-            get_activation(self.middle_activation),
-            nn.Conv2d(
-                in_channels=self.middle_channels,
-                out_channels=self.middle_channels,
-                kernel_size=self.kernel_size,
-                stride=1,
-                padding=1,
-            ),
-            get_activation(self.middle_activation),
-            nn.BatchNorm2d(self.middle_channels),
-            nn.ConvTranspose2d(
-                in_channels=self.middle_channels,
-                out_channels=self.middle_channels,
-                kernel_size=self.kernel_size,
-                stride=2,
-                padding=1,
-                output_padding=1,
-            ),
-            get_activation(self.middle_activation),
-            nn.Conv2d(
-                in_channels=self.middle_channels,
-                out_channels=self.middle_channels,
-                kernel_size=self.kernel_size,
-                stride=1,
-                padding=1,
-            ),
-            get_activation(self.middle_activation),
-            nn.BatchNorm2d(self.middle_channels),
+        self.encoder_3 = (
+            nn.Sequential(
+                nn.Conv2d(
+                    in_channels=self.in_channels,
+                    out_channels=64,
+                    kernel_size=self.kernel_size,
+                    padding=1,
+                ),
+                get_activation(self.middle_activation),
+                nn.Conv2d(
+                    in_channels=64,
+                    out_channels=64,
+                    kernel_size=self.kernel_size,
+                    padding=1,
+                ),
+                get_activation(self.middle_activation),
+                nn.MaxPool2d(
+                    kernel_size=self.pooling_kernel_size,
+                )
+            )
         )
 
-        self.to_output = nn.Sequential(
-            nn.Conv2d(
-                in_channels=self.middle_channels,
-                out_channels=self.out_channels,
-                kernel_size=self.kernel_size,
-                stride=1,
-                padding=1,
-            ),
-            nn.Tanh() if self.output_activation == "Tanh" else nn.Sigmoid(),
-        )
+
 
     def forward(self, x):
         x = self.feature_extraction(x)
