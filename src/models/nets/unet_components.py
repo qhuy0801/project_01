@@ -130,8 +130,9 @@ class DoubleConvolution(nn.Module):
         self,
         in_channels,
         out_channels,
-        additional_channels=None,
-        residual=False,
+        additional_channels: int = None,
+        residual: bool = False,
+        bias: bool = False,
         *args,
         **kwargs
     ) -> None:
@@ -154,7 +155,7 @@ class DoubleConvolution(nn.Module):
                 additional_channels,
                 kernel_size=self.kernel_size,
                 padding=1,
-                bias=False,
+                bias=bias,
             ),
             nn.GroupNorm(1, additional_channels),
             nn.GELU(),
@@ -163,7 +164,7 @@ class DoubleConvolution(nn.Module):
                 out_channels,
                 kernel_size=self.kernel_size,
                 padding=1,
-                bias=False,
+                bias=bias,
             ),
             nn.GroupNorm(1, out_channels),
         )
