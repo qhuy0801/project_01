@@ -1,6 +1,6 @@
 from torch import nn
 
-from utils import get_activation
+from models.nets.unet_components import DoubleConvolution
 
 
 class DualDecoder(nn.Module):
@@ -26,54 +26,43 @@ class DualDecoder(nn.Module):
         self.output_activation = output_activation
         self.pooling_kernel_size = pooling_kernel_size
 
-        self.encoder_3 = (
-            nn.Sequential(
-                nn.Conv2d(
-                    in_channels=self.in_channels,
-                    out_channels=64,
-                    kernel_size=self.kernel_size,
-                    padding=1,
-                ),
-                get_activation(self.middle_activation),
-                nn.Conv2d(
-                    in_channels=64,
-                    out_channels=64,
-                    kernel_size=self.kernel_size,
-                    padding=1,
-                ),
-                get_activation(self.middle_activation),
-                nn.MaxPool2d(
-                    kernel_size=self.pooling_kernel_size,
-                )
-            )
+        self.feature_extractor = DoubleConvolution(
+            in_channels=self.in_channels,
+            out_channels=256,
+            bias=True,
         )
 
-        self.encoder_3 = (
-            nn.Sequential(
-                nn.Conv2d(
-                    in_channels=self.in_channels,
-                    out_channels=64,
-                    kernel_size=self.kernel_size,
-                    padding=1,
-                ),
-                get_activation(self.middle_activation),
-                nn.Conv2d(
-                    in_channels=64,
-                    out_channels=64,
-                    kernel_size=self.kernel_size,
-                    padding=1,
-                ),
-                get_activation(self.middle_activation),
-                nn.MaxPool2d(
-                    kernel_size=self.pooling_kernel_size,
-                )
-            )
+        self.decoder_1 = nn.Sequential(
+            nn.Upsample(scale_factor=2, mode="bilinear", align_corners=True),
+            DoubleConvolution(
+                in_channels=256,
+                out_channels=128,
+                bias=True,
+            ),
         )
 
+        self.decoder_2 = nn.Sequential(
+            nn.Upsample(scale_factor=2, mode="bilinear", align_corners=True),
+            DoubleConvolution(
+                in_channels=128,
+                out_channels=64,
+                bias=True,
+            ),
+        )
 
+        self.to_output = nn.Sequential(
+            nn.Conv2d(
+                in_channels=64,
+                out_channels=self.out_channels,
+                kernel_size=self.kernel_size,
+                padding=1,
+            ),
+            nn.Sigmoid(),
+        )
 
     def forward(self, x):
-        x = self.feature_extraction(x)
-        x = self.up_sampler(x)
+        x = self.feature_extractor(x)
+        x = self.decoder_1(x)
+        x = self.decoder_2(x)
         x = self.to_output(x)
         return x
