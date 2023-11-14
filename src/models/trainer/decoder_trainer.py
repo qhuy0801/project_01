@@ -54,12 +54,7 @@ class DecoderTrainer:
         )
 
         # Model
-        self.model = SuperResAE(
-            in_channels=3,
-            out_channels=3,
-            middle_channels=middle_channels,
-            kernel_size=3,
-        ).to(self.device)
+        self.model = DualDecoder().to(self.device)
 
         # Number of epochs
         self.epochs = epochs
@@ -162,9 +157,7 @@ class DecoderTrainer:
         ):
             # Unpack the batch
             img_s, img_l, _ = batch
-            img_s, img_l = functional.interpolate(
-                img_s, size=(256, 256), mode="bilinear", align_corners=False
-            ).to(self.device), img_l.to(self.device)
+            img_s, img_l = img_s.to(self.device), img_l.to(self.device)
 
             # Forwarding
             pred_img_l = self.model(img_s)
@@ -195,14 +188,17 @@ class DecoderTrainer:
     def sample(self):
         # Get a random embedding from dataset
         img_s, img_l, _ = next(iter(self.sample_loader))
-        img_s = functional.interpolate(
-            img_s, size=(256, 256), mode="bilinear", align_corners=False
-        ).to(self.device)
+        img_s = img_s.to(self.device)
         img_l = img_l.to(self.device)
 
         # Display
         display = [
-            de_normalise(img_s, self.device),
+            de_normalise(
+                functional.interpolate(
+                    img_s, size=(256, 256), mode="bilinear", align_corners=False
+                ),
+                self.device,
+            ),
             de_normalise(img_l, self.device),
         ]
 
@@ -213,7 +209,12 @@ class DecoderTrainer:
         pred_img_l = self.model(img_s)
 
         # Append the result to display
-        display.append(de_normalise(pred_img_l, self.device))
+        display.append(
+            de_normalise(
+                pred_img_l,
+                self.device,
+            )
+        )
 
         # Concatenation for displaying
         display = torch.cat(display, dim=0)

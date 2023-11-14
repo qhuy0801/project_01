@@ -1,4 +1,5 @@
 from torch import nn
+from torchinfo import summary
 
 from models.nets.unet_components import DoubleConvolution
 
@@ -26,28 +27,57 @@ class DualDecoder(nn.Module):
         self.output_activation = output_activation
         self.pooling_kernel_size = pooling_kernel_size
 
-        self.feature_extractor = DoubleConvolution(
-            in_channels=self.in_channels,
-            out_channels=256,
-            bias=True,
+        self.feature_extractor = nn.Sequential(
+            nn.Conv2d(
+                in_channels=self.in_channels,
+                out_channels=256,
+                kernel_size=self.kernel_size,
+                padding=1,
+            ),
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=256,
+                out_channels=256,
+                kernel_size=self.kernel_size,
+                padding=1,
+            ),
+            nn.ReLU(),
         )
 
         self.decoder_1 = nn.Sequential(
             nn.Upsample(scale_factor=2, mode="bilinear", align_corners=True),
-            DoubleConvolution(
+            nn.Conv2d(
                 in_channels=256,
                 out_channels=128,
-                bias=True,
+                kernel_size=self.kernel_size,
+                padding=1,
             ),
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=128,
+                out_channels=128,
+                kernel_size=self.kernel_size,
+                padding=1,
+            ),
+            nn.ReLU(),
         )
 
         self.decoder_2 = nn.Sequential(
             nn.Upsample(scale_factor=2, mode="bilinear", align_corners=True),
-            DoubleConvolution(
+            nn.Conv2d(
                 in_channels=128,
                 out_channels=64,
-                bias=True,
+                kernel_size=self.kernel_size,
+                padding=1,
             ),
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=64,
+                out_channels=64,
+                kernel_size=self.kernel_size,
+                padding=1,
+            ),
+            nn.ReLU(),
         )
 
         self.to_output = nn.Sequential(
@@ -66,3 +96,8 @@ class DualDecoder(nn.Module):
         x = self.decoder_2(x)
         x = self.to_output(x)
         return x
+
+
+if __name__ == "__main__":
+    model_stats = str(summary(DualDecoder(), (1, 3, 64, 64)))
+    print(model_stats)
