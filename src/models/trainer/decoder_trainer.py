@@ -11,6 +11,7 @@ from tqdm import tqdm
 
 from models.nets.autoencoder import SuperResAE
 from models.nets.dual_decoder import DualDecoder
+from models.nets.espcn import ESPCN
 from utils import save_checkpoint, de_normalise
 
 
@@ -54,7 +55,7 @@ class DecoderTrainer:
         )
 
         # Model
-        self.model = DualDecoder(output_activation="Sigmoid").to(self.device)
+        self.model = ESPCN().to(self.device)
 
         # Number of epochs
         self.epochs = epochs
