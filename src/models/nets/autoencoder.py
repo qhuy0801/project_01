@@ -73,7 +73,7 @@ class SuperResAE(nn.Module):
                 out_channels=self.out_channels,
                 bias=True,
             ),
-            nn.Sigmoid(),
+            nn.ReLU(),
         )
 
     def forward(self, x):

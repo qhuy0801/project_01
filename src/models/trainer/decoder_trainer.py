@@ -22,7 +22,7 @@ class DecoderTrainer:
         num_workers: int = 8,
         num_samples: int = 1,
         middle_channels: int = 256,
-        max_lr: float = 3e-4,
+        max_lr: float = 1e-4,
         eps: float = 1e-8,
         epochs: int = 5000,
         run_name: str = "decoder",
@@ -54,7 +54,7 @@ class DecoderTrainer:
         )
 
         # Model
-        self.model = DualDecoder(
+        self.model = SuperResAE(
             in_channels=3,
             out_channels=3,
             middle_channels=middle_channels,
@@ -81,7 +81,7 @@ class DecoderTrainer:
 
         # Log models and training stats
         self.model.eval()
-        model_stats = str(summary(self.model, (1, 3, 64, 64)))
+        model_stats = str(summary(self.model, (1, 3, 256, 256)))
         with open(
             f"{os.path.join(self.run_dir, self.run_time)}/model.txt", "w"
         ) as file:
@@ -162,7 +162,9 @@ class DecoderTrainer:
         ):
             # Unpack the batch
             img_s, img_l, _ = batch
-            img_s, img_l = img_s.to(self.device), img_l.to(self.device)
+            img_s, img_l = functional.interpolate(
+                img_s, size=(256, 256), mode="bilinear", align_corners=False
+            ).to(self.device), img_l.to(self.device)
 
             # Forwarding
             pred_img_l = self.model(img_s)
@@ -193,17 +195,14 @@ class DecoderTrainer:
     def sample(self):
         # Get a random embedding from dataset
         img_s, img_l, _ = next(iter(self.sample_loader))
-        img_s = img_s.to(self.device)
+        img_s = functional.interpolate(
+            img_s, size=(256, 256), mode="bilinear", align_corners=False
+        ).to(self.device)
         img_l = img_l.to(self.device)
 
         # Display
         display = [
-            de_normalise(
-                functional.interpolate(
-                    img_s, size=(256, 256), mode="bilinear", align_corners=False
-                ),
-                self.device,
-            ),
+            de_normalise(img_s, self.device),
             de_normalise(img_l, self.device),
         ]
 
