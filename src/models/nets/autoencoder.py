@@ -27,6 +27,7 @@ class SuperResAE(nn.Module):
             in_channels=self.in_channels,
             out_channels=64,
             bias=True,
+            middle_activation="ReLU",
         )
 
         self.encoder_1 = nn.Sequential(
@@ -35,6 +36,7 @@ class SuperResAE(nn.Module):
                 in_channels=64,
                 out_channels=128,
                 bias=True,
+                middle_activation="ReLU",
             ),
         )
 
@@ -55,6 +57,7 @@ class SuperResAE(nn.Module):
                 in_channels=256,
                 out_channels=128,
                 bias=True,
+                middle_activation="ReLU",
             ),
         )
 
@@ -64,6 +67,7 @@ class SuperResAE(nn.Module):
                 in_channels=128,
                 out_channels=64,
                 bias=True,
+                middle_activation="ReLU",
             ),
         )
 
@@ -72,6 +76,7 @@ class SuperResAE(nn.Module):
                 in_channels=64,
                 out_channels=self.out_channels,
                 bias=True,
+                middle_activation="ReLU",
             ),
             nn.ReLU(),
         )
