@@ -98,7 +98,7 @@ def quadratic_schedule(start, end, steps):
     :param steps:
     :return:
     """
-    return torch.linspace(start**0.5, end**0.5, steps) ** 2
+    return torch.linspace(start ** 0.5, end ** 0.5, steps) ** 2
 
 
 def sigmoid_schedule(start, end, steps, sigmoid_max: float = 10.0):
@@ -136,6 +136,7 @@ def to_uint8(image_tensor):
     """
     return (image_tensor * 255).round().astype("uint8")
 
+
 def get_activation(activation_str: str):
     """
     Get the linear activation functions
@@ -146,7 +147,9 @@ def get_activation(activation_str: str):
         return torch.nn.SiLU()
     elif activation_str == "GeLU":
         return torch.nn.GELU()
-    elif activation_str == "ReLU":
-        return torch.nn.ReLU()
-    else:
+    elif activation_str == "LeakyReLU":
         return torch.nn.LeakyReLU()
+    elif activation_str == "GELU":
+        return torch.nn.GELU()
+    else:
+        return torch.nn.ReLU()

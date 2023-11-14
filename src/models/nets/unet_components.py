@@ -2,6 +2,8 @@ import torch
 from torch import nn
 from torch.nn import functional
 
+from utils import get_activation
+
 
 class UpBlock(nn.Module):
     """
@@ -134,6 +136,7 @@ class DoubleConvolution(nn.Module):
         additional_channels: int = None,
         residual: bool = False,
         bias: bool = False,
+        middle_activation: str = "GELU",
         *args,
         **kwargs
     ) -> None:
@@ -159,7 +162,7 @@ class DoubleConvolution(nn.Module):
                 bias=bias,
             ),
             nn.GroupNorm(1, additional_channels),
-            nn.GELU(),
+            get_activation(middle_activation),
             nn.Conv2d(
                 additional_channels,
                 out_channels,
