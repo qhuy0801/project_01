@@ -54,7 +54,7 @@ class DecoderTrainer:
         )
 
         # Model
-        self.model = DualDecoder().to(self.device)
+        self.model = DualDecoder(output_activation="Sigmoid").to(self.device)
 
         # Number of epochs
         self.epochs = epochs
@@ -76,7 +76,7 @@ class DecoderTrainer:
 
         # Log models and training stats
         self.model.eval()
-        model_stats = str(summary(self.model, (1, 3, 256, 256)))
+        model_stats = str(summary(self.model, (1, 3, 64, 64)))
         with open(
             f"{os.path.join(self.run_dir, self.run_time)}/model.txt", "w"
         ) as file:
