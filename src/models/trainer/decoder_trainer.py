@@ -9,8 +9,6 @@ from torch.utils.tensorboard import SummaryWriter
 from torchinfo import summary
 from tqdm import tqdm
 
-from models.nets.autoencoder import SuperResAE
-from models.nets.dual_decoder import DualDecoder
 from models.nets.espcn import ESPCN
 from utils import save_checkpoint, de_normalise
 
@@ -158,7 +156,9 @@ class DecoderTrainer:
         ):
             # Unpack the batch
             img_s, img_l, _ = batch
-            img_s, img_l = img_s.to(self.device), img_l.to(self.device)
+            img_s, img_l = de_normalise(
+                img_s.to(self.device), self.device
+            ), de_normalise(img_l.to(self.device), self.device)
 
             # Forwarding
             pred_img_l = self.model(img_s)
@@ -189,18 +189,15 @@ class DecoderTrainer:
     def sample(self):
         # Get a random embedding from dataset
         img_s, img_l, _ = next(iter(self.sample_loader))
-        img_s = img_s.to(self.device)
-        img_l = img_l.to(self.device)
+        img_s = de_normalise(img_s.to(self.device), self.device)
+        img_l = de_normalise(img_l.to(self.device), self.device)
 
         # Display
         display = [
-            de_normalise(
-                functional.interpolate(
-                    img_s, size=(256, 256), mode="bilinear", align_corners=False
-                ),
-                self.device,
+            functional.interpolate(
+                img_s, size=(256, 256), mode="bilinear", align_corners=False
             ),
-            de_normalise(img_l, self.device),
+            img_l,
         ]
 
         # Put model in training mode
@@ -210,12 +207,7 @@ class DecoderTrainer:
         pred_img_l = self.model(img_s)
 
         # Append the result to display
-        display.append(
-            de_normalise(
-                pred_img_l,
-                self.device,
-            )
-        )
+        display.append(pred_img_l)
 
         # Concatenation for displaying
         display = torch.cat(display, dim=0)
