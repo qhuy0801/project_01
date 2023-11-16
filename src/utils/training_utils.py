@@ -157,7 +157,7 @@ def get_activation(activation_str: str):
         return torch.nn.ReLU()
 
 
-def psnr(original, reconstructed, max_pixel: float = 1.0):
+def psnr(reconstructed, original, max_pixel: float = 1.0):
     """
     Compute Peak signal-to-noise ratio (PSNR) of 2 tensors
     :param original:
@@ -165,4 +165,5 @@ def psnr(original, reconstructed, max_pixel: float = 1.0):
     :param max_pixel:
     :return:
     """
-    return 20 * torch.log10(max_pixel / torch.sqrt(F.mse_loss(reconstructed, original)))
+    psnr = 20 * torch.log10(max_pixel / torch.sqrt(F.mse_loss(reconstructed, original)))
+    return psnr.item()
