@@ -28,6 +28,7 @@ def train():
         hidden_channels=config.hidden_channels,
         middle_activation=config.middle_activation,
         output_module=config.output_module,
+        wandb_run=run,
     )
 
     # Trigger the training
