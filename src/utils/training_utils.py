@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import torch
 from albumentations.pytorch import ToTensorV2
+import torch.nn.functional as F
 
 MEAN = [0.485, 0.456, 0.406]
 STD = [0.229, 0.224, 0.225]
@@ -40,6 +41,7 @@ def get_segmentation(_sample, _session):
 def forward_transform(image, target_size, to_tensor: bool = True):
     """
     Simple transformation which include normalisation and resizing
+    :param to_tensor:
     :param image:
     :param target_size:
     :return: CHW tensors
@@ -98,7 +100,7 @@ def quadratic_schedule(start, end, steps):
     :param steps:
     :return:
     """
-    return torch.linspace(start ** 0.5, end ** 0.5, steps) ** 2
+    return torch.linspace(start**0.5, end**0.5, steps) ** 2
 
 
 def sigmoid_schedule(start, end, steps, sigmoid_max: float = 10.0):
@@ -153,3 +155,14 @@ def get_activation(activation_str: str):
         return torch.nn.GELU()
     else:
         return torch.nn.ReLU()
+
+
+def psnr(original, reconstructed, max_pixel: float = 1.0):
+    """
+    Compute Peak signal-to-noise ratio (PSNR) of 2 tensors
+    :param original:
+    :param reconstructed:
+    :param max_pixel:
+    :return:
+    """
+    return 20 * torch.log10(max_pixel / torch.sqrt(F.mse_loss(reconstructed, original)))

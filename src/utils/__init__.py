@@ -9,7 +9,8 @@ from .training_utils import (
     get_segmentation,
     resize_segmentation,
     arr_to_tuples,
-    get_activation
+    get_activation,
+    psnr,
 )
 
 from .io_ultis import (
