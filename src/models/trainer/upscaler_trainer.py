@@ -1,31 +1,37 @@
 import os
 from datetime import datetime
 import bitsandbytes as bnb
+import numpy as np
 
 import torch
 import torch.nn.functional as functional
+import wandb
 from torch.utils.data import Dataset, DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from torchinfo import summary
 from tqdm import tqdm
+from wandb.sdk.wandb_run import Run
 
-from models.nets.espcn import ESPCN
-from utils import save_checkpoint, de_normalise
+from models.nets.up_scaler import UpScaler
+from utils import de_normalise, psnr
 
 
-class DecoderTrainer:
+class UpscalerTrainer:
     def __init__(
         self,
         dataset: Dataset,
         batch_size: int = 32,
         num_workers: int = 8,
         num_samples: int = 1,
-        middle_channels: int = 256,
+        hidden_channels: int = 64,
+        middle_activation: str = "ReLU",
+        output_module: str = "sub-pix",
         max_lr: float = 1e-4,
         eps: float = 1e-8,
         epochs: int = 5000,
         run_name: str = "decoder",
         output_dir: str = "./output/",
+        wandb_run: Run = None,
         additional_note: str = "",
     ) -> None:
         super().__init__()
@@ -53,7 +59,11 @@ class DecoderTrainer:
         )
 
         # Model
-        self.model = ESPCN().to(self.device)
+        self.model = UpScaler(
+            hidden_channels=hidden_channels,
+            middle_activation=middle_activation,
+            output_module=output_module,
+        ).to(self.device)
 
         # Number of epochs
         self.epochs = epochs
@@ -83,26 +93,32 @@ class DecoderTrainer:
             file.write(
                 f"\nTotal epochs: {self.epochs}"
                 f"\nMax learning rate: {max_lr}"
+                f"\nMiddle activation method: {middle_activation}"
+                f"\nOutput model: {output_module}"
+                f"\nHidden channels: {hidden_channels}"
                 f"\nBatch size: {batch_size}"
                 f"\nNum workers: {num_workers}"
                 f"\nAdditional note: {additional_note}"
             )
             file.close()
 
-        # Best epoch loss
-        self.best_loss: float = 2000.0
+        # Wandb run
+        self.wandb_run = wandb_run
 
-    def fit(self, sample_every: int = 20):
+        # Best epoch loss
+        self.best_psnr: float = 0.0
+
+    def fit(self):
         # Training mode
         self.model.train()
 
         print(f"Starting training {self.run_name} for {self.epochs} epochs...")
 
         for epoch in range(self.epochs):
-            epoch_loss = self.one_epoch(epoch)
+            epoch_psnr = self.one_epoch(epoch)
 
             # Logs
-            self.log.add_scalar("Epoch/MSE_loss", epoch_loss, epoch)
+            self.log.add_scalar("Epoch/PSNR", epoch_psnr, epoch)
             if self.scheduler is not None:
                 self.log.add_scalar(
                     "Epoch/Learning_rate",
@@ -111,24 +127,11 @@ class DecoderTrainer:
                 )
             self.log.flush()
 
-            # Save checkpoint if new loss archived
-            if epoch_loss < self.best_loss:
-                self.best_loss = epoch_loss
-                save_checkpoint(
-                    {"model": self.model.state_dict()},
-                    self.run_name,
-                    os.path.join(self.run_dir, self.run_time),
-                )
-
-            # Log samples
-            if epoch % sample_every == 0:
-                sample = self.sample()
-                self.log.add_images(
-                    tag=f"Samples/Random/Epoch:{epoch}",
-                    img_tensor=sample,
-                    global_step=epoch,
-                    dataformats="NCHW",
-                )
+            # WandB log
+            if self.wandb_run is not None:
+                wandb.log({"psnr": epoch_psnr})
+                if self.scheduler is not None:
+                    wandb.log({"learning_rate": self.optimiser.param_groups[0]["lr"]})
 
         print(f"{self.epochs} training completed")
         return None
@@ -143,7 +146,7 @@ class DecoderTrainer:
         self.model.train()
 
         # Store epoch loss
-        epoch_loss: float = 0.0
+        epoch_psnr = []
 
         # One batch iteration
         for _, batch in enumerate(
@@ -165,14 +168,12 @@ class DecoderTrainer:
 
             # Loss
             loss = functional.mse_loss(pred_img_l, img_l)
+            epoch_psnr.append(psnr(pred_img_l, img_l))
 
             # Take step
             self.step(loss)
 
-            # Store the loss
-            epoch_loss += loss
-
-        return epoch_loss.mean().item()
+        return np.mean(epoch_psnr)
 
     def step(self, loss):
         """
@@ -213,3 +214,4 @@ class DecoderTrainer:
         display = torch.cat(display, dim=0)
 
         return display
+
