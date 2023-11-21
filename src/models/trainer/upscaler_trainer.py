@@ -108,7 +108,7 @@ class UpscalerTrainer:
         # Best epoch loss
         self.best_psnr: float = 0.0
 
-    def fit(self):
+    def fit(self, sample_every: int = 100):
         # Training mode
         self.model.train()
 
@@ -132,6 +132,16 @@ class UpscalerTrainer:
                 wandb.log({"psnr": epoch_psnr})
                 if self.scheduler is not None:
                     wandb.log({"learning_rate": self.optimiser.param_groups[0]["lr"]})
+
+                    # Log samples
+            if epoch % sample_every == 0:
+                        sample = self.sample(epoch)
+                        self.log.add_images(
+                            tag=f"Samples/Random/Epoch:{epoch}",
+                            img_tensor=sample,
+                            global_step=epoch,
+                            dataformats="NCHW",
+                        )
 
         print(f"{self.epochs} training completed")
         return None

@@ -20,7 +20,7 @@ def train():
         additional_target_tensor_size=256,
     )
 
-    decoder_trainer = UpscalerTrainer(
+    upscaler_trainer = UpscalerTrainer(
         dataset=dataset,
         max_lr=1e-4,
         epochs=500,
@@ -32,8 +32,35 @@ def train():
     )
 
     # Trigger the training
-    decoder_trainer.fit()
+    upscaler_trainer.fit()
 
+
+def final_train():
+    # Init the run
+    run = wandb.init(project="Up_scaler")
+
+    # Training setups
+    dataset = WoundDataset(
+        image_dir=CONST.PROCESSED_IMAGES_DIR,
+        segment_dir=CONST.PROCESSED_SEGMENT_DIR,
+        target_tensor_size=CONST.DIFFUSER_SETTINGS.INPUT_SIZE,
+        additional_target_tensor_size=256,
+    )
+
+    upscaler_trainer = UpscalerTrainer(
+        dataset=dataset,
+        max_lr=1e-4,
+        epochs=5000,
+        num_workers=2,
+        output_dir="../resources/output/",
+        hidden_channels=128,
+        middle_activation="Tanh",
+        output_module="sub-pix",
+        wandb_run=run,
+    )
+
+    # Trigger the training
+    upscaler_trainer.fit()
 
 if __name__ == "__main__":
     # Login wandb
@@ -41,4 +68,6 @@ if __name__ == "__main__":
     wand_logged = wandb.login(key=wandb_key)
 
     # Start the sweep agent
-    wandb.agent(sweep_id="94374qrj", project="Up_scaler", function=train, count=16)
+    # wandb.agent(sweep_id="94374qrj", project="Up_scaler", function=train, count=16)
+
+    final_train()
