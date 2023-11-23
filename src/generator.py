@@ -16,4 +16,4 @@ if __name__ == '__main__':
         ddpm_checkpoint="../resources/checkpoint/ddpm_v1.pt"
     )
 
-    generator.ddpm_generate_all()
+    generator.ddpm_generate_all(result_dir="../resources/output/ddpm_64/")
