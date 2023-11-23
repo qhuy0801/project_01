@@ -1,6 +1,6 @@
 import CONST
 from entities import WoundDataset
-from generator.generator import Generator
+from model_assembly.result_generator import Generator
 
 if __name__ == '__main__':
     dataset = WoundDataset(
