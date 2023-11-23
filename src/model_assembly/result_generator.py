@@ -7,15 +7,21 @@ from torchvision.utils import save_image
 from tqdm import tqdm
 
 from models.nets.unet_v2 import UNet_v2
-from utils import load_checkpoint, cosine_schedule, sigmoid_schedule, quadratic_schedule, linear_schedule
+from utils import (
+    load_checkpoint,
+    cosine_schedule,
+    sigmoid_schedule,
+    quadratic_schedule,
+    linear_schedule,
+)
 
 
 class Generator:
     def __init__(
         self,
         dataset: Dataset,
-        batch_size: int = 24,
-        num_workers: int = 8,
+        batch_size: int = 1,
+        num_workers: int = 1,
         run_name: str = "Generator",
         variance_schedule_type: str = "linear",
         beta_start: float = 1e-4,
@@ -23,7 +29,6 @@ class Generator:
         noise_steps: int = 1000,
         embedding_dim: int = 256,
         attn_heads: int = 1,
-        embedded_dim: int = 256,
         ddpm_checkpoint: str = "",
     ) -> None:
         super().__init__()
@@ -46,7 +51,7 @@ class Generator:
             in_channels=3,
             out_channels=3,
             attn_heads=attn_heads,
-            embedded_dim=embedded_dim,
+            embedded_dim=embedding_dim,
         ).to(self.device)
 
         ddpm_checkpoint = load_checkpoint(ddpm_checkpoint, str(self.device))
@@ -85,12 +90,12 @@ class Generator:
     def ddpm_generate_all(self, result_dir: str = ""):
         self.ddpm_model.eval()
         for _, batch in enumerate(
-                tqdm(
-                    self.dataloader,
-                    desc=f"Generating processing...",
-                    position=0,
-                    leave=False,
-                )
+            tqdm(
+                self.dataloader,
+                desc=f"Generating processing...",
+                position=0,
+                leave=False,
+            )
         ):
             file_names, semantics = batch
             semantics = semantics.to(self.device)
@@ -100,14 +105,16 @@ class Generator:
 
             # Iterate through steps
             for _, time_step in enumerate(
-                    tqdm(
-                        reversed(range(1, self.noise_steps)),
-                        position=0,
-                        leave=True,
-                    )
+                tqdm(
+                    reversed(range(1, self.noise_steps)),
+                    position=0,
+                    leave=True,
+                )
             ):
                 # Numeric timestep
-                t = torch.full(size=(semantics.size(0)), fill_value=time_step, dtype=torch.long).to(self.device)
+                t = torch.full(
+                    size=(semantics.size(0),), fill_value=time_step, dtype=torch.long
+                ).to(self.device)
 
                 # Conditioning
                 time_step_embeddings = self.step_embeddings(t)
@@ -129,19 +136,19 @@ class Generator:
 
                 # Denoising algorithms
                 images = (
-                        1
-                        / torch.sqrt(__alpha)
-                        * (
-                                images
-                                - ((1 - __alpha) / (torch.sqrt(1 - __alpha_cumulative)))
-                                * pred_noise
-                        )
-                        + torch.sqrt(__beta) * iteration_noise
+                    1
+                    / torch.sqrt(__alpha)
+                    * (
+                        images
+                        - ((1 - __alpha) / (torch.sqrt(1 - __alpha_cumulative)))
+                        * pred_noise
+                    )
+                    + torch.sqrt(__beta) * iteration_noise
                 )
 
-                for i, image in enumerate(images):
-                    # Save each image to the specified directory
-                    save_image(image, os.path.join(result_dir, f'{file_names[i]}.png'))
+            for i, image in enumerate(images):
+                # Save each image to the specified directory
+                save_image(image, os.path.join(result_dir, f"{file_names[i]}.png"))
 
     def step_embeddings(self, steps):
         """
