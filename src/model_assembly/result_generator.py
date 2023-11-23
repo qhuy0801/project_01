@@ -13,6 +13,7 @@ from utils import (
     sigmoid_schedule,
     quadratic_schedule,
     linear_schedule,
+    de_normalise,
 )
 
 
@@ -87,6 +88,7 @@ class Generator:
         # Clear memory
         gc.collect()
 
+    @torch.inference_mode()
     def ddpm_generate_all(self, result_dir: str = ""):
         self.ddpm_model.eval()
         for _, batch in enumerate(
@@ -146,6 +148,7 @@ class Generator:
                     + torch.sqrt(__beta) * iteration_noise
                 )
 
+            images = de_normalise(images, self.device)
             for i, image in enumerate(images):
                 # Save each image to the specified directory
                 save_image(image, os.path.join(result_dir, f"{file_names[i]}.png"))
