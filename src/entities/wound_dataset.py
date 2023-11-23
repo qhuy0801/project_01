@@ -21,6 +21,7 @@ class WoundDataset(Dataset):
         embedding_dir: str = None,
         target_tensor_size: int = 512,
         additional_target_tensor_size: int = None,
+        generation_mode: bool = False,
     ) -> None:
         super().__init__()
         self.image_dir = image_dir
@@ -28,6 +29,7 @@ class WoundDataset(Dataset):
         self.target_tensor_size = target_tensor_size
         self.additional_target_tensor_size = additional_target_tensor_size
         self.embedding_dir = embedding_dir
+        self.generation_mode = generation_mode
 
         self.data = []
 
@@ -51,6 +53,12 @@ class WoundDataset(Dataset):
         image = cv2.cvtColor(cv2.imread(file_path), cv2.COLOR_BGR2RGB)
         segment_path = glob.glob(f"{self.segment_dir}{file_name}*")[0]
 
+        if self.generation_mode:
+            __embeddings_path = glob.glob(f"{self.embedding_dir}{file_name}*")[0]
+            return (
+                file_name,
+                torch.load(__embeddings_path),
+            )
         if self.embedding_dir is not None:
             __embeddings_path = glob.glob(f"{self.embedding_dir}{file_name}*")[0]
             return (

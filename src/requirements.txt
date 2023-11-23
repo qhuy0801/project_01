@@ -18,3 +18,4 @@ onnx
 onnxruntime
 torchinfo==1.8.0
 wandb==0.15.12
+torchvision==0.16.0
