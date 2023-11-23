@@ -135,7 +135,7 @@ class UpscalerTrainer:
 
                     # Log samples
             if epoch % sample_every == 0:
-                        sample = self.sample(epoch)
+                        sample = self.sample()
                         self.log.add_images(
                             tag=f"Samples/Random/Epoch:{epoch}",
                             img_tensor=sample,
