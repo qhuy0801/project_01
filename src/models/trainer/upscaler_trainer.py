@@ -13,7 +13,7 @@ from tqdm import tqdm
 from wandb.sdk.wandb_run import Run
 
 from models.nets.up_scaler import UpScaler
-from utils import de_normalise, psnr
+from utils import de_normalise, psnr, save_checkpoint
 
 
 class UpscalerTrainer:
@@ -135,13 +135,22 @@ class UpscalerTrainer:
 
                     # Log samples
             if epoch % sample_every == 0:
-                        sample = self.sample()
-                        self.log.add_images(
-                            tag=f"Samples/Random/Epoch:{epoch}",
-                            img_tensor=sample,
-                            global_step=epoch,
-                            dataformats="NCHW",
-                        )
+                sample = self.sample()
+                self.log.add_images(
+                    tag=f"Samples/Random/Epoch:{epoch}",
+                    img_tensor=sample,
+                    global_step=epoch,
+                    dataformats="NCHW",
+                )
+
+            # Save checkpoint if best PSNR archived
+            if epoch_psnr > self.best_psnr:
+                self.best_psnr = epoch_psnr
+                save_checkpoint(
+                    {"model": self.model.state_dict()},
+                    self.run_name,
+                    os.path.join(self.run_dir, self.run_time),
+                )
 
         print(f"{self.epochs} training completed")
         return None
@@ -224,4 +233,3 @@ class UpscalerTrainer:
         display = torch.cat(display, dim=0)
 
         return display
-
