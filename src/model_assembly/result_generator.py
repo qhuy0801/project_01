@@ -22,8 +22,8 @@ class Generator:
     def __init__(
         self,
         dataset: Dataset,
-        batch_size: int = 1,
-        num_workers: int = 1,
+        batch_size: int = 32,
+        num_workers: int = 2,
         run_name: str = "Generator",
         variance_schedule_type: str = "linear",
         beta_start: float = 1e-4,
@@ -94,7 +94,7 @@ class Generator:
             hidden_channels=upscaler_hidden_channels,
             middle_activation="Tanh",
             output_module="sub-pix",
-        )
+        ).to(self.device)
 
         upscaler_checkpoint = load_checkpoint(upscaler_checkpoint, str(self.device))
         self.upscale_model.load_state_dict(upscaler_checkpoint["model"])
