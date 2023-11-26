@@ -13,7 +13,8 @@ if __name__ == '__main__':
 
     generator = Generator(
         dataset=dataset,
-        ddpm_checkpoint="../resources/checkpoint/ddpm_v1.pt"
+        ddpm_checkpoint="../resources/checkpoint/ddpm_v1.pt",
+        upscaler_checkpoint="../resources/checkpoint/upscaler_v1.pt",
     )
 
-    generator.ddpm_generate_all(result_dir="../resources/output/ddpm_64/")
+    generator.generate_all(result_dir="../resources/output/diffusion_256/")

@@ -7,6 +7,7 @@ from torchvision.utils import save_image
 from tqdm import tqdm
 
 from models.nets.unet_v2 import UNet_v2
+from models.nets.up_scaler import UpScaler
 from utils import (
     load_checkpoint,
     cosine_schedule,
@@ -31,6 +32,8 @@ class Generator:
         embedding_dim: int = 256,
         attn_heads: int = 1,
         ddpm_checkpoint: str = "",
+        upscaler_checkpoint: str = "",
+        upscaler_hidden_channels: int = 128,
     ) -> None:
         super().__init__()
 
@@ -85,73 +88,94 @@ class Generator:
         # Embedding dims
         self.embedding_dim = embedding_dim
 
+        # Load model
+        # Image upscaler
+        self.upscale_model = UpScaler(
+            hidden_channels=upscaler_hidden_channels,
+            middle_activation="Tanh",
+            output_module="sub-pix",
+        )
+
+        upscaler_checkpoint = load_checkpoint(upscaler_checkpoint, str(self.device))
+        self.upscale_model.load_state_dict(upscaler_checkpoint["model"])
+
         # Clear memory
         gc.collect()
 
     @torch.inference_mode()
-    def ddpm_generate_all(self, result_dir: str = ""):
+    def generate_all(self, result_dir: str = ""):
         self.ddpm_model.eval()
         for _, batch in enumerate(
             tqdm(
                 self.dataloader,
-                desc=f"Generating processing...",
+                desc=f"Generating all images based on embeddings...",
                 position=0,
                 leave=False,
             )
         ):
-            file_names, semantics = batch
-            semantics = semantics.to(self.device)
+            file_names, images = self.__ddpm_generate_batch(batch)
+            images = self.__upscale_batch(images)
+            for i, image in enumerate(images):
+                # Save each image to the specified directory
+                save_image(image, os.path.join(result_dir, f"{file_names[i]}.png"))
 
-            # Get random gaussian noise with the shape of image
-            images = torch.randn((semantics.size(0), 3, 64, 64)).to(self.device)
+    @torch.inference_mode()
+    def __upscale_batch(self, images_batch):
+        images_batch = images_batch.to(self.device)
+        return self.upscale_model(images_batch)
 
-            # Iterate through steps
-            for _, time_step in enumerate(
+    @torch.inference_mode()
+    def __ddpm_generate_batch(self, batch):
+        file_names, semantics = batch
+        semantics = semantics.to(self.device)
+
+        # Get random gaussian noise with the shape of image
+        images = torch.randn((semantics.size(0), 3, 64, 64)).to(self.device)
+
+        # Iterate through steps
+        for _, time_step in enumerate(
                 tqdm(
                     reversed(range(1, self.noise_steps)),
                     position=0,
                     leave=True,
                 )
-            ):
-                # Numeric timestep
-                t = torch.full(
-                    size=(semantics.size(0),), fill_value=time_step, dtype=torch.long
-                ).to(self.device)
+        ):
+            # Numeric timestep
+            t = torch.full(
+                size=(semantics.size(0),), fill_value=time_step, dtype=torch.long
+            ).to(self.device)
 
-                # Conditioning
-                time_step_embeddings = self.step_embeddings(t)
-                embeddings = time_step_embeddings + semantics
+            # Conditioning
+            time_step_embeddings = self.step_embeddings(t)
+            embeddings = time_step_embeddings + semantics
 
-                # Forward
-                pred_noise = self.ddpm_model(images, embeddings)
+            # Forward
+            pred_noise = self.ddpm_model(images, embeddings)
 
-                # Denoise parameters
-                __alpha = self.alpha[t][:, None, None, None]
-                __alpha_cumulative = self.alpha_cumulative[t][:, None, None, None]
-                __beta = self.beta[t][:, None, None, None]
+            # Denoise parameters
+            __alpha = self.alpha[t][:, None, None, None]
+            __alpha_cumulative = self.alpha_cumulative[t][:, None, None, None]
+            __beta = self.beta[t][:, None, None, None]
 
-                # Iteration noises
-                if time_step > 1:
-                    iteration_noise = torch.randn_like(images)
-                else:
-                    iteration_noise = torch.zeros_like(images)
+            # Iteration noises
+            if time_step > 1:
+                iteration_noise = torch.randn_like(images)
+            else:
+                iteration_noise = torch.zeros_like(images)
 
-                # Denoising algorithms
-                images = (
+            # Denoising algorithms
+            images = (
                     1
                     / torch.sqrt(__alpha)
                     * (
-                        images
-                        - ((1 - __alpha) / (torch.sqrt(1 - __alpha_cumulative)))
-                        * pred_noise
+                            images
+                            - ((1 - __alpha) / (torch.sqrt(1 - __alpha_cumulative)))
+                            * pred_noise
                     )
                     + torch.sqrt(__beta) * iteration_noise
-                )
+            )
 
-            images = de_normalise(images, self.device)
-            for i, image in enumerate(images):
-                # Save each image to the specified directory
-                save_image(image, os.path.join(result_dir, f"{file_names[i]}.png"))
+        return file_names, de_normalise(images, self.device)
 
     def step_embeddings(self, steps):
         """
