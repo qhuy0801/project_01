@@ -5,11 +5,11 @@ This repository is dedicated to research on a light-weight image generation AI. 
 
 ## Architecture
 We have taken inspiration from the stable diffusion architecture of Stability AI. However, we've introduced several customizations:
-- A more compressed autoencoder, which results in a lighter architecture.
+- Decoder (Up-scaler) only inspired super-resolution model, which results in a lighter architecture.
 - A modified U-Net architecture that serves the diffusion purpose, adapted to fit the more compressed nature of our autoencoder.
 
 
-![Project architecture](./appendices/training.jpg)
+![Project architecture](./appendices/final_model.jpeg)
 
 
 ## Semantic Mapping
