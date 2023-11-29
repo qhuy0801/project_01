@@ -26,6 +26,13 @@ from utils import (
 
 
 class Diffuser:
+    """
+    The class for Diffusion models, which includes:
+        - Neural network (U-Net)
+        - Variance scheduler
+        - Training and sampling functions
+        - Step embedding function (cloned from Embedding class for the ease of apply)
+    """
     def __init__(
         self,
         dataset: Dataset,
@@ -46,6 +53,26 @@ class Diffuser:
         wandb_run: Run = None,
         additional_note: str = "",
     ) -> None:
+        """
+        Constructor
+        :param dataset:
+        :param batch_size:
+        :param num_workers:
+        :param run_name:
+        :param output_dir:
+        :param model_checkpoint:
+        :param variance_schedule_type:
+        :param beta_start:
+        :param beta_end:
+        :param noise_steps:
+        :param epochs:
+        :param max_lr:
+        :param eps:
+        :param embedding_dim:
+        :param attn_heads:
+        :param wandb_run:
+        :param additional_note:
+        """
         super().__init__()
         # Platform
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

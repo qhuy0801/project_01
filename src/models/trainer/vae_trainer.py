@@ -1,3 +1,7 @@
+"""
+Implementation tried for VAE trainer, however all VAE model has been discarded
+due to low-performance
+"""
 import gc
 import os
 from datetime import datetime

@@ -1,6 +1,5 @@
 import gc
 from datetime import datetime
-import itertools
 import os
 
 import torch
@@ -11,7 +10,7 @@ from torch.utils.tensorboard import SummaryWriter
 from torchinfo import summary
 from tqdm import tqdm
 
-from models.nets.vae_v4 import Multi_headed_AE, Autoencoder_v1
+from models.nets.vae_v4 import Multi_headed_AE
 from utils import de_normalise, save_checkpoint, load_checkpoint
 
 

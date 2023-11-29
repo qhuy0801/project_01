@@ -1,3 +1,7 @@
+"""
+This class is no longer used as we no longer continue with auto-encoder in this project
+due to low-performance
+"""
 import gc
 import os
 from datetime import datetime
@@ -11,11 +15,13 @@ import torch.nn.functional as functional
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-from models.nets.vae import VAE
 from utils import save_checkpoint, de_normalise, load_checkpoint
 
 
 class AETrainer_v1:
+    """
+    The implementation of auto-encoder, which include the trainer and sampling methods
+    """
     def __init__(
         self,
         train_dataset: Dataset,

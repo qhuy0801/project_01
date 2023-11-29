@@ -17,6 +17,10 @@ from utils import de_normalise, psnr, save_checkpoint
 
 
 class UpscalerTrainer:
+    """
+    The trainer class of image up-scaler model
+    Which include training trigger, checkpoint saving functions
+    """
     def __init__(
         self,
         dataset: Dataset,
@@ -34,6 +38,23 @@ class UpscalerTrainer:
         wandb_run: Run = None,
         additional_note: str = "",
     ) -> None:
+        """
+        Constructor
+        :param dataset:
+        :param batch_size:
+        :param num_workers:
+        :param num_samples:
+        :param hidden_channels:
+        :param middle_activation:
+        :param output_module:
+        :param max_lr:
+        :param eps:
+        :param epochs:
+        :param run_name:
+        :param output_dir:
+        :param wandb_run:
+        :param additional_note:
+        """
         super().__init__()
         # Platform
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -109,6 +130,11 @@ class UpscalerTrainer:
         self.best_psnr: float = 0.0
 
     def fit(self, sample_every: int = 100):
+        """
+        Training trigger
+        :param sample_every:
+        :return:
+        """
         # Training mode
         self.model.train()
 
@@ -207,6 +233,10 @@ class UpscalerTrainer:
             self.scheduler.step()
 
     def sample(self):
+        """
+        Get a random low-resolution image and upscale it
+        :return:
+        """
         # Get a random embedding from dataset
         img_s, img_l, _ = next(iter(self.sample_loader))
         img_s = de_normalise(img_s.to(self.device), self.device)
