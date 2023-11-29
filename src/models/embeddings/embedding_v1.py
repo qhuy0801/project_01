@@ -6,6 +6,12 @@ from utils import binary_rounding
 
 
 class Embedding_v1(Embedding):
+    """
+    Our customised mechanism of embedding processing which includes:
+        - Time-step embeddings
+        - Semantic embeddings
+    The times-step embeddings were cloned into trainer and generator classes for the ease of implemenation
+    """
     def __init__(
         self,
         device: torch.device,
@@ -14,6 +20,14 @@ class Embedding_v1(Embedding):
         *args,
         **kwargs
     ) -> None:
+        """
+        Class constructor
+        :param device:
+        :param all_embeddings:
+        :param embedding_dim:
+        :param args:
+        :param kwargs:
+        """
         super().__init__(*args, **kwargs)
 
         # Device

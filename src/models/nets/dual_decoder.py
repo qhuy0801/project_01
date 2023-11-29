@@ -1,11 +1,13 @@
 from torch import nn
 from torchinfo import summary
-
-from models.nets.unet_components import DoubleConvolution
 from utils import get_activation
 
 
 class DualDecoder(nn.Module):
+    """
+    One implementation that we tested during the experiment phrase
+
+    """
     def __init__(
         self,
         in_channels: int = 3,

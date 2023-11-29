@@ -19,6 +19,9 @@ from utils import (
 
 
 class Generator:
+    """
+    Class contains the generator of integrated final model: DDPM + Up-scaling module
+    """
     def __init__(
         self,
         dataset: Dataset,
@@ -104,11 +107,16 @@ class Generator:
 
     @torch.inference_mode()
     def generate_all(self, result_dir: str = ""):
+        """
+        Trigger the generation process and generate all available embeddings
+        :param result_dir:
+        :return:
+        """
         self.ddpm_model.eval()
         for _, batch in enumerate(
             tqdm(
                 self.dataloader,
-                desc=f"Generating all images based on embeddings...",
+                desc="Generating all images based on embeddings...",
                 position=0,
                 leave=False,
             )
@@ -121,11 +129,21 @@ class Generator:
 
     @torch.inference_mode()
     def __upscale_batch(self, images_batch):
+        """
+        Get a batch of images and use up-scaler module to upscale the resolution
+        :param images_batch:
+        :return:
+        """
         images_batch = images_batch.to(self.device)
         return self.upscale_model(images_batch)
 
     @torch.inference_mode()
     def __ddpm_generate_batch(self, batch):
+        """
+        Get a batch of images and perform denoising which guided by the embeddings
+        :param batch:
+        :return:
+        """
         file_names, semantics = batch
         semantics = semantics.to(self.device)
 
@@ -179,6 +197,7 @@ class Generator:
 
     def step_embeddings(self, steps):
         """
+        (Cloned from diffuser.py)
         This function implement Sinusoidal positional embeddings.
         Which generates embeddings using sin and cos functions
         Input: tensor shape (N)

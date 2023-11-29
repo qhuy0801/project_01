@@ -5,6 +5,10 @@ from models.nets.unet_components import DoubleConvolution
 
 
 class SuperResAE(nn.Module):
+    """
+    This is one implementation of super-resolution Auto-encoder that we tried
+    The result were discarded because it did not meet expected requirement
+    """
     def __init__(
         self,
         in_channels: int = 3,
@@ -15,6 +19,16 @@ class SuperResAE(nn.Module):
         *args,
         **kwargs
     ) -> None:
+        """
+        Class constructor
+        :param in_channels:
+        :param out_channels:
+        :param middle_channels:
+        :param kernel_size:
+        :param pooling_kernel_size:
+        :param args:
+        :param kwargs:
+        """
         super().__init__(*args, **kwargs)
 
         self.in_channels = in_channels
@@ -82,6 +96,11 @@ class SuperResAE(nn.Module):
         )
 
     def forward(self, x):
+        """
+        Forward function
+        :param x:
+        :return:
+        """
         x = self.feature_extractor(x)
 
         x_e1 = self.encoder_1(x)

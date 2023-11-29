@@ -39,8 +39,8 @@ class SelfAttention(nn.Module):
         """
         depth = x.shape[-1]
         x = x.view(-1, self.channels, depth * depth).swapaxes(1, 2)
-        x_ln = self.layer_norm(x)
-        at_value, _ = self.multi_head_at(x_ln, x_ln, x_ln)
+        x_normalised = self.layer_norm(x)
+        at_value, _ = self.multi_head_at(x_normalised, x_normalised, x_normalised)
         at_value = at_value + x
         at_value = self.self_forward(at_value) + at_value
         return at_value.swapaxes(2, 1).view(-1, self.channels, depth, depth)

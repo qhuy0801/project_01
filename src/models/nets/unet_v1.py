@@ -1,3 +1,6 @@
+"""
+This implementation of U-Net is discarded due to faulty code
+"""
 from torch import nn
 
 from models.nets.attention import SelfAttention

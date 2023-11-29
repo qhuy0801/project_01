@@ -4,7 +4,6 @@ import warnings
 
 import cv2
 import numpy as np
-import pandas as pd
 import torch
 from torch.utils.data import Dataset
 from torch.utils.data.dataset import T_co
@@ -14,6 +13,10 @@ from utils import forward_transform
 
 
 class WoundDataset(Dataset):
+    """
+    Customised Pytorch Dataloader which return all selected images
+    and also relevant files and information
+    """
     def __init__(
         self,
         image_dir: str = CONST.PROCESSED_IMAGES_DIR,
@@ -23,6 +26,15 @@ class WoundDataset(Dataset):
         additional_target_tensor_size: int = None,
         generation_mode: bool = False,
     ) -> None:
+        """
+        Construction
+        :param image_dir:
+        :param segment_dir:
+        :param embedding_dir:
+        :param target_tensor_size:
+        :param additional_target_tensor_size:
+        :param generation_mode:
+        """
         super().__init__()
         self.image_dir = image_dir
         self.segment_dir = segment_dir

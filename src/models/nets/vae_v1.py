@@ -1,3 +1,7 @@
+"""
+Implementation tried for VAE architecture, however all VAE model has been discarded
+due to low-performance
+"""
 import gc
 import torch
 

@@ -1,11 +1,15 @@
-import math
-
 import torch
 from torch import nn
 from torchinfo import summary
 
 
 class UpScaler(nn.Module):
+    """
+    The implementation of image up-scaler module
+    This module is used to enhance the image resolution
+    The model followed the inspiration from: https://arxiv.org/abs/1609.05158
+    However, we used same model constructing approach but everything is re-designed
+    """
     def __init__(
         self,
         in_channels: int = 3,
@@ -17,6 +21,17 @@ class UpScaler(nn.Module):
         *args,
         **kwargs
     ) -> None:
+        """
+        Construction class
+        :param in_channels:
+        :param out_channels:
+        :param hidden_channels:
+        :param scale_factor:
+        :param middle_activation:
+        :param output_module:
+        :param args:
+        :param kwargs:
+        """
         super().__init__(*args, **kwargs)
 
         # Feature extraction
@@ -95,6 +110,11 @@ class UpScaler(nn.Module):
             )
 
     def forward(self, x):
+        """
+        Forwarding fucntion
+        :param x:
+        :return:
+        """
         x = self.feature_extractor(x)
         x = self.to_output(x)
         x = torch.clamp(x, 0, 1)

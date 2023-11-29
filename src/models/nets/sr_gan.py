@@ -1,13 +1,27 @@
+"""
+In this directory we tried a version of Super-Resolution GAN
+Which followed the original implementation of this article: https://arxiv.org/abs/1609.04802
+We discarded the model because the training procedure took a lot of resources and not straight-forward
+"""
 import math
 
-import torch
 from torch import nn
 from torchinfo import summary
 from torchvision.models import vgg19
 
 
 class VGGExtractor(nn.Module):
+    """
+    Feature extractor with 18 first layer of VGG
+    Discarded the last classification layer
+    """
+
     def __init__(self, *args, **kwargs) -> None:
+        """
+        Constructor of the class
+        :param args:
+        :param kwargs:
+        """
         super().__init__(*args, **kwargs)
 
         # Gather the model
@@ -20,10 +34,19 @@ class VGGExtractor(nn.Module):
         self.extractor = nn.Sequential(*layers)
 
     def forward(self, img):
+        """
+        Torch module forward function
+        :param img:
+        :return:
+        """
         return self.extractor(img)
 
 
 class ResBlock(nn.Module):
+    """
+    Residual block implemenation
+    """
+
     def __init__(
         self,
         channels: int,
@@ -32,7 +55,16 @@ class ResBlock(nn.Module):
         padding: int = 1,
         *args,
         **kwargs
-    ):
+    ) -> None:
+        """
+        Constructor
+        :param channels:
+        :param kernel_size:
+        :param stride:
+        :param padding:
+        :param args:
+        :param kwargs:
+        """
         super().__init__(*args, **kwargs)
         self.block = nn.Sequential(
             nn.Conv2d(
@@ -64,6 +96,10 @@ class ResBlock(nn.Module):
 
 
 class Generator(nn.Module):
+    """
+    SRGan's inspired architecture Generator
+    """
+
     def __init__(
         self,
         in_channels: int = 3,
@@ -73,6 +109,15 @@ class Generator(nn.Module):
         *args,
         **kwargs
     ) -> None:
+        """
+        Constructor
+        :param in_channels:
+        :param out_channels:
+        :param num_res_block:
+        :param scaling_factor:
+        :param args:
+        :param kwargs:
+        """
         super().__init__(*args, **kwargs)
 
         # Base layer, with large kernel_size to extract high-level features
@@ -135,6 +180,11 @@ class Generator(nn.Module):
         )
 
     def forward(self, x):
+        """
+        Forward function
+        :param x:
+        :return:
+        """
         x_1 = self.base_layers(x)
         x = self.res_layers(x_1)
         x_2 = self.post_res_layers(x)
@@ -144,6 +194,10 @@ class Generator(nn.Module):
 
 
 class DiscriminatorBlock(nn.Module):
+    """
+    Feature extractor block inside the Discriminator
+    """
+
     def __init__(
         self,
         in_channels: int,
@@ -152,6 +206,14 @@ class DiscriminatorBlock(nn.Module):
         *args,
         **kwargs
     ) -> None:
+        """
+        Construction function
+        :param in_channels:
+        :param out_channels:
+        :param initial_block:
+        :param args:
+        :param kwargs:
+        """
         super().__init__(*args, **kwargs)
 
         layers = [
@@ -181,10 +243,18 @@ class DiscriminatorBlock(nn.Module):
         self.block = nn.Sequential(*layers)
 
     def forward(self, x):
+        """
+        Forward function
+        :param x:
+        :return:
+        """
         return self.block(x)
 
 
 class Discriminator(nn.Module):
+    """
+    SRGan's inspired architecture Discriminator
+    """
     def __init__(
         self,
         in_channels: int = 3,
@@ -194,6 +264,15 @@ class Discriminator(nn.Module):
         *args,
         **kwargs
     ) -> None:
+        """
+        Constructor
+        :param in_channels:
+        :param discriminator_channels:
+        :param avg_pool_size:
+        :param fc_size:
+        :param args:
+        :param kwargs:
+        """
         super().__init__(*args, **kwargs)
 
         conv_layers = []
@@ -218,6 +297,11 @@ class Discriminator(nn.Module):
         self.fc_2 = nn.Linear(fc_size, 1)
 
     def forward(self, x):
+        """
+        Forward function
+        :param x:
+        :return:
+        """
         batch_size = x.size(0)
         x = self.conv_layers(x)
         x = self.avg_pool(x)
