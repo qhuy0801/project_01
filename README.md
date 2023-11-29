@@ -43,9 +43,17 @@ The project is structured into several modules, each serving a distinct purpose 
 #### VAE Module
 - This module encompasses the network, trainer class, training customizations, and trigger code.
 - The relevant code and details can be found in [`vae_training_app.py`](src/vae_training_app.py).
+- It is important to note that we no longer proceed with this model due to low generative performance
 
 #### Diffusion Model
 - This module includes the components, different variations of U-Net, and the diffuser (trainer).
+- In this repository, we implemented a few run on diffusion models, which is
+  - Hyper-parameter search with WandB server [`diffusion_hyper_tuning.py`](src/diffusion_hyper_tuning.py)
+  - Final train for linear and cosine variance scheduler [`diffusion_linear.py`](src/diffusion_linear.py), [`diffusion_cosine.py`](src/diffusion_cosine.py)
+
+#### Image up-scaler (super-resolution) module
+- In this implementation, trained a model to increase the resolution of images from squared 64px to 256px
+- The training trigger can be found at [`up_scaler_training.py`](src/up_scaler_training.py)
 
 ## Acknowledgements
 We would like to express our gratitude to AITIS for providing the original dataset used in this research. Their contribution has been invaluable in advancing our understanding and development of light-weight image generation AI.
