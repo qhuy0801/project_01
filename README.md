@@ -3,6 +3,20 @@
 ## Overview
 This repository is dedicated to research on a light-weight image generation AI. The primary goal is to develop a model that can be rapidly trained on a specific dataset for customized purposes, moving away from the heavy architectures that are common in the field.
 
+We combined the model and generate all learnt image based on textual embedding only, which then processed in our specialised
+mechanism, so that the generated image can be easily viewed and analyse based on their similarity under PCA or other clustering
+method such as T-SNE
+
+
+![Final result](appendices/Screen Recording 2023-11-30 at 20.08.19.gif)
+
+The result can be viewed easily after installing all requirement using
+
+
+```shell
+tensorboard --logdir ./resources/output/combined_projection
+```
+
 ## Architecture
 We have taken inspiration from the stable diffusion architecture of Stability AI. However, we've introduced several customizations:
 - Decoder (Up-scaler) only inspired super-resolution model, which results in a lighter architecture.
