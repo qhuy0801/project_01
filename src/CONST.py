@@ -5,6 +5,12 @@ UNPROCESSED_IMAGES_DIR = "../data/images/"
 PROCESSED_IMAGES_DIR = "../resources/processed/roi/"
 PROCESSED_SEGMENT_DIR = "../resources/processed/segment/"
 PROCESSED_EMBEDDING_DIR = "../resources/processed/embeddings/"
+FINAL_GENERATION_OUTPUT = "../resources/output/diffusion_256/"
+
+# Embedding projection
+FINAL_EMBEDDINGS = "../resources/output/combined_projection/feature_vecs.tsv"
+FINAL_IMAGE_SPRITE = "../resources/output/combined_projection/sprite.jpg"
+FINAL_METADATA = "../resources/output/combined_projection/metadata.tsv"
 
 # Annotations
 FILE_NAME = "ImageDetail.ImageFilename"
