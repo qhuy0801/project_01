@@ -8,7 +8,7 @@ mechanism, so that the generated image can be easily viewed and analyse based on
 method such as T-SNE
 
 
-![Final result](./appendices/projected_result.gif)
+![Final result](./appendices/projected_result_1.gif)
 
 The result can be viewed easily after installing all requirement using
 
