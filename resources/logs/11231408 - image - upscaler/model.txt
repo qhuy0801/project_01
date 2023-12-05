@@ -1,0 +1,31 @@
+==========================================================================================
+Layer (type:depth-idx)                   Output Shape              Param #
+==========================================================================================
+UpScaler                                 [1, 3, 256, 256]          --
+├─Sequential: 1-1                        [1, 64, 64, 64]           --
+│    └─Conv2d: 2-1                       [1, 128, 64, 64]          9,728
+│    └─Tanh: 2-2                         [1, 128, 64, 64]          --
+│    └─Conv2d: 2-3                       [1, 64, 64, 64]           73,792
+│    └─Tanh: 2-4                         [1, 64, 64, 64]           --
+├─Sequential: 1-2                        [1, 3, 256, 256]          --
+│    └─Conv2d: 2-5                       [1, 48, 64, 64]           27,696
+│    └─PixelShuffle: 2-6                 [1, 3, 256, 256]          --
+==========================================================================================
+Total params: 111,216
+Trainable params: 111,216
+Non-trainable params: 0
+Total mult-adds (Units.MEGABYTES): 455.54
+==========================================================================================
+Input size (MB): 0.05
+Forward/backward pass size (MB): 7.86
+Params size (MB): 0.44
+Estimated Total Size (MB): 8.36
+==========================================================================================
+Total epochs: 5000
+Max learning rate: 0.0001
+Middle activation method: Tanh
+Output model: sub-pix
+Hidden channels: 128
+Batch size: 32
+Num workers: 2
+Additional note: 
